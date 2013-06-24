@@ -92,10 +92,10 @@ public class SeatsNumberTest {
     @Test public void shouldReturnFlightsFromGivenOrigin(){
         //when
         FlightManager flightManager = new FlightManager();
-        Flight flight1 = new Flight("FR8723",10,20,"Warsaw","Chicago",new Date());
-        Flight flight2 = new Flight("FR2222",10,20,"Tokyo","Chicago",new Date());
-        Flight flight3 = new Flight("FR8724",10,20,"Warsaw","Tokyo",new Date());
-        Flight flight4 = new Flight("FR1111",10,20,"Warsaw","Poznan",new Date());
+        Flight flight1 = Flight.createBuilder().withFlightCode("FR2222").withOrigin("Warsaw").build();
+        Flight flight2 = Flight.createBuilder().withFlightCode("FR2223").withOrigin("Berlin").build();
+        Flight flight3 = Flight.createBuilder().withFlightCode("FR2224").withOrigin("Warsaw").build();
+        Flight flight4 = Flight.createBuilder().withFlightCode("FR2225").withOrigin("Warsaw").build();
         flightManager.addFlight(flight1);
         flightManager.addFlight(flight2);
         flightManager.addFlight(flight3);
@@ -111,10 +111,10 @@ public class SeatsNumberTest {
     @Test public void shouldReturnFlightsFromGivenDestination(){
         //when
         FlightManager flightManager = new FlightManager();
-        Flight flight1 = new Flight("FR8723",10,20,"Warsaw","Chicago",new Date());
-        Flight flight2 = new Flight("FR2222",10,20,"Tokyo","Chicago",new Date());
-        Flight flight3 = new Flight("FR8724",10,20,"Warsaw","Tokyo",new Date());
-        Flight flight4 = new Flight("FR1111",10,20,"Warsaw","Poznan",new Date());
+        Flight flight1 = Flight.createBuilder().withFlightCode("FR2222").withDestination("Chicago").build();
+        Flight flight2 = Flight.createBuilder().withFlightCode("FR2223").withDestination("Warsaw").build();
+        Flight flight3 = Flight.createBuilder().withFlightCode("FR2224").withDestination("Chicago").build();
+        Flight flight4 = Flight.createBuilder().withFlightCode("FR2225").withDestination("Tokyo").build();
         flightManager.addFlight(flight1);
         flightManager.addFlight(flight2);
         flightManager.addFlight(flight3);
@@ -125,7 +125,7 @@ public class SeatsNumberTest {
         List<Flight> flights = flightManager.getFlightsTo("Chicago");
 
         //then
-        assertThat(flights).contains(flight1).contains(flight2);
+        assertThat(flights).contains(flight1).contains(flight3);
     }
     @Test public void shouldReturnAveragePriceInAGivenClass(){
         //when
