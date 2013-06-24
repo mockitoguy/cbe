@@ -1,22 +1,33 @@
-import org.fest.assertions.Assertions;
+import com.googlecode.catchexception.CatchException;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
+import static com.googlecode.catchexception.CatchException.catchException;
+import static com.googlecode.catchexception.CatchException.caughtException;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class FlightManagerTest {
 
-    private static final String FLIGHT_1 = "LH101";
-    private static final String FLIGHT_2 = "XZ001";
-    private final FlightManager flightManager = new FlightManager();
+    private static final String FLIGHT_NAME = "XP001`";
+
+    @Mock
+    FlightDAO flightDAO;
+
+    @InjectMocks
+    private FlightManager flightManager = new FlightManager(flightDAO);
 
     @Before
     public void setUp() throws Exception {
-        flightManager.addFlight(FLIGHT_1, 5, 80d);
-        flightManager.addFlight(FLIGHT_2, 2, 20d);
-        flightManager.addFlight("AE500", 15, 20d);
+        when(flightDAO.getFlight(FLIGHT_NAME)).thenReturn(new Flight(4, 100d));
     }
 
     @Test
@@ -24,36 +35,34 @@ public class FlightManagerTest {
 
         //given
         //when
-        int count = flightManager.getAvailableSeatsCount("LH101");
+        int count = flightManager.getAvailableSeatsCount(FLIGHT_NAME);
 
         //then
-        assertEquals(5, count);
+        assertEquals(4, count);
 
     }
 
     @Test
     public void shouldTellPriceOfSeatInGivenFlight() {
         //given
-        flightManager.addSeatPrice("LH101", 1, 100d);
-        flightManager.addSeatPrice("LH101", 2, 60d);
+        flightManager.addSeatPrice(FLIGHT_NAME, 1, 120d);
 
         //when
-        double price = flightManager.getSeatPrice("LH101", 1);
+        double price = flightManager.getSeatPrice(FLIGHT_NAME, 1);
 
         //then
-        assertEquals(100d, price, 0.1d);
+        assertEquals(120d, price, 0.1d);
 
     }
 
     @Test
     public void shouldTellPriceOfCheapestSeatInGivenFlight() {
         //given
-        flightManager.addSeatPrice("LH101", 1, 100d);
-        flightManager.addSeatPrice("LH101", 2, 60d);
-        flightManager.addSeatPrice("LH101", 3, 60d);
-        flightManager.addSeatPrice("AE500", 1, 40d);
+        flightManager.addSeatPrice(FLIGHT_NAME, 1, 100d);
+        flightManager.addSeatPrice(FLIGHT_NAME, 2, 60d);
+        flightManager.addSeatPrice(FLIGHT_NAME, 3, 60d);
         //when
-        double price = flightManager.getCheapestSeatPrice("LH101");
+        double price = flightManager.getCheapestSeatPrice(FLIGHT_NAME);
 
         //then
         assertEquals(60d, price, 0.1d);
@@ -64,36 +73,38 @@ public class FlightManagerTest {
     public void shouldBookSeatOnGivenFlight() {
         //given
         //when
-        flightManager.reserveSeatInFlight(12, "AE500");
+        flightManager.reserveSeatInFlight(4, FLIGHT_NAME);
 
         //then
-        boolean isBooked = flightManager.isSeatInFlightReserved(12, "AE500");
+        boolean isBooked = flightManager.isSeatInFlightReserved(4, FLIGHT_NAME);
         assertTrue(isBooked);
     }
 
     @Test
     public void shouldGetAveragePriceOfNonBookedSeatsOnNonBookedFlight() {
         //given
-        flightManager.addSeatPrice(FLIGHT_2, 1, 100d);
-        flightManager.addSeatPrice(FLIGHT_2, 2, 20d);
+        flightManager.addSeatPrice(FLIGHT_NAME, 1, 20d);
+        flightManager.addSeatPrice(FLIGHT_NAME, 2, 20d);
         //when
 
-        Double price = flightManager.getAveragePriceInFlight(FLIGHT_2);
+        Double price = flightManager.getAveragePriceInFlight(FLIGHT_NAME);
 
         //then
         assertThat(price).isEqualTo(60d);
     }
+
     @Test
     public void shouldGetAveragePriceOfNonBookedSeatsOnPartialBookedFlight() {
         //given
-        flightManager.addSeatPrice(FLIGHT_2, 1, 100d);
-        flightManager.addSeatPrice(FLIGHT_2, 2, 34d);
-        flightManager.reserveSeatInFlight(1, FLIGHT_2);
+        flightManager.addSeatPrice(FLIGHT_NAME, 3, 20d);
+        flightManager.addSeatPrice(FLIGHT_NAME, 4, 100d);
+        flightManager.reserveSeatInFlight(1, FLIGHT_NAME);
+        flightManager.reserveSeatInFlight(2, FLIGHT_NAME);
         //when
 
-        Double price = flightManager.getAveragePriceInFlight(FLIGHT_2);
+        Double price = flightManager.getAveragePriceInFlight(FLIGHT_NAME);
 
         //then
-        assertThat(price).isEqualTo(34d);
+        assertThat(price).isEqualTo(60d);
     }
 }
