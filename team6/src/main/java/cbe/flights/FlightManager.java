@@ -75,4 +75,9 @@ public class FlightManager {
         }
         return resultFlights;
     }
+
+    public HashMap<SeatClass, Double> getClassAvaragePricesInFlight(String flightName) {
+        Flight flight = flights.get(flightName);
+        return flight.getClassAvaragePrice();
+    }
 }

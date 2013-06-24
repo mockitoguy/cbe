@@ -6,6 +6,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Set;
 
 import org.junit.Test;
@@ -205,4 +206,36 @@ public class FlightManagerTest {
         //then
         assertThat(flights).containsOnly(flight3);
     }
+
+
+    @Test
+    public void shouldGetSeatsAvaragePrices() {
+
+        //given
+        HashMap<SeatClass, Double> expectedPrices = new HashMap<SeatClass, Double>();
+        expectedPrices.put(SeatClass.ECONOMY, 2d);
+        expectedPrices.put(SeatClass.BUSINESS, 4d);
+        expectedPrices.put(SeatClass.FIRST, 6d);
+
+        Flight flight = new FlightBuilder().setFlightName(FLIGHT_NAME).setAvailableSeats(3).build();
+        flight.addSeat(new SeatBuilder().setPrice(1d).buildEconomySeat());
+        flight.addSeat(new SeatBuilder().setPrice(3d).buildEconomySeat());
+
+        flight.addSeat(new SeatBuilder().setPrice(3d).buildBusinessSeat());
+        flight.addSeat(new SeatBuilder().setPrice(5d).buildBusinessSeat());
+
+        flight.addSeat(new SeatBuilder().setPrice(5d).buildFirstSeat());
+        flight.addSeat(new SeatBuilder().setPrice(7d).buildFirstSeat());
+
+
+        FlightManager manager = new FlightManager();
+        manager.addFlight(flight);
+
+        //when
+        HashMap<SeatClass, Double> prices = manager.getClassAvaragePricesInFlight(FLIGHT_NAME);
+
+        //then
+        assertThat(prices).isSameAs(expectedPrices);
+    }
+
 }

@@ -29,4 +29,7 @@ public class SeatBuilder {
     public Seat buildBusinessSeat() {
         return new Seat(price, SeatClass.BUSINESS);
     }
+    public Seat buildFirstSeat() {
+        return new Seat(price, SeatClass.FIRST);
+    }
 }

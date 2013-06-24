@@ -2,6 +2,7 @@ package cbe.flights;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -90,5 +91,30 @@ public class Flight {
     public void addSeat(Seat seat) {
         seat.setFlight(this);
         seats.add(seat);
+    }
+
+    public HashMap<SeatClass, Double> getClassAvaragePrice() {
+        //init
+        HashMap<SeatClass, Double> prices = new HashMap<SeatClass, Double>();
+        for(SeatClass seatClass : SeatClass.values()){
+            prices.put(seatClass, 0d);
+        }
+        HashMap<SeatClass, Integer> counts = new HashMap<SeatClass, Integer>();
+        for(SeatClass seatClass : SeatClass.values()){
+            counts.put(seatClass, 0);
+        }
+
+        //init end
+
+        for (Seat seat : seats){
+            prices.put(seat.getSeatClass(), prices.get(seat.getSeatClass()) + seat.getPrice());
+            counts.put(seat.getSeatClass(), (counts.get(seat.getSeatClass()))+1);
+        }
+
+        for(SeatClass seatClass : SeatClass.values()){
+            prices.put(seatClass, prices.get(seatClass)/counts.get(seatClass));
+        }
+        return prices;
+
     }
 }
