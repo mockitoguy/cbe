@@ -55,6 +55,6 @@ public class FlightManagerTest {
 
         //then
         Assert.assertTrue(flight.containsSeat(seatNumber));
-        Assert.assertTrue(flight.isSeatAvailable(seatNumber));
+        Assert.assertFalse(flight.isSeatAvailable(seatNumber));
     }
 }
