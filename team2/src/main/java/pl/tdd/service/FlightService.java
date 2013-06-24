@@ -1,6 +1,8 @@
 package pl.tdd.service;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,5 +47,40 @@ public class FlightService {
     public double getAveragePriceOfAvailableSeats(String flightCode) {
         Flight flight = getFlight(flightCode);
         return flight.getAveragePriceOfAvailableSeats();
+    }
+
+    public List<Flight> findFlightsBetween(String origin, String destination) {
+        List<Flight> listOfFlights = new LinkedList<>();
+        for(Flight flight : flightRepo.values()) {
+            if(flight.isFrom(origin) && flight.isTo(destination)) {
+                listOfFlights.add(flight);
+            }
+        }
+        return listOfFlights;
+    }
+
+    public List<Flight> findFlightsFrom(String origin) {
+        List<Flight> listOfFlightsFrom = new LinkedList<>();
+        for(Flight flight : flightRepo.values()) {
+            if(flight.isFrom(origin)) {
+                listOfFlightsFrom.add(flight);
+            }
+        }
+        return listOfFlightsFrom;
+    }
+
+    public List<Flight> findFlightsTo(String destination) {
+        List<Flight> listOfFlightsTo = new LinkedList<>();
+        for(Flight flight : flightRepo.values()) {
+            if(flight.isTo(destination)) {
+                listOfFlightsTo.add(flight);
+            }
+        }
+        return listOfFlightsTo;
+    }
+
+    public double getAveragePriceOfSeatsInClass(String flightCode, SeatClass seatClass) {
+        Flight flight = getFlight(flightCode);
+        return flight.getAveragePriceOfSeatsInClass(seatClass);
     }
 }
