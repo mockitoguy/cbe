@@ -2,6 +2,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class FlightManagerTest {
 
@@ -57,6 +58,16 @@ public class FlightManagerTest {
     }
 
 
+    @Test
+    public void shouldBookSeatOnGivenFlight() {
+        //given
 
+        //when
+        flightManager.reserveSeatInFlight(12, "AE500");
+
+        //then
+        boolean isBooked = flightManager.isSeatInFlightReserved(12, "AE500");
+        assertTrue(isBooked);
+    }
 
 }

@@ -30,4 +30,17 @@ public class FlightManager {
     private Flight getFlight(String flightName) {
         return flights.get(flightName);
     }
+
+    public void reserveSeatInFlight(int seat, String flightName) {
+
+        Flight flight = getFlight(flightName);
+
+        flight.reserveSeat(seat);
+
+
+    }
+
+    public boolean isSeatInFlightReserved(int seat, String flightName) {
+        return getFlight(flightName).isSeatReserved(seat);
+    }
 }

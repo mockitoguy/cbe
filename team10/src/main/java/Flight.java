@@ -25,11 +25,11 @@ public class Flight {
     }
 
     public Double getSeatPrice(int seat) {
-        return seats.get(seat).getPrice();
+        return getSeat(seat).getPrice();
     }
 
     public void setSeatPrice(int seat, Double price) {
-        seats.get(seat).setPrice(price);
+        getSeat(seat).setPrice(price);
     }
 
     public double getCheapestSeatPrice() {
@@ -45,5 +45,19 @@ public class Flight {
                 cheapestPrice = Math.min(cheapestPrice, seatPrice);
         }
         return cheapestPrice;
+    }
+
+    public void reserveSeat(int seatNumber) {
+
+        getSeat(seatNumber).reserve();
+
+    }
+
+    private Seat getSeat(int seatNumber) {
+        return seats.get(seatNumber);
+    }
+
+    public boolean isSeatReserved(int seat) {
+        return getSeat(seat).isReserved();
     }
 }
