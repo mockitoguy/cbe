@@ -10,22 +10,22 @@ public class FlightManager {
     private Map<String, Flight> flights = new HashMap<String, Flight>();
 
     public void addFlight(Flight flight) {
-        if(flights.containsKey(flight.getFlightCode()))
+        if (flights.containsKey(flight.getFlightCode()))
             throw new RuntimeException("Flight already exists!");
-         flights.put(flight.getFlightCode(),flight);
+        flights.put(flight.getFlightCode(), flight);
     }
 
     public Flight getFlight(String flightCode) {
-        if(!flights.containsKey(flightCode))
+        if (!flights.containsKey(flightCode))
             throw new RuntimeException("No such flight!");
         return flights.get(flightCode);
     }
 
     public List<Flight> getFlightsBetween(String origin, String destination) {
 
-        List<Flight> flightsBetween= new LinkedList<Flight>();
-        for(Flight flight: flights.values()){
-            if(flight.getOrigin().equals(origin) && flight.getDestination().equals(destination)){
+        List<Flight> flightsBetween = new LinkedList<Flight>();
+        for (Flight flight : flights.values()) {
+            if (flight.getOrigin().equals(origin) && flight.getDestination().equals(destination)) {
                 flightsBetween.add(flight);
             }
         }
@@ -34,9 +34,9 @@ public class FlightManager {
 
     public List<Flight> getFlightsFrom(String origin) {
 
-        List<Flight> flightsBetween= new LinkedList<Flight>();
-        for(Flight flight: flights.values()){
-            if(flight.getOrigin().equals(origin)){
+        List<Flight> flightsBetween = new LinkedList<Flight>();
+        for (Flight flight : flights.values()) {
+            if (flight.getOrigin().equals(origin)) {
                 flightsBetween.add(flight);
             }
         }
@@ -45,9 +45,9 @@ public class FlightManager {
 
     public List<Flight> getFlightsTo(String destination) {
 
-        List<Flight> flightsBetween= new LinkedList<Flight>();
-        for(Flight flight: flights.values()){
-            if(flight.getDestination().equals(destination)){
+        List<Flight> flightsBetween = new LinkedList<Flight>();
+        for (Flight flight : flights.values()) {
+            if (flight.getDestination().equals(destination)) {
                 flightsBetween.add(flight);
             }
         }

@@ -5,7 +5,7 @@ public class Seat {
     private int seatNumber;
     private int price;
     private boolean booked;
-    private CLASS aClass;
+    private TRAVEL_CLASS aClass = TRAVEL_CLASS.ECONOMIC;
 
     public int getSeatNumber() {
         return seatNumber;
@@ -36,17 +36,17 @@ public class Seat {
         this.booked = booked;
     }
 
-    public void setClass(CLASS aClass) {
+    public void setClass(TRAVEL_CLASS aClass) {
         this.aClass = aClass;
     }
 
-    public CLASS getaClass() {
+    public TRAVEL_CLASS getaClass() {
         return aClass;
     }
 
-    public void setaClass(CLASS aClass) {
+    public void setaClass(TRAVEL_CLASS aClass) {
         this.aClass = aClass;
     }
 
-    public enum CLASS {ECONOMIC,BUSSINESS,FIRST}
+    public enum TRAVEL_CLASS {ECONOMIC, BUSSINESS, FIRST}
 }

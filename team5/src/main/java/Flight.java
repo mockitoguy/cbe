@@ -6,12 +6,21 @@ import java.util.Map;
  * @author: pgrela
  */
 public class Flight {
-    private final int defaultPrice;
+    private Map<Seat.TRAVEL_CLASS, Integer> defaultPrices = new HashMap<Seat.TRAVEL_CLASS, Integer>();
     private final String origin;
     private final String destination;
     private final Date date;
 
     private int seats;
+
+    public Map<Integer, Seat> getSeatsList() {
+        return seatsList;
+    }
+
+    public void setSeatsList(Map<Integer, Seat> seatsList) {
+        this.seatsList = seatsList;
+    }
+
     private String flightCode;
     Map<Integer, Seat> seatsList = new HashMap<Integer, Seat>();
 
@@ -35,17 +44,17 @@ public class Flight {
         return flightCode;
     }
 
-    public Flight(String flightCode, int seats, int defaultPrice, String origin, String destination, Date date) {
+    public Flight(String flightCode, int seats, String origin, String destination, Date date) {
         this.seats = seats;
         this.flightCode = flightCode;
-        this.defaultPrice = defaultPrice;
         this.origin = origin;
         this.destination = destination;
         this.date = date;
+    }
 
-        for (int i = 0; i < seats; i++) {
-            seatsList.put(i + 1, new Seat(i + 1, defaultPrice));
-        }
+
+    private void setDefaultClassPrice(Seat.TRAVEL_CLASS travelClass, int price) {
+        defaultPrices.put(travelClass, price);
     }
 
     public void setSeatPrice(int seatNumber, int price) {
@@ -101,35 +110,55 @@ public class Flight {
             '}';
     }
 
-    public void setSeatsClass(int first, int last, Seat.CLASS seatClass) {
-        for (int i = first; i <= last; ++i) {
-            seatsList.get(i).setClass(seatClass);
-        }
-    }
 
-    public double getSeatsAveragePrice(Seat.CLASS seatClass) {
-        int conter = 0;
+    public double getSeatsAveragePrice(Seat.TRAVEL_CLASS seatClass) {
+        int counter = 0;
         double average = 0;
         for (Seat seat : seatsList.values()) {
             if (seat.getaClass() == seatClass) {
                 average += seat.getPrice();
-                ++conter;
+                ++counter;
             }
         }
-        return average / conter;
+        return average / counter;
     }
-    public static FlightBuilder createBuilder(){
-          return new FlightBuilder();
+
+    public static FlightBuilder createBuilder() {
+        return new FlightBuilder();
+    }
+
+    public int getNumberOfSeatsWithDifferentThanDefaultPrice(Seat.TRAVEL_CLASS aClass) {
+
+        int counter = 0;
+        int defaultPrice = defaultPrices.get(aClass);
+        for (Seat seat : seatsList.values()) {
+            if (seat.getaClass() == aClass && seat.getPrice() != defaultPrice) {
+                ++counter;
+            }
+        }
+        return counter;
     }
 
     public static class FlightBuilder {
+        public FlightBuilder() {
+            for (Seat.TRAVEL_CLASS travelClass : Seat.TRAVEL_CLASS.values()) {
+                defaultPrices.put(travelClass, 100);
+            }
+        }
+
         public Flight build() {
-            return new Flight(flightCode, seats, defaultPrice, origin, destination, date);
+            Flight flight = new Flight(flightCode, seats, origin, destination, date);
+            for (Map.Entry<Seat.TRAVEL_CLASS, Integer> entry : defaultPrices.entrySet()) {
+                flight.setDefaultClassPrice(entry.getKey(), entry.getValue());
+            }
+            if (seatsList == null)
+                generateSeats();
+            flight.setSeatsList(seatsList);
+            return flight;
         }
 
         public FlightBuilder withDefaultPrice(int defaultPrice) {
-            this.defaultPrice = defaultPrice;
-            return this;
+            return withDefaultPrice(defaultPrice, Seat.TRAVEL_CLASS.ECONOMIC);
         }
 
         public FlightBuilder withOrigin(String origin) {
@@ -147,7 +176,7 @@ public class Flight {
             return this;
         }
 
-        public FlightBuilder withSeats(int seats) {
+        public FlightBuilder withSeatsQuantity(int seats) {
             this.seats = seats;
             return this;
         }
@@ -157,12 +186,39 @@ public class Flight {
             return this;
         }
 
-        private int defaultPrice=100;
         private String origin;
         private String destination;
         private Date date;
-        private int seats=100;
+        private int seats = 100;
         private String flightCode;
+        private Map<Integer, Seat> seatsList;
+        private Map<Seat.TRAVEL_CLASS, Integer> defaultPrices = new HashMap<Seat.TRAVEL_CLASS, Integer>();
+
+        public FlightBuilder withDefaultPrice(int price, Seat.TRAVEL_CLASS aClass) {
+            defaultPrices.put(aClass, price);
+            return this;
+        }
+
+        public FlightBuilder generateSeats() {
+            int defaultPrice = defaultPrices.get(Seat.TRAVEL_CLASS.ECONOMIC);
+            seatsList = new HashMap<Integer, Seat>();
+            for (int i = 0; i < seats; i++) {
+                seatsList.put(i + 1, new Seat(i + 1, defaultPrice));
+            }
+            return this;
+        }
+
+        public FlightBuilder setSeatsClass(Seat.TRAVEL_CLASS seatClass, int... seatsNumbers) {
+            if (seatsList == null)
+                generateSeats();
+            int defaultPrice = defaultPrices.get(seatClass);
+            for (int i : seatsNumbers) {
+                Seat seat = seatsList.get(i);
+                seat.setClass(seatClass);
+                seat.setPrice(defaultPrice);
+            }
+            return this;
+        }
     }
 
 }
