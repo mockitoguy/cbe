@@ -13,34 +13,34 @@ import org.junit.Test;
 public class SeatsNumberTest {
     @Test
     public void shouldTellNumberOfAvailableSeatsOnTheFlight() {
-        //when
+        //given
         FlightManager flightManager = new FlightManager();
         Flight flight = Flight.createBuilder().withFlightCode("FR8723").withSeats(5).build();
         flightManager.addFlight(flight);
 
-        //given
+        //when
         int quantity = flightManager.getFlight("FR8723").getSeats();
 
         //then
         assertEquals(5, quantity);
     }
     @Test public void shouldReturnCheapestSeatPrice(){
-        //when
+        //given
         Flight flight = Flight.createBuilder().withDefaultPrice(100).withSeats(5).build();
         flight.setSeatPrice(2, 200);
         flight.setSeatPrice(4, 20);
 
-        //given
+        //when
         int cheapestSeatPrice = flight.getCheapestSeatPrice();
 
         //then
         assertEquals(20, cheapestSeatPrice);
     }
     @Test public void shouldBookASeat(){
-        //when
+        //given
         Flight flight = Flight.createBuilder().withSeats(5).build();
 
-        //given
+        //when
         flight.bookSeat(3);
 
         //then
@@ -48,10 +48,10 @@ public class SeatsNumberTest {
         assertEquals(true, seat.isBooked());
     }
     @Test public void shouldNotBookASeat(){
-        //when
+        //given
         Flight flight = Flight.createBuilder().withSeats(5).build();
 
-        //given
+        //when
         flight.bookSeat(3);
 
         //then
@@ -59,13 +59,13 @@ public class SeatsNumberTest {
         assertEquals(false, seat.isBooked());
     }
     @Test public void shouldReturnNotBookedSeatsAveragePrice(){
-        //when
+        //given
         Flight flight = Flight.createBuilder().withSeats(10).withDefaultPrice(20).build();
         flight.setSeatPrice(3, 200);
         flight.setSeatPrice(1, 11);
         flight.bookSeat(3);
 
-        //given
+        //when
         double average = flight.getNotBookedSeatsAveragePrice();
 
         //then
@@ -73,7 +73,7 @@ public class SeatsNumberTest {
     }
 
     @Test public void shouldReturnFlightsOnOriginDestinationDate(){
-        //when
+        //given
         FlightManager flightManager = new FlightManager();
         Flight flight1 = new Flight("FR8723",10,20,"Warsaw","Chicago",new Date());
         Flight flight2 = new Flight("FR2222",10,20,"Warsaw","Chicago",new Date());
@@ -83,14 +83,14 @@ public class SeatsNumberTest {
         flightManager.addFlight(flight3);
 
 
-        //given
+        //when
         List<Flight> flights = flightManager.getFlightsBetween("Warsaw","Chicago");
 
         //then
         assertThat(flights).contains(flight1).contains(flight2);
     }
     @Test public void shouldReturnFlightsFromGivenOrigin(){
-        //when
+        //given
         FlightManager flightManager = new FlightManager();
         Flight flight1 = Flight.createBuilder().withFlightCode("FR2222").withOrigin("Warsaw").build();
         Flight flight2 = Flight.createBuilder().withFlightCode("FR2223").withOrigin("Berlin").build();
@@ -102,14 +102,14 @@ public class SeatsNumberTest {
         flightManager.addFlight(flight4);
 
 
-        //given
+        //when
         List<Flight> flights = flightManager.getFlightsFrom("Warsaw");
 
         //then
         assertThat(flights).contains(flight1).contains(flight3).contains(flight4);
     }
     @Test public void shouldReturnFlightsFromGivenDestination(){
-        //when
+        //given
         FlightManager flightManager = new FlightManager();
         Flight flight1 = Flight.createBuilder().withFlightCode("FR2222").withDestination("Chicago").build();
         Flight flight2 = Flight.createBuilder().withFlightCode("FR2223").withDestination("Warsaw").build();
@@ -121,20 +121,20 @@ public class SeatsNumberTest {
         flightManager.addFlight(flight4);
 
 
-        //given
+        //when
         List<Flight> flights = flightManager.getFlightsTo("Chicago");
 
         //then
         assertThat(flights).contains(flight1).contains(flight3);
     }
     @Test public void shouldReturnAveragePriceInAGivenClass(){
-        //when
+        //given
         Flight flight = new Flight("FR8723",100,20,"Warsaw","Chicago",new Date());
         flight.setSeatsClass(5,12,Seat.CLASS.BUSSINESS);
         flight.setSeatPrice(6,28);
 
 
-        //given
+        //when
         double average = flight.getSeatsAveragePrice(Seat.CLASS.BUSSINESS);
 
         //then
