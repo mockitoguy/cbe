@@ -6,13 +6,6 @@ public class Flight {
     private String name;
     private final List<Seat> seats;
 
-    public Flight(int seatsCount) {
-        this.seats = new ArrayList<Seat>(seatsCount);
-        for (int i = 0; i < seatsCount; i++) {
-            seats.add(i, new Seat(i));
-        }
-    }
-
     public Flight(int seatsCount, Double defaultPrice) {
         this.seats = new ArrayList<Seat>(seatsCount);
         for (int i = 0; i < seatsCount; i++) {
@@ -54,10 +47,24 @@ public class Flight {
     }
 
     private Seat getSeat(int seatNumber) {
-        return seats.get(seatNumber);
+        return seats.get(seatNumber - 1);
     }
 
     public boolean isSeatReserved(int seat) {
         return getSeat(seat).isReserved();
+    }
+
+    public double getAveragePrice() {
+        double sum = 0;
+        int count = 0;
+
+        for (Seat seat : seats) {
+            if (!seat.isReserved()) {
+                sum += seat.getPrice();
+                count++;
+            }
+        }
+
+        return sum / count;
     }
 }

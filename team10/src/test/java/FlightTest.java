@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 public class FlightTest {
 
-    private final Flight flight = new Flight(5);
+    private final Flight flight = new Flight(4, 20d);
 
     @Test
     public void shouldTellSeatCount() {
@@ -17,7 +17,7 @@ public class FlightTest {
 
 
         //then
-        Assert.assertEquals(5, flight.getSeatsCount());
+        Assert.assertEquals(4, flight.getSeatsCount());
     }
 
     @Test
@@ -42,5 +42,48 @@ public class FlightTest {
         //then
         assertThat(caughtException()).isInstanceOf(SeatAlreadyReserved.class);
 
+    }
+
+    @Test
+    public void shouldGetAveragePriceOnFreeFlight() {
+
+        //given
+        //when
+
+        double price = flight.getAveragePrice();
+
+        //then
+        assertThat(price).isEqualTo(20d);
+    }
+
+    @Test
+    public void shouldGetAveragePriceOnNonFreeFlight() {
+
+        //given
+        flight.reserveSeat(1);
+        flight.reserveSeat(2);
+        //when
+
+        double price = flight.getAveragePrice();
+
+        //then
+        assertThat(price).isEqualTo(20d);
+    }
+
+    @Test
+    public void shouldGetAveragePriceOnNonFreeFlightWithDiffrentPrices() {
+
+        //given
+        flight.setSeatPrice(3, 50d);
+        flight.setSeatPrice(4, 60d);
+        flight.reserveSeat(1);
+        flight.reserveSeat(2);
+
+        //when
+
+        double price = flight.getAveragePrice();
+
+        //then
+        assertThat(price).isEqualTo(55d);
     }
 }

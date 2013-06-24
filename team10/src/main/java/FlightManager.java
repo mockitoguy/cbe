@@ -43,4 +43,8 @@ public class FlightManager {
     public boolean isSeatInFlightReserved(int seat, String flightName) {
         return getFlight(flightName).isSeatReserved(seat);
     }
+
+    public Double getAveragePriceInFlight(String flightName) {
+        return getFlight(flightName).getAveragePrice();
+    }
 }
