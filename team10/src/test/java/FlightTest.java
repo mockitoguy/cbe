@@ -10,7 +10,7 @@ public class FlightTest {
 
     @Test
     public void shouldTellSeatCount() {
-        Flight flight = new FlightBuilder().setSeatsCount(4).createFlight();
+        Flight flight = new FlightBuilder().setSeatsCount(4).build();
 
         //then
         assertThat(flight.getSeatsCount()).isEqualTo(4);
@@ -20,7 +20,7 @@ public class FlightTest {
     @Test
     public void shouldReserveSeat() {
         //when
-        Flight flight = new FlightBuilder().setSeatsCount(2).createFlight();
+        Flight flight = new FlightBuilder().setSeatsCount(2).build();
         flight.reserveSeat(2);
 
         //then
@@ -30,7 +30,7 @@ public class FlightTest {
     @Test
     public void shouldFailOnReservedSeat() {
         //given
-        Flight flight = new FlightBuilder().setSeatsCount(2).createFlight();
+        Flight flight = new FlightBuilder().setSeatsCount(2).build();
 
         //when
         flight.reserveSeat(2);
@@ -46,7 +46,7 @@ public class FlightTest {
     public void shouldGetAveragePriceOnFreeFlight() {
 
         //given
-        Flight flight = new FlightBuilder().setSeatsCount(2).setDefaultPrice(20d).createFlight();
+        Flight flight = new FlightBuilder().setSeatsCount(2).setDefaultPrice(20d).build();
 
         //when
         double price = flight.getAveragePrice();
@@ -59,7 +59,7 @@ public class FlightTest {
     public void shouldGetAveragePriceOnNonFreeFlight() {
 
         //given
-        Flight flight = new FlightBuilder().setSeatsCount(3).setDefaultPrice(20d).createFlight();
+        Flight flight = new FlightBuilder().setSeatsCount(3).setDefaultPrice(20d).build();
         flight.reserveSeat(1);
         flight.reserveSeat(2);
         //when
@@ -74,7 +74,7 @@ public class FlightTest {
     public void shouldGetAveragePriceOnNonFreeFlightWithDiffrentPrices() {
 
         //given
-        Flight flight = new FlightBuilder().setSeatsCount(3).setDefaultPrice(10d).createFlight();
+        Flight flight = new FlightBuilder().setSeatsCount(3).setDefaultPrice(10d).build();
         flight.setSeatPrice(3, 30d);
         flight.reserveSeat(1);
 

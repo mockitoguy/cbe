@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class FlightManager {
 
     private final FlightDAO flightDAO;
@@ -41,5 +43,9 @@ public class FlightManager {
 
     public Double getAveragePriceInFlight(String flightName) {
         return flightDAO.getFlight(flightName).getAveragePrice();
+    }
+
+    public List<Flight> getFlightsBetween(String from, String to) {
+        return flightDAO.findFlightBetween(from, to);
     }
 }

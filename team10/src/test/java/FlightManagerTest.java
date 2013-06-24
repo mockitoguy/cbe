@@ -4,6 +4,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -26,7 +29,7 @@ public class FlightManagerTest {
         when(flightDAO.getFlight(FLIGHT_NAME)).thenReturn(
                 FlightBuilder.aFlight()
                         .setSeatsCount(4)
-                        .createFlight());
+                        .build());
 
         //when
         int count = flightManager.getAvailableSeatsCount(FLIGHT_NAME);
@@ -43,7 +46,7 @@ public class FlightManagerTest {
                 FlightBuilder.aFlight()
                         .setSeatsCount(2)
                         .setDefaultPrice(100d)
-                        .createFlight());
+                        .build());
 
         //when
         double price = flightManager.getSeatPrice(FLIGHT_NAME, 1);
@@ -60,7 +63,7 @@ public class FlightManagerTest {
                 FlightBuilder.aFlight()
                         .setSeatsCount(2)
                         .setDefaultPrice(100d)
-                        .createFlight());
+                        .build());
         flightManager.addSeatPrice(FLIGHT_NAME, 1, 20d);
         //when
         double price = flightManager.getCheapestSeatPrice(FLIGHT_NAME);
@@ -76,7 +79,7 @@ public class FlightManagerTest {
         when(flightDAO.getFlight(FLIGHT_NAME)).thenReturn(
                 FlightBuilder.aFlight()
                         .setSeatsCount(2)
-                        .createFlight());
+                        .build());
         //when
         flightManager.reserveSeatInFlight(2, FLIGHT_NAME);
 
@@ -90,7 +93,7 @@ public class FlightManagerTest {
         when(flightDAO.getFlight(FLIGHT_NAME)).thenReturn(
                 FlightBuilder.aFlight()
                         .setSeatsCount(2)
-                        .createFlight());
+                        .build());
         flightManager.addSeatPrice(FLIGHT_NAME, 1, 20d);
         flightManager.addSeatPrice(FLIGHT_NAME, 2, 40d);
         //when
@@ -107,7 +110,7 @@ public class FlightManagerTest {
         when(flightDAO.getFlight(FLIGHT_NAME)).thenReturn(
                 FlightBuilder.aFlight()
                         .setSeatsCount(3)
-                        .createFlight());
+                        .build());
         flightManager.addSeatPrice(FLIGHT_NAME, 1, 100d);
         flightManager.addSeatPrice(FLIGHT_NAME, 2, 20d);
         flightManager.addSeatPrice(FLIGHT_NAME, 3, 40d);
@@ -119,5 +122,18 @@ public class FlightManagerTest {
 
         //then
         assertThat(price).isEqualTo(30d);
+    }
+
+    @Test
+    public void shouldGetListOfFlightsBetweenLocations() {
+        //given
+        Flight flight = new FlightBuilder().build();
+        when(flightDAO.findFlightBetween("Warsaw","Paris")).thenReturn(Arrays.asList(flight));
+
+        //when
+        List<Flight> flightsBetween = flightManager.getFlightsBetween("Warsaw", "Paris");
+
+        //then
+        assertThat(flightsBetween).containsOnly(flight);
     }
 }

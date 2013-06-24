@@ -3,19 +3,18 @@ import java.util.List;
 
 public class Flight {
 
-    private String from;
-    private String to;
+    private final String from;
+    private final String to;
     private final List<Seat> seats;
+    private String name;
 
-    public Flight(int seatsCount, Double defaultPrice) {
+    public Flight(int seatsCount, Double defaultPrice, String from, String to) {
+        this.from = from;
+        this.to = to;
         this.seats = new ArrayList<Seat>(seatsCount);
         for (int i = 0; i < seatsCount; i++) {
             seats.add(i, new Seat(i, defaultPrice));
         }
-    }
-
-    public Flight(int seatsCount) {
-        this(seatsCount, Seat.PRICE_UNDEFINED);
     }
 
     public int getSeatsCount() {
@@ -69,5 +68,23 @@ public class Flight {
         }
 
         return sum / count;
+    }
+
+    public List<Flight> getFlightsBetween(String from, String to) {
+
+
+        return null;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public String getTo() {
+        return to;
     }
 }
