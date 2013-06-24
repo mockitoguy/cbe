@@ -25,17 +25,15 @@ public class Flight {
         getSeat(seat).setPrice(price);
     }
 
-    public double getCheapestSeatPrice() {
-        Double cheapestPrice = Seat.UNSPECIFIED;
+    public Double getCheapestSeatPrice() {
+        Double cheapestPrice = Seat.PRICE_UNDEFINED;
         for (Seat seat : seats) {
-
             Double seatPrice = seat.getPrice();
-            if (cheapestPrice == Seat.UNSPECIFIED) {
+            if (Seat.PRICE_UNDEFINED.equals(cheapestPrice)) {
                 cheapestPrice = seatPrice;
             }
+            cheapestPrice = Math.min(cheapestPrice, seatPrice);
 
-            if (seatPrice != Seat.UNSPECIFIED)
-                cheapestPrice = Math.min(cheapestPrice, seatPrice);
         }
         return cheapestPrice;
     }

@@ -1,13 +1,10 @@
 public class Seat {
-    public static Double UNSPECIFIED = -1d;
 
-    private int position;
-    private Double price = UNSPECIFIED;
+    public static final Double PRICE_UNDEFINED = -1d;
+
+    private final int position;
+    private Double price;
     private boolean reserved = false;
-
-    public Seat(int position) {
-        this.position = position;
-    }
 
     public Seat(int position, Double price) {
         this.position = position;
@@ -18,16 +15,15 @@ public class Seat {
         return position;
     }
 
-    public void setPosition(int position) {
-        this.position = position;
+    public void setPrice(Double price) {
+        if (price == null) {
+            price = PRICE_UNDEFINED;
+        }
+        this.price = price;
     }
 
     public Double getPrice() {
         return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
     }
 
     public void reserve() {
