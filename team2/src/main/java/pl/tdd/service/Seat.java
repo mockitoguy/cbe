@@ -7,6 +7,8 @@ public class Seat {
 
     private String seatNumber;
 
+    private SeatClass seatClass;
+
     private double price;
 
     private boolean booked;
@@ -16,8 +18,9 @@ public class Seat {
         this.booked = false;
     }
 
-    public Seat(String seatNumber, double price) {
+    public Seat(SeatClass seatClass, String seatNumber, double price) {
         this(seatNumber);
+        this.seatClass = seatClass;
         this.price = price;
     }
 
@@ -27,6 +30,14 @@ public class Seat {
 
     public String getSeatNumber() {
         return seatNumber;
+    }
+
+    public SeatClass getSeatClass() {
+        return seatClass;
+    }
+
+    public boolean isInClass(SeatClass seatClass) {
+        return this.seatClass.equals(seatClass);
     }
 
     public double getPrice() {

@@ -1,6 +1,7 @@
 package pl.tdd.service;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,13 +15,16 @@ public class Flight {
     private String flightCode;
 
     private Map<String, Seat> seats= new HashMap<>();
+    private String origin;
+    private String destination;
+    private Date flightDate;
 
     public Flight(String flightCode) {
         this.flightCode = flightCode;
     }
 
-    public void addSeat(String seatCode, double price) {
-        Seat seat = new Seat(seatCode, price);
+    public void addSeat(SeatClass seatClass, String seatCode, double price) {
+        Seat seat = new Seat(seatClass, seatCode, price);
         seats.put(seatCode, seat);
     }
 
@@ -57,16 +61,61 @@ public class Flight {
     }
 
     public double getAveragePriceOfAvailableSeats() {
-
         double priceSum = 0;
-        int avaiableCount = 0;
+        int availableCount = 0;
         for(Seat seat : seats.values()) {
 
             if(seat.isAvailable()) {
                 priceSum += seat.getPrice();
-                avaiableCount++;
+                availableCount++;
             }
         }
-        return priceSum / avaiableCount;
+        return priceSum / availableCount;
     }
+
+
+    public double getAveragePriceOfSeatsInClass(SeatClass seatClass) {
+        double priceSum = 0;
+        int availableCount = 0;
+        for(Seat seat : seats.values()) {
+            if(seat.isInClass(seatClass)) {
+                priceSum += seat.getPrice();
+                availableCount++;
+            }
+        }
+        return priceSum / availableCount;
+    }
+
+    public boolean isFrom(String origin) {
+        return this.origin.equalsIgnoreCase(origin);
+    }
+
+    public boolean isTo(String destination) {
+        return  this.destination.equalsIgnoreCase(destination);
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setFlightDate(Date flightDate) {
+        this.flightDate = flightDate;
+    }
+
+    public Date getFlightDate() {
+        return flightDate;
+    }
+
 }

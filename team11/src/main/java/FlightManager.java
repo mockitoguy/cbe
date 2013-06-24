@@ -23,8 +23,10 @@ public class FlightManager {
 
     }
 
-    public void setFlight(Flight flight) {
-        listOfFlight.add(flight);
+    public void setFlight(Flight ... flights) {
+        for (Flight flight : flights) {
+            listOfFlight.add(flight);
+        }
     }
 
     public void setSeatPrice(String flightNumber, int seatsNumber, BigDecimal flightPrice) {
@@ -72,5 +74,33 @@ public class FlightManager {
 
         }
         return null;
+    }
+
+    public List<Flight> getAvalibleFlights(String origin, String destination) {
+        List<Flight> flights = new ArrayList<Flight>();
+        for (Flight flight : listOfFlight) {
+            if (flight.getDestination().equals(destination) && flight.getOrigin().equals(origin))
+            flights.add(flight);
+        }
+
+        return flights;
+    }
+
+    public List<Flight> getAllFlightsFromOrigin(String origin) {
+        List<Flight> flights = new ArrayList<Flight>();
+        for (Flight flight : listOfFlight) {
+            if (flight.getOrigin().equals(origin))
+                flights.add(flight);
+        }
+      return flights;
+    }
+
+    public List<Flight> getAllFlightsToDestination(String destination) {
+        List<Flight> flights = new ArrayList<Flight>();
+        for (Flight flight : listOfFlight) {
+            if (flight.getDestination().equals(destination))
+                flights.add(flight);
+        }
+        return flights;
     }
 }

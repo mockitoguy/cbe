@@ -6,74 +6,76 @@ import org.junit.Test;
 import java.math.BigDecimal;
 
 /**
- * Created with IntelliJ IDEA.
- * User: andrzej.wislowski
- * Date: 24.06.2013
- * Time: 10:41
- * To change this template use File | Settings | File Templates.
+ * Created with IntelliJ IDEA. User: andrzej.wislowski Date: 24.06.2013 Time:
+ * 10:41 To change this template use File | Settings | File Templates.
  */
 public class FlightManagerTest {
 
-    @Test
-    public void shouldReturnAvailableSeatsForFlight() {
-        //given
-        FlightManager flightManager = new FlightManager();
-        Flight flight= new Flight("F12");
-        for (int i = 0; i < 5; i++) {
-            flight.addSeat(new Seat("" + i, new BigDecimal(120)));
-        }
-        flightManager.addFlight(flight);
+  @Test
+  public void shouldReturnAvailableSeatsForFlight() {
+    // given
+    FlightManager flightManager = new FlightManager();
+    flightManager.addFlight(new Flight("F12").addSeat(new SeatBuilder().build()).addSeat(new SeatBuilder().build()));
 
-        //expect
-        Assert.assertEquals(5, flightManager.getSeatCountForFlightNumber("F12"));
-    }
+    flightManager.addFlight(new Flight("F13").addSeat(new SeatBuilder().build()));
 
-    @Test
-    public void shouldReturnTheCheapestSeatForAFlight(){
-        //given
-        FlightManager flightManager = new FlightManager();
-        Flight flight = new Flight("F12");
-        for (int i = 0; i < 10; i++) {
-            flight.addSeat(new Seat(""+i, new BigDecimal(120 +i) ));
-        }
-        flightManager.addFlight(flight);
+    // when
+    int seatCount = flightManager.getSeatCountForFlightNumber("F12");
 
-        //expect
-        Assert.assertEquals(new BigDecimal(120), flightManager.getTheCheapestSeatPriceForFlightNumber("F12"));
-    }
+    // then
+    Assert.assertEquals(2, seatCount);
+  }
 
-    @Test
-    public void shouldBookAndReturnSeatNumber() throws Exception {
-        //given
-        FlightManager flightManager = new FlightManager();
-        Flight flight = new Flight("F12");
-        for (int i = 0; i < 10; i++) {
-            flight.addSeat(new Seat("" + i, new BigDecimal(120)));
-        }
-        flightManager.addFlight(flight);
+  @Test
+  public void shouldReturnTheCheapestSeatForFlight() {
+    // given
+    FlightManager flightManager = new FlightManager();
+    Flight flight = new Flight("F12");
+    flight.addSeat(new SeatBuilder().withPrice(120).build());
+    flight.addSeat(new SeatBuilder().withPrice(140).build());
 
-        //when
-        String seatNumber = flightManager.bookSeatForFlightNumber("F12");
+    flightManager.addFlight(flight);
+    flightManager.addFlight(new Flight("F13").addSeat(new SeatBuilder().withPrice(100).build()));
 
-        //then
-        Assert.assertTrue(flight.containsSeat(seatNumber));
-        Assert.assertFalse(flight.isSeatAvailable(seatNumber));
-    }
+    // when
+    BigDecimal cheapestSeatPriceForFlightNumber = flightManager.getTheCheapestSeatPriceForFlightNumber("F12");
+    // then
+    Assert.assertEquals(new BigDecimal(120), cheapestSeatPriceForFlightNumber);
+  }
 
-    @Test
-    public void shouldReturnAvaragePriceForNotBookedSeats() throws Exception {
-        //given
-        FlightManager flightManager = new FlightManager();
-        Flight flight = new Flight("F12");
-        for (int i = 0; i < 10; i++) {
-            flight.addSeat(new Seat("" + i, new BigDecimal(120 + i)));
-        }
-        flightManager.addFlight(flight);
-        for (int i = 0; i < 5; i++) {
-            flightManager.bookSeatForFlightNumber("F12");
-        }
+  @Test
+  public void shouldBookAndReturnSeatNumber() throws Exception {
+    // given
+    FlightManager flightManager = new FlightManager();
+    Flight flight = new Flight("F12");
+    flight.addSeat(new SeatBuilder().withNumber("1").build());
+    flight.addSeat(new SeatBuilder().withNumber("2").build());
+    flightManager.addFlight(flight);
+    Flight anotherFlight = new Flight("F13").addSeat(new SeatBuilder().withNumber("1").build());
+    flightManager.addFlight(anotherFlight);
 
-        //expect
-        Assert.assertEquals(new BigDecimal("126.2"), flightManager.getAvaragePriceOfAvailableSeatsForFlightNumber("F12"));
-    }
+    // when
+    String seatNumber = flightManager.bookSeatForFlightNumber("F12");
+
+    // then
+    Assert.assertTrue(flight.containsSeat(seatNumber));
+    Assert.assertFalse(flight.isSeatAvailable(seatNumber));
+  }
+
+  @Test
+  public void shouldReturnAveragePriceForNotBookedSeats() throws Exception {
+    // given
+    FlightManager flightManager = new FlightManager();
+    Flight flight = new Flight("F12");
+    flight.addSeat(new SeatBuilder().withPrice(100).build()).addSeat(new SeatBuilder().withPrice(200).build())
+        .addSeat(new SeatBuilder().withPrice(400).build());
+    flightManager.addFlight(flight);
+    flightManager.bookSeatForFlightNumber("F12");
+
+    // when
+    BigDecimal avaragePriceOfAvailableSeatsForFlightNumber = flightManager
+        .getAvaragePriceOfAvailableSeatsForFlightNumber("F12");
+    // then
+    Assert.assertEquals(new BigDecimal("300"), avaragePriceOfAvailableSeatsForFlightNumber);
+  }
 }

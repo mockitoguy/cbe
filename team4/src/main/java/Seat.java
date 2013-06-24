@@ -6,8 +6,23 @@ import java.math.BigDecimal;
  */
 public class Seat {
 
+  private SeatClass seatClass;
   private BigDecimal price;
   private User user = null;
+
+  public Seat(BigDecimal price, SeatClass seatClass, User user) {
+    this.price = price;
+    this.seatClass = seatClass;
+    this.user = user;
+  }
+
+  public SeatClass getSeatClass() {
+    return seatClass;
+  }
+
+  public void setSeatClass(SeatClass seatClass) {
+    this.seatClass = seatClass;
+  }
 
   public Seat(BigDecimal price) {
     this.price = price;

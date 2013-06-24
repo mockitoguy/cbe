@@ -14,6 +14,7 @@ public class FlightTest {
 
     @Test
     public void shouldReturnPriceOfCheapestSeat() {
+
         //given
         double cheapestPrice = 20,
                expensivePrice = 100;
@@ -30,6 +31,7 @@ public class FlightTest {
 
     @Test
     public void shouldBookSeatWithGivenNumber() {
+
         // given
         String bookedSeatCode = "TEST_SEAT";
         Flight flight = flight("TEST_FLIGHT").withSeats(20).withSeat(bookedSeatCode).build();
@@ -43,6 +45,7 @@ public class FlightTest {
 
     @Test
     public void shouldReturnAveragePriceOfAvailableSeats() {
+
         //given
         Flight flight = flight("TEST_FLIGHT").withSeatsInPrice(100, 10).withBookedSeatsInPrice(100, 20).build();
 
@@ -51,7 +54,20 @@ public class FlightTest {
 
         //then
         assertThat(averagePriceOfAvailableSeats).isEqualTo(10);
+    }
 
+    @Test
+    public void shouldReturnAveragePriceOfSeatsInClass() {
+        // given
+        Flight flight = flight("TEST_FLIGHT").withSeats(SeatClass.ECONOMIC, 100, 20)
+                .withSeats(SeatClass.ECONOMIC, 100, 40)
+                .withSeats(SeatClass.BUSINESS, 100, 20).build();
+
+        // when
+        double avgPrice = flight.getAveragePriceOfSeatsInClass(SeatClass.ECONOMIC);
+
+        // then
+        assertThat(avgPrice).isEqualTo(30);
     }
 
     @Test
@@ -80,5 +96,4 @@ public class FlightTest {
         //then
         assertThat(caughtException()).isInstanceOf(SeatAlreadyBookedException.class);
     }
-
 }

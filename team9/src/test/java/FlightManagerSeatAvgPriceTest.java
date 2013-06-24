@@ -13,13 +13,14 @@ public class FlightManagerSeatAvgPriceTest {
     public void shouldTellCheapestSeatInGivenFlight() throws Exception {
         //given
         Flight flight = new FlightParametersBuilder()
+            .flightNo("LH101")
             .addSeat(1)
             .addSeat(2)
             .addSeat(3)
             .build();
 
         FlightManager flightManager = new FlightManager();
-        flightManager.addFlight("LH101", flight);
+        flightManager.addFlight(flight);
 
         //when
         int avgPrice = flightManager.getAvgSeatPrice("LH101");
@@ -32,13 +33,14 @@ public class FlightManagerSeatAvgPriceTest {
     public void shoudFailToTellAvgSeatPriceWhenNoAvailable() throws Exception {
         //given
         Flight flight = new FlightParametersBuilder()
+            .flightNo("LH101")
             .addSeat(1, SEAT_RESERVED)
             .addSeat(2, SEAT_RESERVED)
             .addSeat(3, SEAT_RESERVED)
             .build();
 
         FlightManager flightManager = new FlightManager();
-        flightManager.addFlight("LH101", flight);
+        flightManager.addFlight(flight);
 
         //when
         when(flightManager).getAvgSeatPrice("LH101");

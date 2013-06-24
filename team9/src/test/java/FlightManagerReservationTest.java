@@ -19,6 +19,7 @@ public class FlightManagerReservationTest {
     public void shouldReseveFreeSeat() throws Exception {
         //given
         Flight flight = new FlightParametersBuilder()
+            .flightNo("LH101")
             .addSeat(1)
             .addSeat(2)
             .addSeat(3)
@@ -27,7 +28,7 @@ public class FlightManagerReservationTest {
             .build();
 
         FlightManager flightManager = new FlightManager();
-        flightManager.addFlight("LH101", flight);
+        flightManager.addFlight(flight);
 
         //when
         int seatNumber = 2;
@@ -41,6 +42,7 @@ public class FlightManagerReservationTest {
     public void shouldFailReseveReservedSeat() throws Exception {
         //given
         Flight flight = new FlightParametersBuilder()
+            .flightNo("LH101")
             .addSeat(1)
             .addSeat(2)
             .addSeat(3)
@@ -49,7 +51,7 @@ public class FlightManagerReservationTest {
             .build();
 
         FlightManager flightManager = new FlightManager();
-        flightManager.addFlight("LH101", flight);
+        flightManager.addFlight(flight);
 
         //when
         int seatNumber = 2;
@@ -64,6 +66,7 @@ public class FlightManagerReservationTest {
     public void shouldFailReservingNonExistingSeat() throws Exception {
         //given
         Flight flight = new FlightParametersBuilder()
+            .flightNo("LH101")
             .addSeat(1)
             .addSeat(2)
             .addSeat(3)
@@ -72,7 +75,7 @@ public class FlightManagerReservationTest {
             .build();
 
         FlightManager flightManager = new FlightManager();
-        flightManager.addFlight("LH101", flight);
+        flightManager.addFlight(flight);
 
         //when
         int seatNumber = 6;
