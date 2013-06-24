@@ -28,7 +28,7 @@ public class FlightServiceTest {
         flightService.addFlight(flight("AE500").withSeats(15).build());
 
         //when
-        int availableSeatsCount = flightService.getAvailaleSeatsCount("LA101");
+        int availableSeatsCount = flightService.getAvailabeSeatsCount("LA101");
 
         //then
         assertThat(availableSeatsCount).isEqualTo(5);
@@ -39,7 +39,7 @@ public class FlightServiceTest {
         //given
 
         //when
-        catchException(flightService).getAvailaleSeatsCount("GHOST_FLIGHT");
+        catchException(flightService).getAvailabeSeatsCount("GHOST_FLIGHT");
 
         //then
         assertThat(caughtException()).isInstanceOf(UnknownFlightException.class);
@@ -93,7 +93,7 @@ public class FlightServiceTest {
     public void shouldThrowSeatAlreadyBookedExceptionIfSeatAlreadyBooked() {
         // given
         String bookedSeatCode = "BOOKED_SEAT";
-        Flight flight = flight("L102").withBookeSeat(bookedSeatCode).build();
+        Flight flight = flight("L102").withBookedSeat(bookedSeatCode).build();
         flightService.addFlight(flight);
 
         //when

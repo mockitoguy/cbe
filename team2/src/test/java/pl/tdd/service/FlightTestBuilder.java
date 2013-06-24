@@ -51,7 +51,7 @@ public class FlightTestBuilder {
         return this;
     }
 
-    public FlightTestBuilder withBookeSeat(String seatNumber) {
+    public FlightTestBuilder withBookedSeat(String seatNumber) {
         flight.addSeat(seatNumber, 0);
         flight.bookSeat(seatNumber);
         return this;

@@ -72,7 +72,7 @@ public class FlightTest {
 
         //given
         String seatName = "TEST_SEAT_NAME";
-        Flight flight = flight("TEST_FLIGHT").withBookeSeat(seatName).build();
+        Flight flight = flight("TEST_FLIGHT").withBookedSeat(seatName).build();
 
         //when
         catchException(flight).bookSeat(seatName);

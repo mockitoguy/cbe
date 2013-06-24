@@ -16,7 +16,7 @@ public class FlightService {
         flightRepo.put(flight.getFlightCode(), flight);
     }
 
-    public int getAvailaleSeatsCount(String flightCode) {
+    public int getAvailabeSeatsCount(String flightCode) {
         return getFlight(flightCode).getSeatsCount();
     }
 
