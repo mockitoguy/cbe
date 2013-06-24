@@ -8,7 +8,8 @@ public class Flight {
     private final List<Seat> seats;
     private String name;
 
-    public Flight(int seatsCount, Double defaultPrice, String from, String to) {
+    public Flight(String name, int seatsCount, Double defaultPrice, String from, String to) {
+        this.name = name;
         this.from = from;
         this.to = to;
         this.seats = new ArrayList<Seat>(seatsCount);

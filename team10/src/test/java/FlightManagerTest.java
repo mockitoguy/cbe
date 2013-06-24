@@ -4,9 +4,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.Arrays;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -76,10 +76,8 @@ public class FlightManagerTest {
     @Test
     public void shouldBookSeatOnGivenFlight() {
         //given
-        when(flightDAO.getFlight(FLIGHT_NAME)).thenReturn(
-                FlightBuilder.aFlight()
-                        .setSeatsCount(2)
-                        .build());
+        when(flightDAO.getFlight(FLIGHT_NAME)).thenReturn(new FlightBuilder().setSeatsCount(2).build());
+
         //when
         flightManager.reserveSeatInFlight(2, FLIGHT_NAME);
 
@@ -90,10 +88,7 @@ public class FlightManagerTest {
     @Test
     public void shouldGetAveragePriceOfNonBookedSeatsOnNonBookedFlight() {
         //given
-        when(flightDAO.getFlight(FLIGHT_NAME)).thenReturn(
-                FlightBuilder.aFlight()
-                        .setSeatsCount(2)
-                        .build());
+        when(flightDAO.getFlight(FLIGHT_NAME)).thenReturn(new FlightBuilder().setSeatsCount(2).build());
         flightManager.addSeatPrice(FLIGHT_NAME, 1, 20d);
         flightManager.addSeatPrice(FLIGHT_NAME, 2, 40d);
         //when
@@ -107,10 +102,7 @@ public class FlightManagerTest {
     @Test
     public void shouldGetAveragePriceOfNonBookedSeatsOnPartialBookedFlight() {
         //given
-        when(flightDAO.getFlight(FLIGHT_NAME)).thenReturn(
-                FlightBuilder.aFlight()
-                        .setSeatsCount(3)
-                        .build());
+        when(flightDAO.getFlight(FLIGHT_NAME)).thenReturn(new FlightBuilder().setSeatsCount(3).build());
         flightManager.addSeatPrice(FLIGHT_NAME, 1, 100d);
         flightManager.addSeatPrice(FLIGHT_NAME, 2, 20d);
         flightManager.addSeatPrice(FLIGHT_NAME, 3, 40d);
@@ -128,7 +120,7 @@ public class FlightManagerTest {
     public void shouldGetListOfFlightsBetweenLocations() {
         //given
         Flight flight = new FlightBuilder().build();
-        when(flightDAO.findFlightBetween("Warsaw","Paris")).thenReturn(Arrays.asList(flight));
+        when(flightDAO.findFlightBetween("Warsaw", "Paris")).thenReturn(asList(flight));
 
         //when
         List<Flight> flightsBetween = flightManager.getFlightsBetween("Warsaw", "Paris");
@@ -136,4 +128,5 @@ public class FlightManagerTest {
         //then
         assertThat(flightsBetween).containsOnly(flight);
     }
+
 }

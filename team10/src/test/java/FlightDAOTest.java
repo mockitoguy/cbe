@@ -1,4 +1,5 @@
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.List;
 
@@ -46,5 +47,18 @@ public class FlightDAOTest {
 
         //then
         assertThat(flights).containsOnly(flightOne, flightTwo);
+    }
+
+    @Test
+    public void shouldGetFlightNumbersOfFlightsBetweenLocations() {
+        //given
+        Flight flight = new FlightBuilder().withName("LT102").from("Warsaw").to("Paris").build();
+        FlightDAO flightDAO = new FlightDAO(asList(flight));
+
+        //when
+        List<Flight> flightsBetween = flightDAO.findFlightBetween("Warsaw", "Paris");
+
+        //then
+        assertThat(flightsBetween.get(0).getName()).isEqualTo("LT102");
     }
 }

@@ -1,4 +1,5 @@
 public class FlightBuilder {
+    private String name;
     private int seatsCount;
     private Double defaultPrice = Seat.PRICE_UNDEFINED;
     private String from;
@@ -22,6 +23,10 @@ public class FlightBuilder {
         this.from = from;
         return this;
     }
+    public FlightBuilder withName(String name) {
+        this.name = name;
+        return this;
+    }
 
     public FlightBuilder to(String to) {
         this.to = to;
@@ -29,6 +34,6 @@ public class FlightBuilder {
     }
 
     public Flight build() {
-        return new Flight(seatsCount, defaultPrice, from, to);
+        return new Flight(name, seatsCount, defaultPrice, from, to);
     }
 }
