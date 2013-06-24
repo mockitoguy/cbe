@@ -6,8 +6,8 @@ out
 /*.ipr
 *.iws
 
-*.classpath
-*.project
+/*.classpath
+/*.project
 *.settings
-/bin
-/.idea
+bin
+.idea
