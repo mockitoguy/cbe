@@ -5,6 +5,7 @@ public class Seat {
     private int seatNumber;
     private int price;
     private boolean booked;
+    private CLASS aClass;
 
     public int getSeatNumber() {
         return seatNumber;
@@ -34,4 +35,18 @@ public class Seat {
     public void setBooked(boolean booked) {
         this.booked = booked;
     }
+
+    public void setClass(CLASS aClass) {
+        this.aClass = aClass;
+    }
+
+    public CLASS getaClass() {
+        return aClass;
+    }
+
+    public void setaClass(CLASS aClass) {
+        this.aClass = aClass;
+    }
+
+    public enum CLASS {ECONOMIC,BUSSINESS,FIRST}
 }
