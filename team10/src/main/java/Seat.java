@@ -1,5 +1,5 @@
 public class Seat {
-    private static Double UNSPECIFIED = -1d;
+    public static Double UNSPECIFIED = -1d;
 
     private int position ;
     private Double price = UNSPECIFIED;

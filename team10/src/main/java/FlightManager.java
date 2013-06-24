@@ -20,4 +20,20 @@ public class FlightManager {
     public double getSeatPrice(String flightName, int seat) {
         return flights.get(flightName).getSeatPrice(seat);
     }
+
+    public double getCheapestSeatPrice(String flightName) {
+
+        Double cheapestPrice = Seat.UNSPECIFIED;
+        for (Seat seat : flights.get(flightName).getSeats()) {
+
+            Double seatPrice = seat.getPrice();
+            if (cheapestPrice == Seat.UNSPECIFIED) {
+                cheapestPrice = seatPrice;
+            }
+
+            if (seatPrice != Seat.UNSPECIFIED)
+                cheapestPrice = Math.min(cheapestPrice, seatPrice);
+        }
+        return cheapestPrice;
+    }
 }

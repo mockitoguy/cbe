@@ -18,6 +18,10 @@ public class Flight {
 
     }
 
+    public List<Seat> getSeats() {
+        return seats;
+    }
+
     public String getName() {
         return name;
     }

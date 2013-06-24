@@ -29,16 +29,30 @@ public class FlightManagerTest {
     }
 
     @Test
-    public void shouldTellPriceOfCheapestSeatInGivenFlight() {
+    public void shouldTellPriceOfSeatInGivenFlight() {
         //given
         flightManager.addSeatPrice("LH101", 1, 100d);
         flightManager.addSeatPrice("LH101", 2, 60d);
-        flightManager.addSeatPrice("LH101", 3, 60d);
-        flightManager.addSeatPrice("AE500", 1, 160d);
+
         //when
         double price = flightManager.getSeatPrice("LH101", 1);
 
         //then
         assertEquals(100d, price, 0.1d);
+
+    }
+
+    @Test
+    public void shouldTellPriceOfCheapestSeatInGivenFlight() {
+        //given
+        flightManager.addSeatPrice("LH101", 1, 100d);
+        flightManager.addSeatPrice("LH101", 2, 60d);
+        flightManager.addSeatPrice("LH101", 3, 60d);
+        flightManager.addSeatPrice("AE500", 1, 40d);
+        //when
+        double price = flightManager.getCheapestSeatPrice("LH101");
+
+        //then
+        assertEquals(60d, price, 0.1d);
     }
 }
