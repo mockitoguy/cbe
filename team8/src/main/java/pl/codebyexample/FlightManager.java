@@ -1,5 +1,6 @@
 package pl.codebyexample;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,13 +28,13 @@ public class FlightManager {
         flights.add(flight);
     }
 
-    public int getTheCheapestSeatPriceForFlightNumber(String flightNumber) {
+    public BigDecimal getTheCheapestSeatPriceForFlightNumber(String flightNumber) {
         for (Flight flight : flights) {
             if (flight.getFlightNumber().equals(flightNumber)) {
                 return flight.getCheapestSeat();
             }
         }
-        return 0;
+        return BigDecimal.ZERO;
     }
 
     public String bookSeatForFlightNumber(String flightNumber) {
@@ -43,5 +44,14 @@ public class FlightManager {
             }
         }
         return null;
+    }
+
+    public BigDecimal getAvaragePriceOfAvailableSeatsForFlightNumber(String flightNumber) {
+        for (Flight flight : flights) {
+            if (flight.getFlightNumber().equals(flightNumber)) {
+                return flight.getAvaragePriceOfAvailableSeats();
+            }
+        }
+        return BigDecimal.ZERO;
     }
 }

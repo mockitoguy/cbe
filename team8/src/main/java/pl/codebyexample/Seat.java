@@ -1,5 +1,7 @@
 package pl.codebyexample;
 
+import java.math.BigDecimal;
+
 /**
  * Created with IntelliJ IDEA.
  * User: andrzej.wislowski
@@ -9,16 +11,16 @@ package pl.codebyexample;
  */
 public class Seat {
 
-    private int price;
+    private BigDecimal price;
     private boolean available = true;
     private String number;
 
-    public Seat(String number, int price) {
+    public Seat(String number, BigDecimal price) {
         this.price = price;
         this.number = number;
     }
 
-    public int getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 

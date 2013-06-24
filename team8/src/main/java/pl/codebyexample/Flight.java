@@ -1,5 +1,6 @@
 package pl.codebyexample;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 
 /**
@@ -32,10 +33,11 @@ public class Flight {
     seats.add(seat);
   }
 
-  public int getCheapestSeat() {
-    int cheapest = Integer.MAX_VALUE;
+  public BigDecimal getCheapestSeat() {
+    BigDecimal cheapest = new BigDecimal(Integer.MAX_VALUE);
     for (Seat seat : seats) {
-      cheapest = cheapest > seat.getPrice() ? seat.getPrice() : cheapest;
+        if (cheapest.compareTo(seat.getPrice()) > 0)
+            cheapest = seat.getPrice();
     }
     return cheapest;
   }
@@ -49,10 +51,10 @@ public class Flight {
   }
 
   public boolean isSeatAvailable(String seatNumber) {
-      for (Seat seat : seats) {
-          if (seat.getNumber().equals(seatNumber))
-              return seat.isAvailable();
-      }
+    for (Seat seat : seats) {
+      if (seat.getNumber().equals(seatNumber))
+        return seat.isAvailable();
+    }
     return false;
   }
 
@@ -62,8 +64,23 @@ public class Flight {
         seat.setAvailable(false);
         return seat.getNumber();
       }
-
     }
     return null;
+  }
+
+  public BigDecimal getAvaragePriceOfAvailableSeats() {
+      int count =0;
+      BigDecimal amount = BigDecimal.ZERO;
+      for (Seat seat : seats) {
+          if (seat.isAvailable()) {
+              count++;
+              amount = amount.add(seat.getPrice());
+          }
+      }
+      if (count > 0) {
+          return amount.divide(new BigDecimal(count));
+      }
+
+    return BigDecimal.ZERO;
   }
 }
