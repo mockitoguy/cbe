@@ -2,7 +2,7 @@ apply plugin: 'idea'
 
 task setupTeams
 
-10.times { 
+12.times { 
   def team = "team${it+1}"
   delete team
   def genTeam = tasks.create(name: "genTeam${it+1}", type: Sync) {
