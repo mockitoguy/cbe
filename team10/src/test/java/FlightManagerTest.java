@@ -9,8 +9,8 @@ public class FlightManagerTest {
 
     @Before
     public void setUp() throws Exception {
-        flightManager.addFlight("LH101", 5);
-        flightManager.addFlight("AE500", 15);
+        flightManager.addFlight("LH101", 5, 80d);
+        flightManager.addFlight("AE500", 15, 20d);
     }
 
     @Test
@@ -55,4 +55,8 @@ public class FlightManagerTest {
         //then
         assertEquals(60d, price, 0.1d);
     }
+
+
+
+
 }

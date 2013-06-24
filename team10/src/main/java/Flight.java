@@ -6,7 +6,6 @@ public class Flight {
     private String name;
     private final List<Seat> seats;
 
-
     public Flight(int seatsCount) {
         this.seats = new ArrayList<Seat>(seatsCount);
         for (int i = 0; i < seatsCount; i++) {
@@ -14,20 +13,11 @@ public class Flight {
         }
     }
 
-    public void addSeat(int number, Double price) {
-
-    }
-
-    public List<Seat> getSeats() {
-        return seats;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public Flight(int seatsCount, Double defaultPrice) {
+        this.seats = new ArrayList<Seat>(seatsCount);
+        for (int i = 0; i < seatsCount; i++) {
+            seats.add(i, new Seat(i, defaultPrice));
+        }
     }
 
     public int getSeatsCount() {
@@ -42,5 +32,18 @@ public class Flight {
         seats.get(seat).setPrice(price);
     }
 
+    public double getCheapestSeatPrice() {
+        Double cheapestPrice = Seat.UNSPECIFIED;
+        for (Seat seat : seats) {
 
+            Double seatPrice = seat.getPrice();
+            if (cheapestPrice == Seat.UNSPECIFIED) {
+                cheapestPrice = seatPrice;
+            }
+
+            if (seatPrice != Seat.UNSPECIFIED)
+                cheapestPrice = Math.min(cheapestPrice, seatPrice);
+        }
+        return cheapestPrice;
+    }
 }
