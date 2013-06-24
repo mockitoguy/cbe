@@ -54,4 +54,14 @@ public class FlightManager {
         }
         return BigDecimal.ZERO;
     }
+
+    public List<FlightInfo> flightsBetween(String origin, String destination) {
+        List<FlightInfo> ret = new ArrayList<FlightInfo>();
+        for (Flight flight : flights) {
+            if (flight.getOrigin().equals(origin) && flight.getDestination().equals(destination)) {
+                ret.add(new FlightInfo(flight.getFlightNumber(), flight.getDate()));
+            }
+        }
+        return ret;
+    }
 }

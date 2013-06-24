@@ -1,7 +1,9 @@
 package pl.codebyexample;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 /**
  * Created with IntelliJ IDEA. User: andrzej.wislowski Date: 24.06.2013 Time:
@@ -10,9 +12,12 @@ import java.util.HashSet;
 public class Flight {
 
   String flightNumber;
-  HashSet<Seat> seats = new HashSet<Seat>();
+  HashSet<Seat> seats = new LinkedHashSet<Seat>();
+    private Date date;
+    private String origin;
+    private String destination;
 
-  public Flight(String flightNumber) {
+    public Flight(String flightNumber) {// }, String origin, String destination) {
     this.flightNumber = flightNumber;
   }
 
@@ -29,15 +34,16 @@ public class Flight {
     return flightNumber;
   }
 
-  public void addSeat(Seat seat) {
+  public Flight addSeat(Seat seat) {
     seats.add(seat);
+    return this;
   }
 
   public BigDecimal getCheapestSeat() {
     BigDecimal cheapest = new BigDecimal(Integer.MAX_VALUE);
     for (Seat seat : seats) {
-        if (cheapest.compareTo(seat.getPrice()) > 0)
-            cheapest = seat.getPrice();
+      if (cheapest.compareTo(seat.getPrice()) > 0)
+        cheapest = seat.getPrice();
     }
     return cheapest;
   }
@@ -69,18 +75,42 @@ public class Flight {
   }
 
   public BigDecimal getAvaragePriceOfAvailableSeats() {
-      int count =0;
-      BigDecimal amount = BigDecimal.ZERO;
-      for (Seat seat : seats) {
-          if (seat.isAvailable()) {
-              count++;
-              amount = amount.add(seat.getPrice());
-          }
+    int count = 0;
+    BigDecimal amount = BigDecimal.ZERO;
+    for (Seat seat : seats) {
+      if (seat.isAvailable()) {
+        count++;
+        amount = amount.add(seat.getPrice());
       }
-      if (count > 0) {
-          return amount.divide(new BigDecimal(count));
-      }
+    }
+    if (count > 0) {
+      return amount.divide(new BigDecimal(count));
+    }
 
     return BigDecimal.ZERO;
   }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
 }
