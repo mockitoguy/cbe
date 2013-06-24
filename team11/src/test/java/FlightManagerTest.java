@@ -1,8 +1,10 @@
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * @author: cameleeck
@@ -11,6 +13,9 @@ import static junit.framework.Assert.assertEquals;
  */
 
 public class FlightManagerTest {
+
+    private FlightManager flightManager = new FlightManager();
+
     @Test
     public void shouldReturnAvailableSeats() {
         // given
@@ -28,7 +33,6 @@ public class FlightManagerTest {
     @Test
     public void shouldReturnTheCheapestSeats() {
         //given
-        FlightManager flightManager = new FlightManager();
         flightManager.setSeatPrice("E303", 2, new BigDecimal(300));
         flightManager.setSeatPrice("E303", 67, new BigDecimal(120));
         //when
@@ -40,7 +44,6 @@ public class FlightManagerTest {
     @Test
     public void shouldBookASeat() {
         //given
-        FlightManager flightManager = new FlightManager();
         flightManager.setSeatPrice("E303", 34, new BigDecimal(456));
         flightManager.setSeatPrice("E303", 56, new BigDecimal(756));
         flightManager.setSeatPrice("E453", 56, new BigDecimal(756));
@@ -54,7 +57,6 @@ public class FlightManagerTest {
     @Test
     public void shouldReturnAvaragePriceFromNonBookedSeats() {
         //given
-        FlightManager flightManager = new FlightManager();
         flightManager.setSeatPrice("E404", 01, new BigDecimal(200));
         flightManager.setSeatPrice("E404", 02, new BigDecimal(600));
         flightManager.setSeatPrice("E404", 03, new BigDecimal(666));
@@ -68,4 +70,65 @@ public class FlightManagerTest {
         assertEquals(new BigDecimal("400.00"), returnedValue);
 
     }
+
+    @Test
+    public void shouldGetListOfFlights() {
+        //given
+        Flight expected = builder().withDestination("Warsaw").withOrigin("Poznan").build();
+        flightManager.setFlight(expected, builder().withDestination("Poznan").withOrigin("Konin").build(), builder().withDestination("Warsaw").withOrigin("Radom").build());
+        //when
+        List<Flight> returnedFlights = flightManager.getAvalibleFlights("Poznan", "Warsaw");
+        //then
+        assertThat(returnedFlights).containsOnly(expected);
+
+    }
+
+
+    @Test
+    public void shouldNotReturnAnyFlights() {
+        //given
+        flightManager.setFlight(builder().withDestination("Warsaw").withOrigin("Poznan").build());
+        flightManager.setFlight(builder().withDestination("Poznan").withOrigin("Bialystok").build());
+        //when
+        List<Flight> returnedFlights = flightManager.getAvalibleFlights("Bialystok", "Wroclaw");
+        //then
+        assertThat(returnedFlights).isEmpty();
+
+    }
+
+    @Test
+    public void shouldFindByOrigin() {
+        //given
+        Flight expected = builder().withDestination("Warsaw").withOrigin("Poznan").build();
+        Flight expected_1 = builder().withDestination("Konin").withOrigin("Poznan").build();
+        Flight expected_2 = builder().withDestination("Warsaw").withOrigin("Poznan").build();
+        flightManager.setFlight(expected, expected_1, expected_2, builder().withDestination("Warsaw").withOrigin("Radom").build());
+        //when
+        List<Flight> flightList = flightManager.getAllFlightsFromOrigin("Poznan");
+
+        //then
+        assertThat(flightList).containsOnly(expected, expected_1, expected_2);
+
+    }
+
+    @Test
+    public void shouldFindByDestination() {
+        //given
+        Flight expected = builder().withDestination("Warsaw").withOrigin("Poznan").build();
+        Flight expected_1 = builder().withDestination("Warsaw").withOrigin("Poznan").build();
+        flightManager.setFlight(expected, expected_1,
+                builder().withNumber("E405").withDestination("Konin").withOrigin("Radom").build());
+        //when
+        List<Flight> flightList = flightManager.getAllFlightsToDestination("Warsaw");
+
+        //then
+        assertThat(flightList).containsOnly(expected, expected_1);
+    }
+
+    private FlightBuilder builder() {
+        return new FlightBuilder();
+    }
 }
+
+
+
