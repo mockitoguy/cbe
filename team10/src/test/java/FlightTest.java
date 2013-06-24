@@ -1,30 +1,26 @@
-import org.junit.Assert;
 import org.junit.Test;
 
-import static com.googlecode.catchexception.CatchException.catchException;
 import static com.googlecode.catchexception.CatchException.caughtException;
+import static com.googlecode.catchexception.apis.CatchExceptionBdd.then;
+import static com.googlecode.catchexception.apis.CatchExceptionBdd.when;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class FlightTest {
 
-    private final Flight flight = new Flight(4, 20d);
-
     @Test
     public void shouldTellSeatCount() {
-        //given
-        //when
-
+        Flight flight = new FlightBuilder().setSeatsCount(4).createFlight();
 
         //then
-        Assert.assertEquals(4, flight.getSeatsCount());
+        assertThat(flight.getSeatsCount()).isEqualTo(4);
     }
+
 
     @Test
     public void shouldReserveSeat() {
-        //given
         //when
-
+        Flight flight = new FlightBuilder().setSeatsCount(2).createFlight();
         flight.reserveSeat(2);
 
         //then
@@ -34,24 +30,25 @@ public class FlightTest {
     @Test
     public void shouldFailOnReservedSeat() {
         //given
-        //when
+        Flight flight = new FlightBuilder().setSeatsCount(2).createFlight();
 
+        //when
         flight.reserveSeat(2);
-        catchException(flight).reserveSeat(2);
+        when(flight).reserveSeat(2);
 
         //then
-        assertThat(caughtException()).isInstanceOf(SeatAlreadyReserved.class);
+        then(caughtException()).isInstanceOf(SeatAlreadyReserved.class);
 
     }
-
 
 
     @Test
     public void shouldGetAveragePriceOnFreeFlight() {
 
         //given
-        //when
+        Flight flight = new FlightBuilder().setSeatsCount(2).setDefaultPrice(20d).createFlight();
 
+        //when
         double price = flight.getAveragePrice();
 
         //then
@@ -62,6 +59,7 @@ public class FlightTest {
     public void shouldGetAveragePriceOnNonFreeFlight() {
 
         //given
+        Flight flight = new FlightBuilder().setSeatsCount(3).setDefaultPrice(20d).createFlight();
         flight.reserveSeat(1);
         flight.reserveSeat(2);
         //when
@@ -76,16 +74,16 @@ public class FlightTest {
     public void shouldGetAveragePriceOnNonFreeFlightWithDiffrentPrices() {
 
         //given
-        flight.setSeatPrice(3, 50d);
-        flight.setSeatPrice(4, 60d);
+        Flight flight = new FlightBuilder().setSeatsCount(3).setDefaultPrice(10d).createFlight();
+        flight.setSeatPrice(3, 30d);
         flight.reserveSeat(1);
-        flight.reserveSeat(2);
 
         //when
 
         double price = flight.getAveragePrice();
 
         //then
-        assertThat(price).isEqualTo(55d);
+        assertThat(price).isEqualTo(20d);
     }
+
 }

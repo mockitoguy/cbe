@@ -5,7 +5,7 @@ public class FlightDAO {
     private Map<String, Flight> flights = new HashMap<String, Flight>();
 
     public void addFlight(String flightName, int count, Double defaultPrice) {
-        flights.put(flightName, new Flight(count, defaultPrice));
+        flights.put(flightName, new FlightBuilder().setSeatsCount(count).setDefaultPrice(defaultPrice).createFlight());
     }
 
     public Flight getFlight(String flightName) {

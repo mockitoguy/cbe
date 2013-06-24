@@ -3,7 +3,8 @@ import java.util.List;
 
 public class Flight {
 
-    private String name;
+    private String from;
+    private String to;
     private final List<Seat> seats;
 
     public Flight(int seatsCount, Double defaultPrice) {
@@ -11,6 +12,10 @@ public class Flight {
         for (int i = 0; i < seatsCount; i++) {
             seats.add(i, new Seat(i, defaultPrice));
         }
+    }
+
+    public Flight(int seatsCount) {
+        this(seatsCount, Seat.PRICE_UNDEFINED);
     }
 
     public int getSeatsCount() {
