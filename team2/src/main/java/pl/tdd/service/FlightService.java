@@ -1,6 +1,5 @@
 package pl.tdd.service;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +8,6 @@ import java.util.Map;
  */
 public class FlightService {
 
-    public static final int NO_SEATS = 0;
     private Map<String, Flight> flightRepo = new HashMap<>();
 
     public void addFlight(Flight flight) {
