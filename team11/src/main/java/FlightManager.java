@@ -50,12 +50,27 @@ public class FlightManager {
     }
 
     public Reservation bookSeat(String flightNumber, int seatNo) {
+
         Reservation reservation = new Reservation();
         reservation.setFlight(flightNumber);
         reservation.setSeat(seatNo);
+        for (Flight flight : listOfFlight) {
+            if (flight.getFlightNumber().equals(flightNumber))
+                flight.addNewReservation(reservation);
+            return reservation;
+        }
         Flight flight = new Flight();
         flight.addNewReservation(reservation);
         listOfFlight.add(flight);
         return reservation;
+    }
+
+    public BigDecimal getAvaragePriceOfNonBookedSeats(String flightNumber) {
+        for (Flight flight : listOfFlight) {
+            if (flight.getFlightNumber().equals(flightNumber))
+                return flight.getAveragePriceOfSeat();
+
+        }
+        return null;
     }
 }
