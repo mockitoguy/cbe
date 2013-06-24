@@ -164,4 +164,5 @@ public class Flight {
         private int seats=100;
         private String flightCode;
     }
+
 }
