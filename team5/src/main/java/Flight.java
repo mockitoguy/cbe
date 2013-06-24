@@ -90,4 +90,31 @@ public class Flight {
             throw new RuntimeException("No not booked seats");
         return average/count;
     }
+
+    @Override
+    public String toString() {
+        return "Flight{" +
+            "origin='" + origin + '\'' +
+            ", destination='" + destination + '\'' +
+            ", seats=" + seats +
+            '}';
+    }
+
+    public void setSeatsClass(int first, int last, Seat.CLASS seatClass) {
+        for(int i=first;i<=last;++i){
+            seatsList.get(i).setClass(seatClass);
+        }
+    }
+
+    public double getSeatsAveragePrice(Seat.CLASS seatClass) {
+        int conter=0;
+        double average=0;
+        for(Seat seat : seatsList.values()){
+            if(seat.getaClass()==seatClass){
+                average+=seat.getPrice();
+                ++conter;
+            }
+        }
+        return average/conter;
+    }
 }
