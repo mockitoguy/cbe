@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class FlightManager {
 
@@ -9,12 +11,15 @@ public class FlightManager {
     }
 
     public void addFlight(String flightNumber, int seatsCount) {
-        Flight flight = new Flight(seatsCount);
+        Flight flight = new Flight(flightNumber, seatsCount);
         mFlightMap.put(flightNumber, flight);
     }
 
-    public void addFlight(String flightNumber, Flight flight) {
-        mFlightMap.put(flightNumber, flight);
+    public FlightManager addFlight(Flight... flights) {
+        for (Flight flight : flights) {
+            mFlightMap.put(flight.getFlightNumber(), flight);
+        }
+        return this;
     }
 
     public int getAvailableSeatsCount(String flightNumber) throws FlightNotFoundException {
@@ -43,5 +48,45 @@ public class FlightManager {
         Flight flight = getFlightOrThrow(flightNumber);
 
         return flight.getAvgPrice();
+    }
+
+    public List<Flight> getFlightsBetween(String from, String to) {
+        List<Flight> flightsList = new ArrayList<Flight>();
+
+        for (String flightNumber : mFlightMap.keySet()) {
+            Flight flight = mFlightMap.get(flightNumber);
+
+            if (flight.getOrigin().equals(from)
+                    && flight.getDestination().equals(to)) {
+                flightsList.add(flight);
+            }
+        }
+        return flightsList;
+    }
+
+    public List<Flight> getFlightsFrom(String from) {
+        List<Flight> flightsList = new ArrayList<Flight>();
+
+        for (String flightNumber : mFlightMap.keySet()) {
+            Flight flight = mFlightMap.get(flightNumber);
+
+            if (flight.getOrigin().equals(from)) {
+                flightsList.add(flight);
+            }
+        }
+        return flightsList;
+    }
+
+    public List<Flight> getFlightsTo(String to) {
+        List<Flight> flightsList = new ArrayList<Flight>();
+
+        for (String flightNumber : mFlightMap.keySet()) {
+            Flight flight = mFlightMap.get(flightNumber);
+
+            if (flight.getDestination().equals(to)) {
+                flightsList.add(flight);
+            }
+        }
+        return flightsList;
     }
 }

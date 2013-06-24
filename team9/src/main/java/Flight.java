@@ -1,10 +1,17 @@
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Flight {
     private List<SeatParameters> mSeats;
 
-    public Flight(int seatsCount) {
+    private Date mDate;
+    private String mDestination;
+    private String mOrigin;
+    private String mFlightNumber;
+
+    public Flight(String flightNumber, int seatsCount) {
+        mFlightNumber = flightNumber;
         mSeats = new ArrayList<SeatParameters>(seatsCount);
         initEmptySeats(mSeats, seatsCount);
     }
@@ -85,5 +92,37 @@ public class Flight {
         }
 
         return avgPrice/mSeats.size();
+    }
+
+    public Date getDate() {
+        return mDate;
+    }
+
+    public void setDate(Date mDate) {
+        this.mDate = mDate;
+    }
+
+    public String getDestination() {
+        return mDestination;
+    }
+
+    public void setDestination(String mDestination) {
+        this.mDestination = mDestination;
+    }
+
+    public String getOrigin() {
+        return mOrigin;
+    }
+
+    public void setOrigin(String mOrigin) {
+        this.mOrigin = mOrigin;
+    }
+
+    public String getFlightNumber() {
+        return mFlightNumber;
+    }
+
+    public void setFlightNumber(String mFlightNumber) {
+        this.mFlightNumber = mFlightNumber;
     }
 }

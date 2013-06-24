@@ -1,3 +1,5 @@
+import java.util.Date;
+
 /**
  * Created with IntelliJ IDEA.
  * User: rafal.gurzkowski
@@ -28,5 +30,25 @@ public class FlightParametersBuilder {
 
     public Flight build() {
         return mFlight;
+    }
+
+    public FlightParametersBuilder origin(String origin) {
+        mFlight.setOrigin(origin);
+        return this;
+    }
+
+    public FlightParametersBuilder dest(String destination) {
+        mFlight.setDestination(destination);
+        return this;
+    }
+
+    public FlightParametersBuilder setDate(String date) {
+        mFlight.setDate(new Date(date));
+        return this;
+    }
+
+    public FlightParametersBuilder flightNo(String number) {
+        mFlight.setFlightNumber(number);
+        return this;
     }
 }
