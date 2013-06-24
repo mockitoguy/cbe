@@ -3,26 +3,26 @@ apply plugin: 'eclipse'
 apply plugin: 'java'
 
 dependencies {
-  testCompile fileTree(dir: "libs")
+    testCompile fileTree(dir: "libs")
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 configurations {
-	libs
+    libs
 }
 
 task getLibs(type: Sync) {
-  from configurations.libs
-  into "libs"
-  tasks.eclipse.dependsOn it
-  tasks.idea.dependsOn it
+    from configurations.libs
+    into "libs"
+    tasks.eclipse.dependsOn it
+    tasks.idea.dependsOn it
 }
 
 dependencies {
-	libs 'junit:junit:4.10'
-	libs 'com.googlecode.catch-exception:catch-exception:1.0.4'
-	libs 'org.easytesting:fest-assert:1.4'
+    libs 'junit:junit:4.10'
+    libs 'com.googlecode.catch-exception:catch-exception:1.0.4'
+    libs 'org.easytesting:fest-assert:1.4'
 }

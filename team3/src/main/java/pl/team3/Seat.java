@@ -5,7 +5,7 @@ public class Seat {
 
     private final int seatNo;
 
-    public Seat(long price, int seatNo) {
+    public Seat(int seatNo, long price) {
         this.price = price;
         this.seatNo = seatNo;
 

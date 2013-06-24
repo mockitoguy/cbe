@@ -7,7 +7,7 @@ public class Seats {
     private List<Seat> seats;
 
     public Seats(List<Seat> seats) {
-        this.seats =seats;
+        this.seats = seats;
     }
 
     public List<Seat> getSeats() {
@@ -30,8 +30,6 @@ public class Seats {
                 results.add(seat);
                 cheapestPrice = seat.getPrice();
             }
-
-
         }
         return results;
     }

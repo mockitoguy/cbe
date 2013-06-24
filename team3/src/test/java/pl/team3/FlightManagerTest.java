@@ -3,7 +3,6 @@ package pl.team3;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -17,103 +16,38 @@ import static org.fest.assertions.Assertions.assertThat;
  */
 public class FlightManagerTest {
 
-    public static final String FIRST_FLIGHT_NUMBER = "LOT123";
-    public static final String SECOND_FLIGHT_NUMBER = "BA666";
-    private static final long STANDARD_PRICE = 700L;
-    private static final long CHEAPEST_PRICE = 500l;
     private FlightManager manager;
-    private int firstSeatsNumber = 3;
-    private int secondSeatsNumber = 7;
 
     @Before
     public void setUp() throws Exception {
         manager = new FlightManager();
-        manager.addFlight(FIRST_FLIGHT_NUMBER, new Flight(provideSeats(firstSeatsNumber)));
-        manager.addFlight(SECOND_FLIGHT_NUMBER, new Flight(provideSeats(secondSeatsNumber)));
     }
 
     @Test
     public void ShouldReturnAvailableSeatsNumber() throws Exception {
 
         //Given
+        manager.addFlight(new Flight.Builder("LOT123").addSeat(new Seat(1, 100)).addSeat(new Seat(2, 200)).build());
+        manager.addFlight(new Flight.Builder("LOT123").addSeat(new Seat(2, 200)).build());
 
         //When
-        List<Seat> foundSeats = manager.getSeatsByFlightNumber(FIRST_FLIGHT_NUMBER);
+        List<Seat> foundSeats = manager.getSeatsByFlightNumber("LOT123");
         //Then
-        assertThat(foundSeats.size()).isEqualTo(firstSeatsNumber);
-
-    }
-
-    @Test
-    public void shouldReturnZeroForEmptyFlights() throws Exception {
-        //Given
-        manager = new FlightManager();
-
-        //When
-        List<Seat> foundSeats = manager.getSeatsByFlightNumber(FIRST_FLIGHT_NUMBER);
-        //Then
-        assertThat(foundSeats).isEmpty();
-
+        assertThat(foundSeats.size()).isEqualTo(2);
 
     }
 
     @Test
     public void shouldReturnTheCheapestSeatInFlight() throws Exception {
         //Given
-        manager.getFlightByNumber(FIRST_FLIGHT_NUMBER).addSeat(provideCheapestSeat(666));
+        Seat chepestSeat = new Seat(22, 80);
+        manager.addFlight(new Flight.Builder("LOT123").addSeat(new Seat(1, 100)).addSeat(chepestSeat).build());
         //When
 
-        List<Seat> cheapestSeats = manager.getCheapestSeatForFlight(FIRST_FLIGHT_NUMBER);
+        List<Seat> cheapestSeats = manager.getCheapestSeatForFlight("LOT123");
         //Then
-        assertThat(cheapestSeats).isNotNull();
-        assertThat(cheapestSeats).hasSize(1);
-        assertThat(cheapestSeats.get(0).getPrice()).isEqualTo(CHEAPEST_PRICE);
+        assertThat(cheapestSeats).containsExactly(chepestSeat);
 
-    }
-
-    @Test
-    public void shouldReturnTheCheapestSeatsInFlight() throws Exception {
-        //Given
-        Flight fligt = manager.getFlightByNumber(FIRST_FLIGHT_NUMBER);
-        fligt.addSeat(provideCheapestSeat(666));
-        fligt.addSeat(provideCheapestSeat(667));
-
-        //When
-
-        List<Seat> cheapestSeats = manager.getCheapestSeatForFlight(FIRST_FLIGHT_NUMBER);
-        //Then
-        assertThat(cheapestSeats).isNotNull();
-        assertThat(cheapestSeats).hasSize(2);
-        for (Seat seat : cheapestSeats) {
-            assertThat(seat.getPrice()).isEqualTo(CHEAPEST_PRICE);
-        }
-
-    }
-
-    @Test
-    public void shouldBookSeatForClient() throws Exception {
-        //Given
-
-
-        //When
-
-        //Then
-    }
-
-    private List<Seat> provideSeats(int no) {
-        List<Seat> result = new ArrayList<Seat>();
-        for (int i = 0; i < no; i++) {
-            result.add(provideSeat(i));
-        }
-        return result;
-    }
-
-    private Seat provideSeat(int seatNo) {
-        return new Seat(STANDARD_PRICE, seatNo);
-    }
-
-    private Seat provideCheapestSeat(int seatNo) {
-        return new Seat(CHEAPEST_PRICE, seatNo);
     }
 
 

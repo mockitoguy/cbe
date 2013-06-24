@@ -1,12 +1,10 @@
 package pl.team3;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class FlightManager {
-    private Map<String, Flight> flights = new HashMap<String, Flight>();
+    private List<Flight> flights = new ArrayList<Flight>();
 
 
     public Flight getFlightByNumber(String flightNumber) {
@@ -15,16 +13,17 @@ public class FlightManager {
             throw new IllegalStateException("No flights");
         }
 
-        return flights.get(flightNumber);
+        for (Flight flight : flights) {
+            if (flight != null && flightNumber.equals(flight.getFlightName())) {
+                return flight;
+            }
+        }
+        throw new IllegalStateException("no flight");
 
     }
 
-    public void addFlight(String flightNumber, Flight seats) {
-        if (flights.get(flightNumber) != null) {
-            throw new IllegalStateException("Flight: " + flightNumber + "exists ");
-        }
-        flights.put(flightNumber, seats);
-
+    public void addFlight(Flight flight) {
+        flights.add(flight);
     }
 
     public List<Seat> getSeatsByFlightNumber(String flightNumber) {
