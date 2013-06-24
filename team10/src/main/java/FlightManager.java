@@ -14,10 +14,10 @@ public class FlightManager {
     }
 
     public void addSeatPrice(String flightName, int seat, double price) {
-        flights.get(flightName).getSeats().get(seat).setPrice(price);
+        flights.get(flightName).setSeatPrice(seat, price);
     }
 
     public double getSeatPrice(String flightName, int seat) {
-        return flights.get(flightName).getSeats().get(seat).getPrice();
+        return flights.get(flightName).getSeatPrice(seat);
     }
 }

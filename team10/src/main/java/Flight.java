@@ -26,13 +26,17 @@ public class Flight {
         this.name = name;
     }
 
-    public List<Seat> getSeats() {
-        return seats;
-    }
-
-
     public int getSeatsCount() {
         return seats.size();
     }
+
+    public Double getSeatPrice(int seat) {
+        return seats.get(seat).getPrice();
+    }
+
+    public void setSeatPrice(int seat, Double price) {
+        seats.get(seat).setPrice(price);
+    }
+
 
 }
