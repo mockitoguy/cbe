@@ -70,4 +70,18 @@ public class FlightManager {
     return flight.getSeats().get(i).getUser();
   }
 
+  public BigDecimal getAveragePrice(String id) {
+    Flight flight = getFlight(id);
+    List<Seat> seats = flight.getSeats();
+    int count = 0;
+    BigDecimal sum = new BigDecimal(0);
+    for (Seat seat : seats) {
+      if (seat.getUser() == null) {
+        sum = sum.add(seat.getPrice());
+        count++;
+      }
+    }
+
+    return sum.divide(new BigDecimal(count));
+  }
 }

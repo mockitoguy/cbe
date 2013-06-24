@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 public class Seat {
 
   private BigDecimal price;
-  private User user;
+  private User user = null;
 
   public Seat(BigDecimal price) {
     this.price = price;
