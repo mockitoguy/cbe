@@ -13,7 +13,7 @@ public class Flight {
         this.flightName = flightName;
         this.maxSeatsCount = availableSeats;
         this.seats = new Seat[maxSeatsCount];
-        for(int i=0; i<maxSeatsCount; i++){
+        for (int i = 0; i < maxSeatsCount; i++) {
             seats[i] = new Seat();
 
         }
@@ -27,20 +27,21 @@ public class Flight {
     public String getFlightName() {
         return flightName;
     }
+
     public int getMaxSeatsCount() {
         return maxSeatsCount;
     }
 
     public Seat getCheapestSeat() {
         Seat cheapestSeat = getSeat(0);
-        for(Seat seat: seats){
-             if(cheapestSeat.getPrice() > seat.getPrice())
-                 cheapestSeat = seat;
+        for (Seat seat : seats) {
+            if (cheapestSeat.getPrice() > seat.getPrice())
+                cheapestSeat = seat;
         }
         return cheapestSeat;
     }
 
-    private Seat getSeat(int seatId){
+    private Seat getSeat(int seatId) {
         return seats[seatId];
     }
 
@@ -54,9 +55,12 @@ public class Flight {
 
     public double getNotBookedAvaragePrice() {
         double notBookedAvaragePrice = 0d;
-        for(Seat seat: seats)
-            if(!seat.isBooked())
-                notBookedAvaragePrice = (notBookedAvaragePrice+seat.getPrice())/2;
-        return notBookedAvaragePrice;
+        int seatCount = 0;
+        for (Seat seat : seats)
+            if (!seat.isBooked()) {
+                notBookedAvaragePrice += seat.getPrice();
+                seatCount++;
+            }
+        return notBookedAvaragePrice/seatCount;
     }
 }

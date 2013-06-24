@@ -87,9 +87,9 @@ public class FlightManagerTest {
         Flight flight = new Flight(TU_128, AVAILABLE_SEATS);
         flight.setSeatPrice(0, 2d);
         flight.setSeatPrice(1, 2d);
-        flight.setSeatPrice(2, 2d);
+        flight.setSeatPrice(2, 4d);
         flight.setSeatPrice(3, 1d);
-        flight.setSeatPrice(4, 2d);
+        flight.setSeatPrice(4, 4d);
 
         FlightManager manager = new FlightManager();
         manager.addFlight(flight);
@@ -101,7 +101,7 @@ public class FlightManagerTest {
         double avaragePrice = manager.getNonBookedAvaragePrice(TU_128);
 
         //then
-        assertEquals(2d, avaragePrice, 0.01);
+        assertEquals(3d, avaragePrice, 0.01);
     }
 
 
