@@ -36,9 +36,7 @@ public class FlightManagerTest {
         Flight flight3 = Flight.createBuilder().withFlightCode("FR2224").withOrigin("Warsaw").withDestination
             ("Chicago")
             .build();
-        flightManager.addFlight(flight1);
-        flightManager.addFlight(flight2);
-        flightManager.addFlight(flight3);
+        flightManager.addFlight(flight1, flight2, flight3);
 
 
         //when
@@ -55,9 +53,7 @@ public class FlightManagerTest {
         Flight flight1 = Flight.createBuilder().withFlightCode("FR2222").withOrigin("Warsaw").build();
         Flight flight2 = Flight.createBuilder().withFlightCode("FR2223").withOrigin("Berlin").build();
         Flight flight3 = Flight.createBuilder().withFlightCode("FR2224").withOrigin("Warsaw").build();
-        flightManager.addFlight(flight1);
-        flightManager.addFlight(flight2);
-        flightManager.addFlight(flight3);
+        flightManager.addFlight(flight1, flight2, flight3);
 
         //when
         List<Flight> flights = flightManager.getFlightsFrom("Warsaw");
@@ -73,9 +69,7 @@ public class FlightManagerTest {
         Flight flight1 = Flight.createBuilder().withFlightCode("FR2222").withDestination("Chicago").build();
         Flight flight2 = Flight.createBuilder().withFlightCode("FR2223").withDestination("Warsaw").build();
         Flight flight3 = Flight.createBuilder().withFlightCode("FR2224").withDestination("Chicago").build();
-        flightManager.addFlight(flight1);
-        flightManager.addFlight(flight2);
-        flightManager.addFlight(flight3);
+        flightManager.addFlight(flight1, flight2, flight3);
 
 
         //when

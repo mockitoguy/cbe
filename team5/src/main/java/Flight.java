@@ -140,6 +140,14 @@ public class Flight {
     }
 
     public static class FlightBuilder {
+
+        private String origin;
+        private String destination;
+        private Date date;
+        private int seats = 100;
+        private String flightCode;
+        private Map<Integer, Seat> seatsList;
+        private Map<Seat.TRAVEL_CLASS, Integer> defaultPrices = new HashMap<Seat.TRAVEL_CLASS, Integer>();
         public FlightBuilder() {
             for (Seat.TRAVEL_CLASS travelClass : Seat.TRAVEL_CLASS.values()) {
                 defaultPrices.put(travelClass, 100);
@@ -186,13 +194,6 @@ public class Flight {
             return this;
         }
 
-        private String origin;
-        private String destination;
-        private Date date;
-        private int seats = 100;
-        private String flightCode;
-        private Map<Integer, Seat> seatsList;
-        private Map<Seat.TRAVEL_CLASS, Integer> defaultPrices = new HashMap<Seat.TRAVEL_CLASS, Integer>();
 
         public FlightBuilder withDefaultPrice(int price, Seat.TRAVEL_CLASS aClass) {
             defaultPrices.put(aClass, price);

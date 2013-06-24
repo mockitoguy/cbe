@@ -9,10 +9,12 @@ import java.util.Map;
 public class FlightManager {
     private Map<String, Flight> flights = new HashMap<String, Flight>();
 
-    public void addFlight(Flight flight) {
-        if (flights.containsKey(flight.getFlightCode()))
-            throw new RuntimeException("Flight already exists!");
-        flights.put(flight.getFlightCode(), flight);
+    public void addFlight(Flight ... flightsToAdd) {
+        for (Flight flight : flightsToAdd) {
+            if (flights.containsKey(flight.getFlightCode()))
+                throw new RuntimeException("Flight already exists!");
+            flights.put(flight.getFlightCode(), flight);
+        }
     }
 
     public Flight getFlight(String flightCode) {
