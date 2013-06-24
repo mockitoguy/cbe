@@ -2,8 +2,8 @@
 build
 out
 
-*.iml
-*.ipr
+/*.iml
+/*.ipr
 *.iws
 
 *.classpath
