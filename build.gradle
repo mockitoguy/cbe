@@ -1,0 +1,49 @@
+apply plugin: 'idea'
+
+task setupTeams
+
+10.times { 
+  def team = "team${it+1}"
+  delete team
+  def genTeam = tasks.create(name: "genTeam${it+1}", type: Sync) {
+  	from "template-team"  
+  	into team
+  }
+  def setupIde = tasks.create(name: "setupTeam${it+1}", type: GradleBuild, dependsOn: genTeam) {
+    buildFile "$team/build.gradle"
+    tasks = ['eclipse', 'idea']
+  }
+  setupTeams.dependsOn setupIde
+}  
+
+task setupRoot {
+
+}
+
+
+task generateProjects {
+  doLast {
+    file("settings.gradle").createNewFile()
+    //String include = "include 'team1'"
+    10.times { 
+      def team = "team${it+1}"
+      delete(team)
+      file(team).mkdirs() 
+      file("$team/settings.gradle").createNewFile()
+      copy { 
+        from "template-build.gradle"
+        into team
+        rename "template-build.gradle", "build.gradle"
+      }
+      copy {
+        from 'libs'
+        into "$team/libs"
+      }
+      //include += ", '$team'"
+      
+    }
+    
+    //file("settings.gradle").text = "$include\n"
+  }
+}
+
