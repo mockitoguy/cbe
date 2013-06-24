@@ -1,27 +1,34 @@
 package cbe.flights;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 /**
  * @author tskrobol
  */
 public class Flight {
     private String flightName;
-    private int maxSeatsCount;
-    private Seat[] seats;
+    private int maxSeatsCount = 0;
+    private List<Seat> seats;
     private Seat cheapestSeat;
+    private Places from;
+    private Places to;
+    private Date date;
 
-    public Flight(String flightName, int availableSeats) {
+    public Flight(String flightName, int availableSeats, Date date, Places from, Places to) {
         this.flightName = flightName;
         this.maxSeatsCount = availableSeats;
-        this.seats = new Seat[maxSeatsCount];
-        for (int i = 0; i < maxSeatsCount; i++) {
-            seats[i] = new Seat();
-
-        }
+        this.from = from;
+        this.to = to;
+        this.date = date;
+        this.seats = new ArrayList<Seat>(maxSeatsCount);
     }
 
-
     public void setSeatPrice(int seatId, double price) {
-        seats[seatId].setPrice(price);
+
+        getSeat(seatId).setPrice(price);
+
     }
 
     public String getFlightName() {
@@ -41,8 +48,12 @@ public class Flight {
         return cheapestSeat;
     }
 
-    private Seat getSeat(int seatId) {
-        return seats[seatId];
+    public Seat getSeat(int seatId) {
+        if (seatId > maxSeatsCount - 1)
+            throw new IllegalArgumentException("Seat number out of bounds:" + seatId);
+        if (seats.size() < seatId + 1)
+            throw new IllegalArgumentException("There is no seat with id " + seatId);
+        return seats.get(seatId);
     }
 
 
@@ -61,6 +72,23 @@ public class Flight {
                 notBookedAvaragePrice += seat.getPrice();
                 seatCount++;
             }
-        return notBookedAvaragePrice/seatCount;
+        return notBookedAvaragePrice / seatCount;
+    }
+
+    public Places getFrom() {
+        return from;
+    }
+
+    public Places getTo() {
+        return to;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void addSeat(Seat seat) {
+        seat.setFlight(this);
+        seats.add(seat);
     }
 }
