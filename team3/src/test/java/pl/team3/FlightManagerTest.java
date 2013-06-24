@@ -2,9 +2,6 @@ package pl.team3;
 
 import org.junit.Before;
 import org.junit.Test;
-import pl.team3.Flight;
-import pl.team3.FlightManager;
-import pl.team3.Seat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +23,13 @@ public class FlightManagerTest {
     private static final long CHEAPEST_PRICE = 500l;
     private FlightManager manager;
     private int firstSeatsNumber = 3;
-    private int seccondSeatsNumber = 7;
+    private int secondSeatsNumber = 7;
 
     @Before
     public void setUp() throws Exception {
         manager = new FlightManager();
         manager.addFlight(FIRST_FLIGHT_NUMBER, new Flight(provideSeats(firstSeatsNumber)));
-        manager.addFlight(SECOND_FLIGHT_NUMBER, new Flight(provideSeats(seccondSeatsNumber)));
+        manager.addFlight(SECOND_FLIGHT_NUMBER, new Flight(provideSeats(secondSeatsNumber)));
     }
 
     @Test

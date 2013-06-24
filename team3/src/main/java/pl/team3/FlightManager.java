@@ -5,13 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created with IntelliJ IDEA.
- * User: pawelb
- * Date: 24.06.13
- * Time: 10:48
- * To change this template use File | Settings | File Templates.
- */
 public class FlightManager {
     private Map<String, Flight> flights = new HashMap<String, Flight>();
 
