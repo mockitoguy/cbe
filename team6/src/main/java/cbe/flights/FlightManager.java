@@ -1,7 +1,9 @@
 package cbe.flights;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author tskrobol
@@ -42,5 +44,40 @@ public class FlightManager {
             return 0;
 
         return flight.getNotBookedAvaragePrice();
+    }
+
+    public Set<Flight> getFlightsFrom(Places from) {
+        Set<Flight> resultFlights = new HashSet<Flight>();
+        for (Map.Entry<String, Flight> entry : flights.entrySet()) {
+            Flight flight = entry.getValue();
+            if (flight.getFrom().equals(from))
+                resultFlights.add(flight);
+        }
+        return resultFlights;
+    }
+
+    public Set<Flight> getFlightsTo(Places to) {
+        Set<Flight> resultFlights = new HashSet<Flight>();
+        for (Map.Entry<String, Flight> entry : flights.entrySet()) {
+            Flight flight = entry.getValue();
+            if (flight.getTo().equals(to))
+                resultFlights.add(flight);
+        }
+        return resultFlights;
+    }
+
+    public Set<Flight> getFlightsFromTo(Places from, Places to) {
+        Set<Flight> resultFlights = new HashSet<Flight>();
+        for (Map.Entry<String, Flight> entry : flights.entrySet()) {
+            Flight flight = entry.getValue();
+            if (flight.getTo().equals(to) && flight.getFrom().equals(from))
+                resultFlights.add(flight);
+        }
+        return resultFlights;
+    }
+
+    public HashMap<SeatClass, Double> getClassAvaragePricesInFlight(String flightName) {
+        Flight flight = flights.get(flightName);
+        return flight.getClassAvaragePrice();
     }
 }
