@@ -1,6 +1,7 @@
 package cbe.flights;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -79,6 +80,29 @@ public class FlightManagerTest {
 
         //then
         assertTrue(booked);
+    }
+
+    @Test
+    public void shouldFailSecondBookSeat(){
+        //given
+        Flight flight = new Flight(TU_128, AVAILABLE_SEATS);
+        flight.setSeatPrice(0, 2d);
+        flight.setSeatPrice(1, 3d);
+        flight.setSeatPrice(2, 4d);
+        flight.setSeatPrice(3, 1d);
+        flight.setSeatPrice(4, 6d);
+
+        FlightManager manager = new FlightManager();
+        manager.addFlight(flight);
+
+        User user = new User("Tomek");
+
+        //when
+        manager.bookSeatInFlight(TU_128, 3, user);
+        boolean booked = manager.bookSeatInFlight(TU_128, 3, user);
+
+        //then
+        assertFalse(booked);
     }
 
     @Test
