@@ -1,16 +1,25 @@
 package com.airway;
 
+import org.joda.time.DateTime;
+
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class Flight {
 
     private final String flightNo;
+    private DateTime departure;
+    private DateTime arrive;
+    private String origin;
+    private String destination;
     private final Map<String, Seat> availableSeats;
     private final Map<String, Seat> bookedSeats;
 
-    private Flight(String flightNo, Map<String, Seat> availableSeats) {
+    private Flight(String flightNo, String origin, String destination, Map<String, Seat> availableSeats) {
         this.flightNo = flightNo;
+        this.origin = origin;
+        this.destination = destination;
         this.availableSeats = availableSeats;
         this.bookedSeats = new HashMap<String, Seat>();
     }
@@ -38,10 +47,30 @@ public class Flight {
         return flightNo;
     }
 
+    public DateTime getDeparture() {
+        return departure;
+    }
+
+    public DateTime getArrive() {
+        return arrive;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
     public static class Builder {
 
         private String flightNo;
         private Map<String, Seat> seats = new HashMap<String, Seat>();
+        private DateTime departure;
+        private DateTime arrival;
+        private String origin;
+        private String destination;
 
         public Builder setName(String flightNo) {
             this.flightNo = flightNo;
@@ -53,8 +82,28 @@ public class Flight {
             return this;
         }
 
+        public Builder setOrigin(String origin) {
+            this.origin = origin;
+            return this;
+        }
+
+        public Builder setDestination(String destination) {
+            this.destination = destination;
+            return this;
+        }
+
+        public Builder setDeparture(String departure) {
+            this.departure = new DateTime(departure);
+            return this;
+        }
+
+        public Builder setArrival(String arrival) {
+            this.arrival = new DateTime(arrival);
+            return this;
+        }
+
         public Flight build() {
-            return new Flight(flightNo, seats);
+            return new Flight(flightNo, origin, destination, seats);
         }
     }
 
