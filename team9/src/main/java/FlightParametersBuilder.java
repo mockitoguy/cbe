@@ -7,26 +7,26 @@
  */
 public class FlightParametersBuilder {
 
-    private FlightParameters mFlightParameters;
+    private Flight mFlight;
 
     public FlightParametersBuilder() {
-        mFlightParameters = new FlightParameters();
+        mFlight = new Flight();
     }
 
     public FlightParametersBuilder addSeat(int price) {
-        mFlightParameters.addSeat(new SeatParameters(price));
+        mFlight.addSeat(new SeatParameters(price));
         return this;
     }
 
     public FlightParametersBuilder addSeat(int price, boolean reserved) {
         SeatParameters seatParameters = new SeatParameters(price);
         seatParameters.setIsReserved(reserved);
-        mFlightParameters.addSeat(seatParameters);
+        mFlight.addSeat(seatParameters);
 
         return this;
     }
 
-    public FlightParameters build() {
-        return mFlightParameters;
+    public Flight build() {
+        return mFlight;
     }
 }

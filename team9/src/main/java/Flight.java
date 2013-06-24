@@ -1,15 +1,15 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlightParameters {
+public class Flight {
     private List<SeatParameters> mSeats;
 
-    public FlightParameters(int seatsCount) {
+    public Flight(int seatsCount) {
         mSeats = new ArrayList<SeatParameters>(seatsCount);
         initEmptySeats(mSeats, seatsCount);
     }
 
-    public FlightParameters() {
+    public Flight() {
         mSeats = new ArrayList<SeatParameters>();
     }
 

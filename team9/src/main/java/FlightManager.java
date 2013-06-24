@@ -2,47 +2,46 @@ import java.util.HashMap;
 
 public class FlightManager {
 
-    private HashMap<String, FlightParameters> mFlightParams;
+    private HashMap<String, Flight> mFlightMap;
 
     public FlightManager() {
-        mFlightParams = new HashMap<String, FlightParameters>();
+        mFlightMap = new HashMap<String, Flight>();
     }
 
     public void addFlight(String flightNumber, int seatsCount) {
-        FlightParameters flightParameters = new FlightParameters(seatsCount);
-        mFlightParams.put(flightNumber, flightParameters);
+        Flight flight = new Flight(seatsCount);
+        mFlightMap.put(flightNumber, flight);
     }
 
-    public void addFlight(String flightNumber, FlightParameters flightParameters) {
-        mFlightParams.put(flightNumber, flightParameters);
+    public void addFlight(String flightNumber, Flight flight) {
+        mFlightMap.put(flightNumber, flight);
     }
 
     public int getAvailableSeatsCount(String flightNumber) throws FlightNotFoundException {
-        return getFlightParametersOrThrow(flightNumber).getSeatsCount();
+        return getFlightOrThrow(flightNumber).getSeatsCount();
     }
 
-    private FlightParameters getFlightParametersOrThrow(String flightNumber) throws FlightNotFoundException {
-        if (!mFlightParams.containsKey(flightNumber)) {
+    private Flight getFlightOrThrow(String flightNumber) throws FlightNotFoundException {
+        if (!mFlightMap.containsKey(flightNumber)) {
             throw new FlightNotFoundException();
         }
-        return mFlightParams.get(flightNumber);
+        return mFlightMap.get(flightNumber);
     }
 
     public int getCheapestSeatPrice(String flightNumber) throws FlightException {
-        FlightParameters flightParameters = getFlightParametersOrThrow(flightNumber);
-        return flightParameters.getCheapestFreeSeat();
+        Flight flight = getFlightOrThrow(flightNumber);
+        return flight.getCheapestFreeSeat();
     }
 
     public boolean bookSelectedSeat(String flightNumber, int seatNumber) throws FlightException {
-        FlightParameters flightParameters = getFlightParametersOrThrow(flightNumber);
+        Flight flight = getFlightOrThrow(flightNumber);
 
-        return flightParameters.reserveSeat(seatNumber);
+        return flight.reserveSeat(seatNumber);
     }
 
     public int getAvgSeatPrice(String flightNumber) throws FlightException {
-        FlightParameters flightParameters = getFlightParametersOrThrow(flightNumber);
+        Flight flight = getFlightOrThrow(flightNumber);
 
-        return flightParameters.getAvgPrice();  //To change body of created methods use File | Settings | File
-        // Templates.
+        return flight.getAvgPrice();
     }
 }
