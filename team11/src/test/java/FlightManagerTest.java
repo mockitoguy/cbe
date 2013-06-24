@@ -38,16 +38,34 @@ public class FlightManagerTest {
     }
 
     @Test
-    public void  shouldBookASeat() {
+    public void shouldBookASeat() {
         //given
         FlightManager flightManager = new FlightManager();
         flightManager.setSeatPrice("E303", 34, new BigDecimal(456));
         flightManager.setSeatPrice("E303", 56, new BigDecimal(756));
         flightManager.setSeatPrice("E453", 56, new BigDecimal(756));
         //when
-       Reservation reservation = flightManager.bookSeat("E303", 56);
+        Reservation reservation = flightManager.bookSeat("E303", 56);
         //then
         assertEquals(56, reservation.getSeat());
         assertEquals("E303", reservation.getFlight());
+    }
+
+    @Test
+    public void shouldReturnAvaragePriceFromNonBookedSeats() {
+        //given
+        FlightManager flightManager = new FlightManager();
+        flightManager.setSeatPrice("E404", 01, new BigDecimal(200));
+        flightManager.setSeatPrice("E404", 02, new BigDecimal(600));
+        flightManager.setSeatPrice("E404", 03, new BigDecimal(666));
+
+        //when
+        flightManager.bookSeat("E404", 03);
+        BigDecimal returnedValue = flightManager.getAvaragePriceOfNonBookedSeats("E404");
+
+        //then
+
+        assertEquals(new BigDecimal("400.00"), returnedValue);
+
     }
 }

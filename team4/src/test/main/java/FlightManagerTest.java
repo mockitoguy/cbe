@@ -2,8 +2,7 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 public class FlightManagerTest {
 
@@ -42,62 +41,76 @@ public class FlightManagerTest {
 
   @Test
   public void shouldKnowTheDefaultPrice() throws IncorrectFlightNumberException {
-    //given
+    // given
     FlightManager flightManager = new FlightManager();
     flightManager.addFlight(ID_112, 5);
 
-    //when
+    // when
     BigDecimal price = flightManager.getCheapestPlacePrice(ID_112);
 
-    //then
+    // then
     assertEquals(Flight.DEFAULT_PRICE, price);
   }
 
-
   @Test
   public void shouldSetPriceOnSeatNumberProvided() throws IncorrectFlightNumberException {
-    //given
+    // given
     FlightManager flightManager = new FlightManager();
     flightManager.addFlight(ID_112, 5);
 
-    //when
+    // when
     flightManager.setSeatPriceForFlight(ID_112, 2, new BigDecimal(12.5));
 
-    //then
+    // then
     assertEquals(flightManager.getSeatPriceForFlight(ID_112, 2), new BigDecimal(12.5));
   }
 
   @Test
   public void shouldGetCheapestPrice() throws IncorrectFlightNumberException {
-    //given
+    // given
     FlightManager flightManager = new FlightManager();
     flightManager.addFlight(ID_112, 2);
     flightManager.setSeatPriceForFlight(ID_112, 0, new BigDecimal(12.5));
 
-    //when
+    // when
     BigDecimal cheapestPlacePrice = flightManager.getCheapestPlacePrice(ID_112);
 
-    //then
+    // then
     assertFalse((new BigDecimal(12.5)).equals(cheapestPlacePrice));
     assertEquals(cheapestPlacePrice, BigDecimal.ONE);
   }
 
-
   @Test
   public void shouldUserBookSeatForFlight() throws SeatAlreadyBookedException, IncorrectFlightNumberException {
-    //given
+    // given
     FlightManager flightManager = new FlightManager();
     flightManager.addFlight(ID_112, 2);
     User user = new User("Ewa");
 
-
-    //when
+    // when
     flightManager.bookPlace(ID_112, 1, user);
 
-    //then
+    // then
     assertEquals(flightManager.getSeatReservation(ID_112, 1).getName(), user.getName());
 
   }
 
+  @Test
+  public void shouldGetAveragePrice() throws SeatAlreadyBookedException, IncorrectFlightNumberException {
+    // given
+    FlightManager flightManager = new FlightManager();
+    flightManager.addFlight(ID_112, 3);
+    User user = new User("Ewa");
+    flightManager.setSeatPriceForFlight(ID_112, 0, new BigDecimal(12.5));
+    flightManager.setSeatPriceForFlight(ID_112, 1, new BigDecimal(3.5));
+    flightManager.bookPlace(ID_112, 2, user);
+
+    // when
+    BigDecimal averagePrice = flightManager.getAveragePrice(ID_112);
+
+    // then
+    assertTrue(averagePrice.compareTo(new BigDecimal(8.0)) == 0);
+
+  }
 
 }

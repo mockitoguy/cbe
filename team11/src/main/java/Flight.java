@@ -1,4 +1,5 @@
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,7 @@ public class Flight {
     private String flightNumber;
     private Map<Integer, BigDecimal> seats = new HashMap<Integer, BigDecimal>();
     private List<Reservation> listOfReservation = new ArrayList<Reservation>();
+    private Map<Integer, BigDecimal> nonBookedSeats = new HashMap<Integer, BigDecimal>();
 
     public String getFlightNumber() {
         return flightNumber;
@@ -25,6 +27,8 @@ public class Flight {
 
     public void addNewReservation(Reservation reservation) {
         this.listOfReservation.add(reservation);
+        nonBookedSeats.remove(reservation.getSeat());
+
     }
 
     public List<Reservation> getListOfReservation() {
@@ -33,7 +37,7 @@ public class Flight {
 
     public void addSeat(int seatsNumber, BigDecimal flightPrice) {
         seats.put(seatsNumber, flightPrice);
-
+        nonBookedSeats.put(seatsNumber, flightPrice);
     }
 
     public BigDecimal getCheapestSeat() {
@@ -48,4 +52,20 @@ public class Flight {
         return cheapestSeat;
     }
 
+    /**
+     * znalezc miejsca ktore nie sa zarezerwowane
+     * liczymy srednia
+     *
+     * @return
+     */
+    public BigDecimal getAveragePriceOfSeat() {
+        BigDecimal sum = new BigDecimal(0);
+        Integer count = 0;
+        for (BigDecimal price : nonBookedSeats.values()) {
+            sum = sum.add(price);
+            count++;
+        }
+        BigDecimal result = sum.divide(BigDecimal.valueOf(count), 2, RoundingMode.HALF_UP);
+        return result;
+    }
 }
