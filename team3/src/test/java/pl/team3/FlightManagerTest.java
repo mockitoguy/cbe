@@ -7,13 +7,6 @@ import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-/**
- * Created with IntelliJ IDEA.
- * User: pawelb
- * Date: 24.06.13
- * Time: 10:31
- * To change this template use File | Settings | File Templates.
- */
 public class FlightManagerTest {
 
     private FlightManager manager;
@@ -40,15 +33,64 @@ public class FlightManagerTest {
     @Test
     public void shouldReturnTheCheapestSeatInFlight() throws Exception {
         //Given
-        Seat chepestSeat = new Seat(22, 80);
-        manager.addFlight(new Flight.Builder("LOT123").addSeat(new Seat(1, 100)).addSeat(chepestSeat).build());
+        Seat cheapestSeat = new Seat(3, 80);
+        Seat anotherCheapestSeat = new Seat(2, 80);
+        Seat seat = new Seat(1, 100);
+        manager.addFlight(new Flight.Builder("LOT123").addSeat(seat).addSeat(cheapestSeat).addSeat(anotherCheapestSeat).build());
         //When
 
         List<Seat> cheapestSeats = manager.getCheapestSeatForFlight("LOT123");
         //Then
-        assertThat(cheapestSeats).containsExactly(chepestSeat);
+        assertThat(cheapestSeats).hasSize(2).contains(cheapestSeat).contains(anotherCheapestSeat);
 
     }
 
+    @Test
+    public void shouldReturnFligthBetweenPoints() throws Exception {
+        //given                                                                            a
+        manager.addFlight(new Flight.Builder("LOT123").origin("london").destination("warsaw").flightDate(DateProvider.previousDate()).build());
+        manager.addFlight(new Flight.Builder("LOT123").origin("london").destination("oslo").build());
+        manager.addFlight(new Flight.Builder("LOT123").origin("warsaw").destination("london").build());
+        //when
+        List<Flight> flights = manager.findFlights("london", "warsaw");
+        //then
+        assertThat(flights.size()).isEqualTo(1);
+    }
 
+    @Test
+    public void shouldReturnAllFlights() throws Exception {
+        //given                                                                            a
+        manager.addFlight(new Flight.Builder("LOT123").origin("london").destination("warsaw").flightDate(DateProvider.previousDate()).build());
+        manager.addFlight(new Flight.Builder("LOT123").origin("london").destination("oslo").build());
+        manager.addFlight(new Flight.Builder("LOT123").origin("warsaw").destination("london").build());
+        //when
+        List<Flight> flights = manager.findFlights(null, null);
+        //then
+        assertThat(flights.size()).isEqualTo(3);
+    }
+
+    @Test
+    public void shouldReturnFlightFrom() throws Exception {
+        //given                                                                            a
+        manager.addFlight(new Flight.Builder("LOT123").origin("london").destination("warsaw").build());
+        manager.addFlight(new Flight.Builder("LOT123").origin("london").destination("oslo").build());
+        manager.addFlight(new Flight.Builder("LOT123").origin("warsaw").destination("london").build());
+        //when
+        List<Flight> flights = manager.findFrom("london");
+        //then
+        assertThat(flights.size()).isEqualTo(2);
+    }
+
+    @Test
+    public void shouldReturnFlightTo() throws Exception {
+        //given                                                                            a
+        manager.addFlight(new Flight.Builder("LOT123").origin("london").destination("warsaw").build());
+        manager.addFlight(new Flight.Builder("LOT123").origin("london").destination("oslo").build());
+        manager.addFlight(new Flight.Builder("LOT123").origin("warsaw").destination("london").build());
+        manager.addFlight(new Flight.Builder("LOT123").origin("new york").destination("london").build());
+        //when
+        List<Flight> flights = manager.findTo("london");
+        //then
+        assertThat(flights.size()).isEqualTo(2);
+    }
 }

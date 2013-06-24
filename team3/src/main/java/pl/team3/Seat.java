@@ -9,7 +9,7 @@ public class Seat {
         this.price = price;
         this.seatNo = seatNo;
 
-    }
+     }
 
     public int getSeatNo() {
         return seatNo;

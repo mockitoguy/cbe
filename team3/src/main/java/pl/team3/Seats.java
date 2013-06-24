@@ -34,11 +34,5 @@ public class Seats {
         return results;
     }
 
-    public void addSeat(Seat seat) {
-        if (seats == null) {
-            seats = new ArrayList<Seat>();
-        }
-        this.seats.add(seat);
 
-    }
 }
