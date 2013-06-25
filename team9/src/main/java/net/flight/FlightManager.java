@@ -1,7 +1,12 @@
 package net.flight;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
+
+import com.google.common.base.Predicates;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 public class FlightManager {
 
@@ -53,6 +58,20 @@ public class FlightManager {
       sum = sum.add(seat.getPrice());
     }
     return sum.divide(new BigDecimal(seats.size()));
+  }
+
+  public List<Flight> findFlights(String origin, String destination) {
+    return Lists.newArrayList(Iterables.filter(flightRepository.getAllFlights(),
+        Predicates.and(new OriginPredicate(origin), new DestinationPredicate(destination))));
+  }
+
+  public List<Flight> findFlightsFrom(String origin) {
+    return Lists.newArrayList(Iterables.filter(flightRepository.getAllFlights(),
+            new OriginPredicate(origin)));
+
+
+
+
   }
 
 }

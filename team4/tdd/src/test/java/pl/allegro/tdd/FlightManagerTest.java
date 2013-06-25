@@ -1,5 +1,7 @@
 package pl.allegro.tdd;
 
+import java.util.List;
+import org.fest.assertions.Assertions;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -11,26 +13,20 @@ public class FlightManagerTest {
   @Before
   public void beforeTest() {
     instance = new FlightManager();
-    
-    Seat seat1 = new Seat();
-    seat1.setNumber(1);
-    seat1.setPrice(9.99);
-    
-    Seat seat2 = new Seat();
-    seat2.setNumber(2);
-    seat2.setPrice(9.97);
-    
-    Flight flight = new Flight("LOT101");
-    flight.addSeat(seat1);
-    flight.addSeat(seat2);
-    
-    instance.addFlight(flight);
   }
   
   
   @Test
   public void shouldReturnNumberOfAvailableSeats() {
     // given
+    Seat seat1 = new SeatBuilder().withNumber(1).build();
+    Seat seat2 = new SeatBuilder().withNumber(2).build();
+    
+    Flight flight = new FlightBuilder().build("LOT101");
+    flight.addSeat(seat1);
+    flight.addSeat(seat2);
+    
+    instance.addFlight(flight);
     
     // when
     int seats = instance.getAvailableSeats("LOT101");
@@ -42,6 +38,12 @@ public class FlightManagerTest {
   @Test
   public void shouldReturnSeatWithCheapestPrice() {
     // given
+    Flight flight = new FlightBuilder().build("LOT101");
+    flight.addSeat(new SeatBuilder().withNumber(1).withPrice(9.99).build());
+    flight.addSeat(new SeatBuilder().withNumber(2).withPrice(9.97).build());
+    
+    instance.addFlight(flight);
+    
     Seat expectedResult = new Seat();
     expectedResult.setNumber(2);
     expectedResult.setPrice(9.96);
@@ -56,7 +58,14 @@ public class FlightManagerTest {
   }
   
   @Test
-  public void shouldBookSeatOnFlight() {
+  public void shouldBookSeatOnFlight() throws SeatAlreadyBookedException {
+    // given
+    Flight exampleflight = new FlightBuilder().build("LOT101");
+    exampleflight.addSeat(new SeatBuilder().withNumber(1).build());
+    exampleflight.addSeat(new SeatBuilder().withNumber(2).build());
+    
+    instance.addFlight(exampleflight);
+    
     // when
     instance.bookSeat("LOT101", 2);
     
@@ -68,14 +77,80 @@ public class FlightManagerTest {
   }
   
   @Test
+  public void shouldFailOnBookSeatThatAlreadyBooked() {
+    // given
+    Flight exampleflight = new FlightBuilder().build("LOT101");
+    exampleflight.addSeat(new SeatBuilder().withNumber(1).booked(true).build());
+    
+    instance.addFlight(exampleflight);
+
+    try { 
+      // when
+      instance.bookSeat("LOT101", 1);
+      // then
+      fail();
+    } catch (SeatAlreadyBookedException ex) {}
+  }
+  
+  @Test
   public void shouldReturnAveragePriceOfNonBookedSeatsOnFlight() {
     // given
-    instance.bookSeat("LOT101", 1);
+    Flight exampleflight = new FlightBuilder().build("LOT101");
+    
+    exampleflight.addSeat(new SeatBuilder().withNumber(1).withPrice(100).build());
+    exampleflight.addSeat(new SeatBuilder().withNumber(2).withPrice(100).build());
+    exampleflight.addSeat(new SeatBuilder().withNumber(3).booked(true).build());
+    
+    instance.addFlight(exampleflight);
     
     // when
     double result = instance.getAveragePriceOfNonBookedSeats("LOT101");
     
     // then
-    assertEquals(9.97, result, 0.01);
+    assertEquals(100, result, 0.01);
+  }
+  
+  @Test
+  public void shouldReturnListOfFlightsBetweenOriginAndDestination() {
+    // given
+    instance.addFlight(new FlightBuilder().withOriginAndDestination("Warszawa", "Moskwa").build("WM1"));
+    instance.addFlight(new FlightBuilder().withOriginAndDestination("Warszawa", "Moskwa").build("WM2"));
+    instance.addFlight(new FlightBuilder().withOriginAndDestination("Warszawa", "Paryż").build("WP1"));
+    
+    // when
+    List<Flight> result = instance.getFlightsBetween("Warszawa", "Moskwa");
+    
+    // then
+    MyAssertions.assertThat(result).containsFlights("WM1", "WM2");
+  }
+  
+  public void shouldReturnListOfFlightsFromOrigin() {
+    // given
+    Flight expectedFlight = new FlightBuilder().withOrigin("Moskwa").build("MP1");
+    
+    instance.addFlight(new FlightBuilder().withOrigin("Warszawa").build("WM1"));
+    instance.addFlight(new FlightBuilder().withOrigin("Warszawa").build("WM2"));
+    instance.addFlight(expectedFlight);
+    
+    // when 
+    List<Flight> result = instance.getFlightsFrom("Moskwa");
+    
+    // then
+    Assertions.assertThat(result).containsOnly(expectedFlight);
+  }
+  
+  public void shouldReturnListOfFlightsToDestination() {
+    // given
+    Flight expectedFlight = new FlightBuilder().withDestination("Moskwa").build("MM1");
+    
+    instance.addFlight(new FlightBuilder().withDestination("Kraków").build("WK1"));
+    instance.addFlight(new FlightBuilder().withDestination("Warszawa").build("MW2"));
+    instance.addFlight(expectedFlight);
+    
+    // when 
+    List<Flight> result = instance.getFlightsTo("Kraków");
+    
+    // then
+    Assertions.assertThat(result).containsOnly(expectedFlight);
   }
 }

@@ -1,6 +1,8 @@
 package pl.allegro.tdd;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,7 +47,11 @@ class FlightManager {
     flights.get(flightNumber).addSeat(seat);
   }
 
-  public void bookSeat(String flightNumber, int number) {
+  public void bookSeat(String flightNumber, int number) throws SeatAlreadyBookedException {
+    if (flights.get(flightNumber).getSeat(number).isBooked()) {
+      throw new SeatAlreadyBookedException("Seat already booked by someone else!");
+    }
+    
     flights.get(flightNumber).getSeat(number).setBooked(true);
   }
 
@@ -71,5 +77,41 @@ class FlightManager {
     
     return sum / numerOfNonBookedSeat;
 
+  }
+
+  public List<Flight> getFlightsBetween(String origin, String destination) {
+    List<Flight> result = new ArrayList<>();
+    
+    for (Flight flight : flights.values()) {
+      if (flight.getDestination().equals(origin) && flight.getDestination().equals(destination)) {
+        result.add(flight);
+      }
+    }
+    
+    return result;
+  }
+
+  List<Flight> getFlightsFrom(String origin) {
+    List<Flight> result = new ArrayList<>();
+    
+    for (Flight flight : flights.values()) {
+      if (flight.getOrigin().equals(origin)) {
+        result.add(flight);
+      }
+    }
+    
+    return result;
+  }
+
+  List<Flight> getFlightsTo(String destination) {
+    List<Flight> result = new ArrayList<>();
+    
+    for (Flight flight : flights.values()) {
+      if (flight.getDestination().equals(destination)) {
+        result.add(flight);
+      }
+    }
+    
+    return result;
   }
 }
