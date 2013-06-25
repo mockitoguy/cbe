@@ -7,10 +7,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Maps;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author jkubrynski@gmail.com
@@ -22,12 +19,13 @@ public class Flight {
   private final String from;
   private final String to;
   private final Map<String, Seat> seats;
+  private EnumMap<FlightClass, Long> defaultPriceMap;
 
-
-  public Flight(String flightNumber, Set<Seat> seats, String from, String to) {
+  public Flight(String flightNumber, Set<Seat> seats, String from, String to, EnumMap<FlightClass, Long> defaultPriceMap) {
     this.flightNumber = flightNumber;
     this.from = from;
     this.to = to;
+    this.defaultPriceMap = defaultPriceMap;
     this.seats = buildSeatsMap(seats);
   }
 
@@ -40,8 +38,12 @@ public class Flight {
     return resultMap;
   }
 
-  public String getFlightNumber() {
-    return flightNumber;
+  public void bookSeat(String seatNo) throws SeatAlreadyBookedException, NoSuchSeatException {
+    Seat seat = seats.get(seatNo);
+    if (seat == null) {
+      throw new NoSuchSeatException();
+    }
+    seat.book();
   }
 
   public long getLowestSeatPrice() {
@@ -55,26 +57,42 @@ public class Flight {
     return lowestPrice;
   }
 
-  public void bookSeat(String seatNo) throws SeatAlreadyBookedException, NoSuchSeatException {
-    Seat seat = seats.get(seatNo);
-    if (seat == null) {
-      throw new NoSuchSeatException();
-    }
-    seat.book();
-  }
-
   public long getAveragePriceOfFreeSeats() throws NonFreeSeatsAvailableException {
     final Collection<Seat> freeSeats = getFreeSeats();
     if (freeSeats.isEmpty()) {
       throw new NonFreeSeatsAvailableException();
     }
 
-    long sum = 0;
-    for (Seat seat : freeSeats) {
-      sum += seat.getPriceInCents();
-    }
+    return countAveragePrice(freeSeats);
+  }
 
-    return sum / freeSeats.size();
+  public long getAveragePriceForClass(final FlightClass flightClass) {
+    Collection<Seat> seatCollection = Collections2.filter(seats.values(), new Predicate<Seat>() {
+      @Override public boolean apply(Seat input) {
+        return flightClass == input.getFlightClass();
+      }
+    });
+    return countAveragePrice(seatCollection);
+  }
+
+  public int getAvailableSeatsCount() {
+    return getFreeSeats().size();
+  }
+
+  public String getFlightNumber() {
+    return flightNumber;
+  }
+
+  public Seat getSeat(String seatNumber) {
+    return seats.get(seatNumber);
+  }
+
+  public String getFrom() {
+    return from;
+  }
+
+  public String getTo() {
+    return to;
   }
 
   private Collection<Seat> getFreeSeats() {
@@ -85,19 +103,29 @@ public class Flight {
     });
   }
 
-  public Seat getSeat(String seatNumber) {
-    return seats.get(seatNumber);
+  private long countAveragePrice(Collection<Seat> freeSeats) {
+    long sum = 0;
+    for (Seat seat : freeSeats) {
+      sum += seat.getPriceInCents();
+    }
+    return sum / freeSeats.size();
   }
 
-  public int getAvailableSeatsCount() {
-    return getFreeSeats().size();
+  public int getSeatsCountWithoutDefaultClassPrice(final FlightClass flightClass) {
+    Collection<Seat> seatCollection = Collections2.filter(getSeatsFromFlightClass(flightClass), new Predicate<Seat>() {
+      @Override public boolean apply(Seat input) {
+        return input.getPriceInCents() != defaultPriceMap.get(flightClass);
+      }
+    });
+    return seatCollection.size();
   }
 
-  public String getFrom() {
-    return from;
-  }
-
-  public String getTo() {
-    return to;
+  private Collection<Seat> getSeatsFromFlightClass(final FlightClass flightClass) {
+    return Collections2.filter(seats.values(), new Predicate<Seat>() {
+      @Override public boolean apply(Seat input) {
+        return input.getFlightClass() == flightClass;
+      }
+    });
   }
 }
+

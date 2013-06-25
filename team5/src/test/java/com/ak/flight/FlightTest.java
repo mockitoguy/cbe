@@ -83,16 +83,49 @@ public class FlightTest {
   public void shouldReturnAveragePriceOfFreeSeats() throws NonFreeSeatsAvailableException {
     //given
     Flight flight = new FlightBuilder()
-        .addSeat(new SeatBuilder().price(10000).build())
-        .addSeat(new SeatBuilder().price(20000).build())
-        .addSeat(new SeatBuilder().price(40000).booked().build())
+        .addSeat(new SeatBuilder().price(10).build())
+        .addSeat(new SeatBuilder().price(20).build())
+        .addSeat(new SeatBuilder().price(40).booked().build())
         .build();
 
     //when
     long averagePrice = flight.getAveragePriceOfFreeSeats();
 
     //then
-    assertThat(averagePrice).isEqualTo(15000);
+    assertThat(averagePrice).isEqualTo(15);
+  }
+
+  public void shouldKnowAveragePriceForClass() {
+    //given
+    Flight flight = new FlightBuilder()
+        .addSeat(new SeatBuilder().price(50).flightClass(FlightClass.ECONOMIC).build())
+        .addSeat(new SeatBuilder().price(150).flightClass(FlightClass.ECONOMIC).booked().build())
+        .addSeat(new SeatBuilder().price(150).flightClass(FlightClass.BUSINESS).build())
+        .build();
+
+    //when
+    long averagePrice = flight.getAveragePriceForClass(FlightClass.ECONOMIC);
+
+    //then
+    assertThat(averagePrice).isEqualTo(100);
+  }
+
+  public void shouldKnowSeatsCountWithPriceDifferingFromDefaultForClass() {
+    //given
+    Flight flight = new FlightBuilder()
+        .addDefaultClassPrice(FlightClass.BUSINESS, 15)
+        .addDefaultClassPrice(FlightClass.ECONOMIC, 10)
+        .addSeat(new SeatBuilder().flightClass(FlightClass.BUSINESS).price(10).build())
+        .addSeat(new SeatBuilder().flightClass(FlightClass.BUSINESS).price(15).build())
+        .addSeat(new SeatBuilder().flightClass(FlightClass.BUSINESS).price(25).booked().build())
+        .addSeat(new SeatBuilder().flightClass(FlightClass.ECONOMIC).price(5).build())
+        .build();
+
+    //when
+    int seatsCount = flight.getSeatsCountWithoutDefaultClassPrice(FlightClass.BUSINESS);
+
+    //then
+    assertThat(seatsCount).isEqualTo(2);
   }
 
 }

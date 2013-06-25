@@ -10,11 +10,13 @@ public class Seat {
 
   private final String seatNumber;
   private long priceInCents;
+  private FlightClass flightClass;
   private boolean booked;
 
-  public Seat(String seatNumber, long priceInCents) {
+  public Seat(String seatNumber, long priceInCents, FlightClass flightClass) {
     this.seatNumber = seatNumber;
     this.priceInCents = priceInCents;
+    this.flightClass = flightClass;
   }
 
   public String getSeatNumber() {
@@ -35,5 +37,9 @@ public class Seat {
 
   public boolean isBooked() {
     return booked;
+  }
+
+  public FlightClass getFlightClass() {
+    return flightClass;
   }
 }

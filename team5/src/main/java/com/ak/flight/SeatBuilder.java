@@ -13,6 +13,7 @@ public class SeatBuilder {
   private String seatNumber = UUID.randomUUID().toString();
   private boolean booked;
   private long priceInCents;
+  private FlightClass flightClass;
 
   public SeatBuilder booked() {
     this.booked = true;
@@ -21,7 +22,7 @@ public class SeatBuilder {
 
 
   public Seat build() {
-    Seat seat = new Seat(seatNumber, priceInCents);
+    Seat seat = new Seat(seatNumber, priceInCents, flightClass);
     if (booked) {
       try {
         seat.book();
@@ -38,6 +39,11 @@ public class SeatBuilder {
 
   public SeatBuilder price(int price) {
     this.priceInCents = price;
+    return this;
+  }
+
+  public SeatBuilder flightClass(FlightClass flightClass) {
+    this.flightClass = flightClass;
     return this;
   }
 }

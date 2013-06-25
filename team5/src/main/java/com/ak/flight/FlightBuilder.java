@@ -3,6 +3,7 @@ package com.ak.flight;
 import com.google.common.collect.Sets;
 import org.joda.time.DateTime;
 
+import java.util.EnumMap;
 import java.util.Set;
 import java.util.UUID;
 
@@ -17,6 +18,7 @@ public class FlightBuilder {
   private String from;
   private String to;
   private DateTime time;
+  private EnumMap<FlightClass,Long> defaultPriceMap = new EnumMap<FlightClass, Long>(FlightClass.class);
 
   public FlightBuilder withFlightNumber(String flightNumber) {
     this.flightNumber = flightNumber;
@@ -29,7 +31,7 @@ public class FlightBuilder {
   }
 
   public Flight build() {
-    return new Flight(flightNumber, seats, from, to);
+    return new Flight(flightNumber, seats, from, to, defaultPriceMap);
   }
 
   public FlightBuilder from(String from) {
@@ -44,6 +46,11 @@ public class FlightBuilder {
 
   public FlightBuilder time(DateTime dateTime) {
     this.time = dateTime;
+    return this;
+  }
+
+  public FlightBuilder addDefaultClassPrice(FlightClass flightClass, long defaultPrice) {
+    defaultPriceMap.put(flightClass, defaultPrice);
     return this;
   }
 }
