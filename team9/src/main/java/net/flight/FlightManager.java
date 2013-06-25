@@ -12,32 +12,45 @@ public class FlightManager {
   }
 
   public int getAvailableSeats(String flightNo) {
-    return flightRepository.getFlightSeatsForFlight(flightNo).size();
+    List<Seat> seats = flightRepository.getFlightSeats(flightNo);
+    int availableCount = 0;
+    for (Seat seat : seats) {
+      if (!seat.isBooked()) {
+        availableCount++;
+      }
+    }
+    return availableCount;
   }
 
   public BigDecimal getCheapestSeatPrice(String flightNo) {
-    List<FlightRepository.Seat> seats = flightRepository.getFlightSeatsForFlight(flightNo);
-    BigDecimal minPrice = seats.get(0).price;
-    for (FlightRepository.Seat seat : seats) {
-      if(seat.price.compareTo(minPrice) < 0) {
-        minPrice=seat.price;
+    List<Seat> seats = flightRepository.getFlightSeats(flightNo);
+    BigDecimal minPrice = seats.get(0).getPrice();
+    for (Seat seat : seats) {
+      if (seat.getPrice().compareTo(minPrice) < 0) {
+        minPrice = seat.getPrice();
       }
     }
 
-    return minPrice;  //To change body of created methods use File | Settings | File Templates.
+    return minPrice;
   }
 
-  public void bookSeatOnFlight(String flightNo) {
-    List<FlightRepository.Seat> seats = flightRepository.getFlightSeatsForFlight(flightNo);
-    seats.remove(0);
+  public boolean bookSeatOnFlight(String flightNo) {
+    List<Seat> seats = flightRepository.getFlightSeats(flightNo);
+    for (Seat seat : seats) {
+      if (!seat.isBooked()) {
+        seat.setBooked(true);
+        return true;
+      }
+    }
+    return false;
   }
 
   public BigDecimal averagePriceNonBookedSeats(String flightNo) {
-    List<FlightRepository.Seat> seats = flightRepository.getFlightSeatsForFlight(flightNo);
+    List<Seat> seats = flightRepository.getFlightSeats(flightNo);
 
     BigDecimal sum = BigDecimal.ZERO;
-    for (FlightRepository.Seat seat : seats) {
-      sum = sum.add(seat.price);
+    for (Seat seat : seats) {
+      sum = sum.add(seat.getPrice());
     }
     return sum.divide(new BigDecimal(seats.size()));
   }
