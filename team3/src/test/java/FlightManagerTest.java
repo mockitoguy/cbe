@@ -3,6 +3,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.fest.assertions.Assertions;
 import org.junit.Test;
 
 public class FlightManagerTest {
@@ -13,6 +14,8 @@ public class FlightManagerTest {
     private static final String SAMPLE_FLIGHT_NAME = "LH";
     private static final String INCORRECT_FLIGHT_NAME = "XXX";
 
+    // ITERATION 1
+    // story 1
     @Test
     public void shouldReturnAvailableSeats() {
         // given
@@ -25,7 +28,7 @@ public class FlightManagerTest {
         FlightManager flightManager = new FlightManager.Builder().addFlight(flight).build();
         // when
 
-        List<Seat> availableSeats = flightManager.getAvaliableSeatsForFlight(SAMPLE_FLIGHT_NAME);
+        List<Seat> availableSeats = flightManager.getFlightByName(SAMPLE_FLIGHT_NAME).getAvaliableSeats();
         int seatsCount = availableSeats.size();
 
         // then
@@ -41,12 +44,14 @@ public class FlightManagerTest {
         FlightManager flightManager = new FlightManager.Builder().addFlight(flight).build();
 
         // when
-        flightManager.getAvaliableSeatsForFlight(INCORRECT_FLIGHT_NAME);
+        flightManager.getFlightByName(INCORRECT_FLIGHT_NAME).getAvaliableSeats();
 
         // then throws IllegalArgumentException
 
     }
 
+    // ITERATION 1
+    // story 2
     @Test
     public void shouldReturnCheapestSeatPrice() {
         // given
@@ -59,7 +64,7 @@ public class FlightManagerTest {
         FlightManager flightManager = new FlightManager.Builder().addFlight(flight).build();
 
         // when
-        Seat seat = flightManager.getCheapestSeatsForFlight(SAMPLE_FLIGHT_NAME);
+        Seat seat = flightManager.getFlightByName(SAMPLE_FLIGHT_NAME).getCheapestSeats();
 
         // then
         assertEquals(MIN_PRICE, seat.price);
@@ -73,11 +78,13 @@ public class FlightManagerTest {
         FlightManager flightManager = new FlightManager.Builder().addFlight(flight).build();
 
         // when
-        flightManager.getCheapestSeatsForFlight(SAMPLE_FLIGHT_NAME);
+        flightManager.getFlightByName(SAMPLE_FLIGHT_NAME).getCheapestSeats();
 
         // then throws IllegalStateExcpetion
     }
 
+    // ITERATION 1
+    // story 3
     @Test
     public void shouldBookSeatOnFlight() {
         // given
@@ -88,13 +95,13 @@ public class FlightManagerTest {
         FlightManager flightManager = new FlightManager.Builder().addFlight(flight).build();
 
         // when
-        Seat seat = flightManager.bookSeatOnFlight(SAMPLE_FLIGHT_NAME, SAMPLE_SEAT_NUMBER);
+        Seat seat = flightManager.getFlightByName(SAMPLE_FLIGHT_NAME).getSeatOnFlight(SAMPLE_SEAT_NUMBER).book();
 
         // then
         assertTrue(seat.isBooked);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IllegalStateException.class)
     public void shouldFailOnDoubleBooking() {
         // given
         Flight flight = new Flight().setFlightNo(SAMPLE_FLIGHT_NAME);
@@ -102,13 +109,34 @@ public class FlightManagerTest {
         flight.seats.add(new Seat(SAMPLE_SEAT_NUMBER, MIN_PRICE));
 
         FlightManager flightManager = new FlightManager.Builder().addFlight(flight).build();
+        Flight flightByName = flightManager.getFlightByName(SAMPLE_FLIGHT_NAME);
 
         // when
-        flightManager.bookSeatOnFlight(SAMPLE_FLIGHT_NAME, SAMPLE_SEAT_NUMBER);
-        flightManager.bookSeatOnFlight(SAMPLE_FLIGHT_NAME, SAMPLE_SEAT_NUMBER);
+        flightByName.getSeatOnFlight(SAMPLE_SEAT_NUMBER).book().book();
 
-        // then throws IllegallArg..
+        // then throws IllegalArgumentException
 
     }
+
+    // ITERATION 1
+    // story 4
+    @Test
+    public void shouldReturnAvaragePriceOfNonBookedSeats() {
+        // given
+        Flight flight = new Flight().setFlightNo(SAMPLE_FLIGHT_NAME).addSeat(new Seat(1, 100))
+                .addSeat(new Seat(2, 200)).addSeat(new Seat(2, 600).book());
+
+        FlightManager flightManager = new FlightManager.Builder().addFlight(flight).build();
+
+        // when
+
+        double avaragePrice = flightManager.getFlightByName(SAMPLE_FLIGHT_NAME).getAvaragePriceOfNonBookedSeats();
+
+        // then
+        Assertions.assertThat(avaragePrice).isEqualTo(150f);
+
+    }
+
+    // ITERATION 2
 
 }
