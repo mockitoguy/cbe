@@ -3,7 +3,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 import net.flight.Flight;
@@ -92,12 +91,9 @@ public class FlightManagerTest {
   @Test
   public void shouldShowListOfFlightsBetween() throws Exception {
     // given
-    Date flightF004Date = new Date();
-    flightRepository.addFlights(new FlightBuilder("F004").withOrigin("WAW").withDestination("HAM")
-        .withDepartureDate(flightF004Date).build());
+    flightRepository.addFlights(new FlightBuilder("F004").withOrigin("WAW").withDestination("HAM").build());
 
-    flightRepository.addFlights(new FlightBuilder("F001").withOrigin("WAW2").withDestination("HAM2")
-        .withDepartureDate(new Date()).build());
+    flightRepository.addFlights(new FlightBuilder("F001").withOrigin("WAW2").withDestination("HAM2").build());
 
     // when
     List<Flight> flights = flightManager.findFlights("WAW", "HAM");
@@ -106,21 +102,17 @@ public class FlightManagerTest {
     assertThat(flights).isNotNull();
     assertThat(flights).hasSize(1);
 
-    assertThat(flights.get(0).getFlightNo()).isEqualTo("F004");
-    assertThat(flights.get(0).getDepartureDate()).isEqualTo(flightF004Date);
+    assertThat(extractFlightNumbers(flights)).contains("F001");
   }
 
   @Test
   public void shouldFindFlightFromOrigin() throws Exception {
     // given
-    flightRepository.addFlights(new FlightBuilder("F001").withOrigin("WAW").withDestination("HAM")
-        .withDepartureDate(new Date()).build());
+    flightRepository.addFlights(new FlightBuilder("F001").withOrigin("WAW").withDestination("HAM").build());
 
-    flightRepository.addFlights(new FlightBuilder("F002").withOrigin("WAW").withDestination("HAM2")
-        .withDepartureDate(new Date()).build());
+    flightRepository.addFlights(new FlightBuilder("F002").withOrigin("WAW").withDestination("HAM2").build());
 
-    flightRepository.addFlights(new FlightBuilder("F003").withOrigin("HAM").withDestination("WAW")
-        .withDepartureDate(new Date()).build());
+    flightRepository.addFlights(new FlightBuilder("F003").withOrigin("HAM").withDestination("WAW").build());
 
     // when
     List<Flight> flights = flightManager.findFlightsFrom("WAW");
@@ -132,7 +124,6 @@ public class FlightManagerTest {
     assertThat(extractFlightNumbers(flights)).contains("F001", "F002");
   }
 
-
   private Iterable<String> extractFlightNumbers(List<Flight> flights) {
     return Iterables.transform(flights, new Function<Flight, String>() {
       @Override
@@ -142,7 +133,7 @@ public class FlightManagerTest {
         }
         return flight.getFlightNo();
       }
-    });
+ });
   }
 
 }
