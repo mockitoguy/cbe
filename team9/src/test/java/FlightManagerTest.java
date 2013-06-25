@@ -129,7 +129,12 @@ public class FlightManagerTest {
     assertThat(flights).isNotNull();
     assertThat(flights).hasSize(2);
 
-    Iterable<String> flightsNo = Iterables.transform(flights, new Function<Flight, String>() {
+    assertThat(extractFlightNumbers(flights)).contains("F001", "F002");
+  }
+
+
+  private Iterable<String> extractFlightNumbers(List<Flight> flights) {
+    return Iterables.transform(flights, new Function<Flight, String>() {
       @Override
       public String apply(@Nullable Flight flight) {
         if (flight == null) {
@@ -138,8 +143,6 @@ public class FlightManagerTest {
         return flight.getFlightNo();
       }
     });
-
-    assertThat(flightsNo).contains("F001", "F002");
   }
 
 }
