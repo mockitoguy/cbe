@@ -1,12 +1,10 @@
 package net.flight.model;
 
-import java.util.Date;
 import java.util.List;
 
 public class Flight {
 
   private final String flightNo;
-  private Date departureDate;
   private String origin;
   private String destination;
 
@@ -28,14 +26,6 @@ public class Flight {
     return seats;
   }
 
-  public void setDepartureDate(Date departureDate) {
-    this.departureDate = departureDate;
-  }
-
-  public Date getDepartureDate() {
-    return departureDate;
-  }
-
   public void setOrigin(String origin) {
     this.origin = origin;
   }
@@ -51,4 +41,5 @@ public class Flight {
   public String getDestination() {
     return destination;
   }
+
 }
