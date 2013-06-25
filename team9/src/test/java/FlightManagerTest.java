@@ -1,3 +1,5 @@
+import net.flight.FlightManager;
+import net.flight.FlightRepository;
 import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
@@ -86,6 +88,13 @@ public class FlightManagerTest {
     assertEquals(new BigDecimal("60.0"), averagePriceNonBookedSeats);
   }
 
+  @Test
+  public void shouldShowListOfFlightsBetween() throws Exception {
+    //given
 
+    //when
 
+    //then
+
+  }
 }

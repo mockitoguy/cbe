@@ -1,3 +1,5 @@
+package net.flight;
+
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +21,7 @@ public class FlightRepository {
     BigDecimal price;
     boolean booked = false;
 
-    Seat(String price) {
+    public Seat(String price) {
       this.price = new BigDecimal(price);
     }
   }
