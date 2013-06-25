@@ -65,4 +65,13 @@ public class FlightManager {
         Predicates.and(new OriginPredicate(origin), new DestinationPredicate(destination))));
   }
 
+  public List<Flight> findFlightsFrom(String origin) {
+    return Lists.newArrayList(Iterables.filter(flightRepository.getAllFlights(),
+            new OriginPredicate(origin)));
+
+
+
+
+  }
+
 }

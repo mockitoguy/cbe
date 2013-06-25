@@ -12,8 +12,10 @@ import net.flight.FlightRepository;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
-import static org.mockito.Mockito.*;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+import com.sun.istack.internal.Nullable;
 
 public class FlightManagerTest {
 
@@ -95,8 +97,7 @@ public class FlightManagerTest {
         .withDepartureDate(flightF004Date).build());
 
     flightRepository.addFlights(new FlightBuilder("F001").withOrigin("WAW2").withDestination("HAM2")
-            .withDepartureDate(new Date()).build());
-
+        .withDepartureDate(new Date()).build());
 
     // when
     List<Flight> flights = flightManager.findFlights("WAW", "HAM");
@@ -107,6 +108,38 @@ public class FlightManagerTest {
 
     assertThat(flights.get(0).getFlightNo()).isEqualTo("F004");
     assertThat(flights.get(0).getDepartureDate()).isEqualTo(flightF004Date);
+  }
+
+  @Test
+  public void shouldFindFlightFromOrigin() throws Exception {
+    // given
+    flightRepository.addFlights(new FlightBuilder("F001").withOrigin("WAW").withDestination("HAM")
+        .withDepartureDate(new Date()).build());
+
+    flightRepository.addFlights(new FlightBuilder("F002").withOrigin("WAW").withDestination("HAM2")
+        .withDepartureDate(new Date()).build());
+
+    flightRepository.addFlights(new FlightBuilder("F003").withOrigin("HAM").withDestination("WAW")
+        .withDepartureDate(new Date()).build());
+
+    // when
+    List<Flight> flights = flightManager.findFlightsFrom("WAW");
+
+    // then
+    assertThat(flights).isNotNull();
+    assertThat(flights).hasSize(2);
+
+    Iterable<String> flightsNo = Iterables.transform(flights, new Function<Flight, String>() {
+      @Override
+      public String apply(@Nullable Flight flight) {
+        if (flight == null) {
+          return null;
+        }
+        return flight.getFlightNo();
+      }
+    });
+
+    assertThat(flightsNo).contains("F001", "F002");
   }
 
 }
