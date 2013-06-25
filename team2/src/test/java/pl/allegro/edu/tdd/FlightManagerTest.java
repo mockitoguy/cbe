@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -30,13 +31,17 @@ public class FlightManagerTest {
   @Mock
   private SeatDao seatDao;
 
+  private final static BigDecimal AVERAGE = new BigDecimal("153");
+  private final static BigDecimal $10 = new BigDecimal("10");
+  private final static BigDecimal $50 = new BigDecimal("50");
+
   @InjectMocks
   private FlightManager flightManager = new FlightManager();
 
   @Test
   public void shouldReturnAvailableSeats() {
     // given:
-    when(flightDao.findFlightByNo("LOT102")).thenReturn(FlightBuilder.no("LOT102").availableSeats(5).build());
+    when(seatDao.countAvailableSeats("LOT102")).thenReturn(5);
 
     // when:
     int seats = flightManager.getAvailableSeats("LOT102");
@@ -59,13 +64,13 @@ public class FlightManagerTest {
   @Test
   public void shouldReturnCheapestSeatForFlight() {
     // given:
-    when(seatDao.findSeatByFlightNoOrderByPriceDesc("LOT102")).thenReturn(Arrays.asList(new Seat(10L), new Seat(50L)));
+    when(seatDao.findSeatByFlightNoOrderByPriceDesc("LOT102")).thenReturn(Arrays.asList(new Seat($10), new Seat($50)));
 
     // when:
-    long price = flightManager.getCheapestSeatPrice("LOT102");
+    BigDecimal price = flightManager.getCheapestSeatPrice("LOT102");
 
     // then:
-    assertEquals(10L, price);
+    assertEquals($10, price);
   }
 
   @Test
@@ -83,7 +88,7 @@ public class FlightManagerTest {
   @Test
   public void shouldThrowExceptionForBookedSeat() {
     // given:
-    when(seatDao.findSeatByFlightNoAndSeatNo("LOT102", "15A")).thenReturn(new Seat(10L, false));
+    when(seatDao.findSeatByFlightNoAndSeatNo("LOT102", "15A")).thenReturn(new Seat($10, false));
 
     // when:
     CatchException.catchException(flightManager).bookSeat("LOT102", "15A");
@@ -106,7 +111,7 @@ public class FlightManagerTest {
   @Test
   public void shouldBookAvailableSeat() {
     // given:
-    when(seatDao.findSeatByFlightNoAndSeatNo("LOT102", "15A")).thenReturn(new Seat(10L, true));
+    when(seatDao.findSeatByFlightNoAndSeatNo("LOT102", "15A")).thenReturn(new Seat($10, true));
     ArgumentCaptor<Seat> seatCaptor = ArgumentCaptor.forClass(Seat.class);
 
     // when:
@@ -115,5 +120,17 @@ public class FlightManagerTest {
     // then:
     verify(seatDao).save(seatCaptor.capture());
     assertEquals(false, seatCaptor.getValue().isAvailable());
+  }
+
+  @Test
+  public void shouldEvaluateAveragePriceForAvailableSeats() {
+    // given:
+    when(seatDao.calculateAveragePriceForAvailable("LOT102")).thenReturn(AVERAGE);
+
+    // when:
+    BigDecimal calculatedAverage = flightManager.calculateAveragePriceForAvailableSeats("LOT102");
+
+    // then:
+    assertEquals(AVERAGE, calculatedAverage);
   }
 }

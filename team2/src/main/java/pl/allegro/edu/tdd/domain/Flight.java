@@ -1,20 +1,14 @@
 package pl.allegro.edu.tdd.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Flight {
+
   private String no;
-  private int availableSeats;
 
-  public Flight(String no, int availableSeats) {
+  public Flight(String no) {
     this.no = no;
-    this.availableSeats = availableSeats;
-  }
-
-  public int getAvailableSeats() {
-    return availableSeats;
-  }
-
-  public void setAvailableSeats(int availableSeats) {
-    this.availableSeats = availableSeats;
   }
 
   public String getNo() {
