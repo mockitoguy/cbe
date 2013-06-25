@@ -58,7 +58,7 @@ public class FlightManagerTest {
   }
   
   @Test
-  public void shouldBookSeatOnFlight() {
+  public void shouldBookSeatOnFlight() throws SeatAlreadyBookedException {
     // given
     Flight exampleflight = new FlightBuilder().build("LOT101");
     exampleflight.addSeat(new SeatBuilder().withNumber(1).build());
@@ -74,6 +74,22 @@ public class FlightManagerTest {
     
     assertFalse(flight.getSeat(1).isBooked());
     assertTrue(flight.getSeat(2).isBooked());
+  }
+  
+  @Test
+  public void shouldFailOnBookSeatThatAlreadyBooked() {
+    // given
+    Flight exampleflight = new FlightBuilder().build("LOT101");
+    exampleflight.addSeat(new SeatBuilder().withNumber(1).booked(true).build());
+    
+    instance.addFlight(exampleflight);
+
+    try { 
+      // when
+      instance.bookSeat("LOT101", 1);
+      // then
+      fail();
+    } catch (SeatAlreadyBookedException ex) {}
   }
   
   @Test

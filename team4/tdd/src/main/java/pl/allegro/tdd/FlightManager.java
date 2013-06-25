@@ -47,7 +47,11 @@ class FlightManager {
     flights.get(flightNumber).addSeat(seat);
   }
 
-  public void bookSeat(String flightNumber, int number) {
+  public void bookSeat(String flightNumber, int number) throws SeatAlreadyBookedException {
+    if (flights.get(flightNumber).getSeat(number).isBooked()) {
+      throw new SeatAlreadyBookedException("Seat already booked by someone else!");
+    }
+    
     flights.get(flightNumber).getSeat(number).setBooked(true);
   }
 
