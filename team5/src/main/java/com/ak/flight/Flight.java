@@ -16,12 +16,15 @@ import java.util.*;
 public class Flight {
 
   private final String flightNumber;
+  private final String from;
+  private final String to;
   private final Map<String, Seat> seats;
 
 
-  public Flight(String flightNumber, Set<Seat> seats) {
+  public Flight(String flightNumber, Set<Seat> seats, String from, String to) {
     this.flightNumber = flightNumber;
-
+    this.from = from;
+    this.to = to;
     this.seats = buildSeatsMap(seats);
   }
 

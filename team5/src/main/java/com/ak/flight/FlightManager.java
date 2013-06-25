@@ -4,6 +4,7 @@ import com.ak.flight.exception.NoSuchFlightExpection;
 import com.google.common.collect.Maps;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author jkubrynski@gmail.com
@@ -28,5 +29,10 @@ public class FlightManager {
 
   public Flight getFlight(String flightNumber) {
     return flights.get(flightNumber);
+  }
+
+  public Set<Flight> getFlightsBetweenAirports(String from, String to) {
+
+    return null;
   }
 }

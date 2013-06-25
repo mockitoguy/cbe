@@ -6,6 +6,11 @@ import com.ak.flight.exception.NonFreeSeatsAvailableException;
 import com.ak.flight.exception.SeatAlreadyBookedException;
 import org.testng.annotations.Test;
 
+import java.util.Set;
+
+import static com.googlecode.catchexception.apis.CatchExceptionBdd.then;
+import static com.googlecode.catchexception.apis.CatchExceptionBdd.thenThrown;
+import static com.googlecode.catchexception.apis.CatchExceptionBdd.when;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
@@ -19,10 +24,14 @@ public class FlightManagerTest {
   public static final int SEATS_COUNT = 5;
   public static final int LOWEST_PRICE = 11000;
   public static final String SEAT_NO = "2A";
+  public static final int FLIGTS_COUNT = 2;
+  public static final String DEST_WAW = "WAW";
+  public static final String DEST_JFK = "JFK";
 
   private FlightManager getFlightManager() {
     FlightManager flightManager = new FlightManager();
     flightManager.addFlight(new FlightBuilder().withFlightNumber(FLIGHT_NUMBER)
+        .from(DEST_WAW).to(DEST_JFK)
         .addSeat("1A", LOWEST_PRICE)
         .addSeat(SEAT_NO, 13000)
         .addSeat("3A", 12000)
@@ -64,17 +73,18 @@ public class FlightManagerTest {
     flight.bookSeat(SEAT_NO);
   }
 
-  public void shouldNotBookAlreadyBookedSeat() throws NoSuchSeatException {
+  public void shouldNotBookAlreadyBookedSeat() throws NoSuchSeatException, SeatAlreadyBookedException {
     //given
     FlightManager flightManager = getFlightManager();
     Flight flight = flightManager.getFlight(FLIGHT_NUMBER);
-    try {
-      flight.bookSeat(SEAT_NO);
-    } catch (SeatAlreadyBookedException ignored) {
-      // cannot happen
-    }
+    flight.bookSeat(SEAT_NO);
 
-    //when
+    //when     WHY????
+//    when(flight).bookSeat(SEAT_NO);
+
+    //then
+//    thenThrown(SeatAlreadyBookedException.class);
+
     try {
       flight.bookSeat(SEAT_NO);
     } catch (SeatAlreadyBookedException e) {
@@ -94,4 +104,14 @@ public class FlightManagerTest {
     assertThat(averagePrice).isEqualTo(12000);
   }
 
+  public void shouldReturnFlightsBetweenAirports() {
+    //given
+    FlightManager flightManager = getFlightManager();
+
+    //when
+    Set<Flight> flights = flightManager.getFlightsBetweenAirports(DEST_WAW, DEST_JFK);
+
+    //then
+    assertThat(flights).hasSize(FLIGTS_COUNT);
+  }
 }

@@ -12,6 +12,8 @@ public class FlightBuilder {
 
   private String flightNumber;
   private Set<Seat> seats = Sets.newHashSet();
+  private String from;
+  private String to;
 
   public FlightBuilder withFlightNumber(String flightNumber) {
     this.flightNumber = flightNumber;
@@ -24,6 +26,16 @@ public class FlightBuilder {
   }
 
   public Flight build() {
-    return new Flight(flightNumber, seats);
+    return new Flight(flightNumber, seats, from, to);
+  }
+
+  public FlightBuilder from(String from) {
+    this.from = from;
+    return this;
+  }
+
+  public FlightBuilder to(String to) {
+    this.to = to;
+    return this;
   }
 }
