@@ -1,4 +1,4 @@
-package net.flight;
+package net.flight.model;
 
 import java.math.BigDecimal;
 

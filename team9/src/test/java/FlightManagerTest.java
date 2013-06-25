@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.math.BigDecimal;
 import java.util.List;
 
-import net.flight.Flight;
+import net.flight.model.Flight;
 import net.flight.FlightManager;
 import net.flight.FlightRepository;
 
@@ -141,7 +141,7 @@ public class FlightManagerTest {
         }
         return flight.getFlightNo();
       }
- });
+    });
   }
 
 }

@@ -1,4 +1,4 @@
-import net.flight.Seat;
+import net.flight.model.Seat;
 
 import java.math.BigDecimal;
 

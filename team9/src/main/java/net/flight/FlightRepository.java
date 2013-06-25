@@ -1,6 +1,8 @@
 package net.flight;
 
 import static java.util.Arrays.asList;
+import net.flight.model.Flight;
+import net.flight.model.Seat;
 
 import java.util.Collection;
 import java.util.HashMap;

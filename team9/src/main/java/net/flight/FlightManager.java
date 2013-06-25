@@ -6,6 +6,10 @@ import java.util.List;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import net.flight.model.Flight;
+import net.flight.model.Seat;
+import net.flight.predicate.FromPredicate;
+import net.flight.predicate.ToPredicate;
 
 public class FlightManager {
 
@@ -61,15 +65,15 @@ public class FlightManager {
 
   public List<Flight> findFlights(String origin, String destination) {
     return Lists.newArrayList(Iterables.filter(flightRepository.getAllFlights(),
-        Predicates.and(new OriginPredicate(origin), new DestinationPredicate(destination))));
+        Predicates.and(new FromPredicate(origin), new ToPredicate(destination))));
   }
 
   public List<Flight> findFlightsFrom(String origin) {
-    return Lists.newArrayList(Iterables.filter(flightRepository.getAllFlights(), new OriginPredicate(origin)));
+    return Lists.newArrayList(Iterables.filter(flightRepository.getAllFlights(), new FromPredicate(origin)));
   }
 
   public List<Flight> findFlightsTo(String destination) {
     return Lists
-        .newArrayList(Iterables.filter(flightRepository.getAllFlights(), new DestinationPredicate(destination)));
+        .newArrayList(Iterables.filter(flightRepository.getAllFlights(), new ToPredicate(destination)));
   }
 }

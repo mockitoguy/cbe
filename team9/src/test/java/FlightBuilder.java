@@ -1,6 +1,4 @@
-import net.flight.Flight;
-
-import java.util.Date;
+import net.flight.model.Flight;
 
 public class FlightBuilder {
 
@@ -20,14 +18,8 @@ public class FlightBuilder {
     return this;
   }
 
-
-
   public Flight build() {
     return flight;
   }
 
-  public FlightBuilder withDepartureDate(Date date) {
-    flight.setDepartureDate(date);
-    return this;
-  }
 }
