@@ -1,6 +1,8 @@
 package pl.allegro.tdd;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -71,5 +73,41 @@ class FlightManager {
     
     return sum / numerOfNonBookedSeat;
 
+  }
+
+  public List<Flight> getFlightsBetween(String origin, String destination) {
+    List<Flight> result = new ArrayList<>();
+    
+    for (Flight flight : flights.values()) {
+      if (flight.getDestination().equals(origin) && flight.getDestination().equals(destination)) {
+        result.add(flight);
+      }
+    }
+    
+    return result;
+  }
+
+  List<Flight> getFlightsFrom(String origin) {
+    List<Flight> result = new ArrayList<>();
+    
+    for (Flight flight : flights.values()) {
+      if (flight.getOrigin().equals(origin)) {
+        result.add(flight);
+      }
+    }
+    
+    return result;
+  }
+
+  List<Flight> getFlightsTo(String destination) {
+    List<Flight> result = new ArrayList<>();
+    
+    for (Flight flight : flights.values()) {
+      if (flight.getDestination().equals(destination)) {
+        result.add(flight);
+      }
+    }
+    
+    return result;
   }
 }
