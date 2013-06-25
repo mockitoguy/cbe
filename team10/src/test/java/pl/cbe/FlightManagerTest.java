@@ -11,10 +11,16 @@ public class FlightManagerTest {
 	
 	private static final String F_NO = "LOT01";
 
+	//story 1
 	@Test public void shouldKnowNoOfAvailSeats() {
 		//given
 		FlightManager fm = new FlightManager();
-		fm.addFlight(F_NO,5);
+		fm.addFlight(F_NO);
+		fm.addSeat(F_NO,200);
+		fm.addSeat(F_NO,200);
+		fm.addSeat(F_NO,200);
+		fm.addSeat(F_NO,200);
+		fm.addSeat(F_NO,200);
 		
 		//when
 		int seats = fm.getAvailSeats(F_NO);
@@ -23,18 +29,55 @@ public class FlightManagerTest {
 		Assertions.assertThat(seats).isEqualTo(5);
 	}
 	
+	//story 2
 	@Test public void shouldFindCheapestSeat() {
 		//given
 		FlightManager fm = new FlightManager();
-		fm.addFlight(F_NO,5);
-		fm.setPrice(F_NO,1,200);
-		fm.setPrice(F_NO,2,200);
-		fm.setPrice(F_NO,3,100);
+		fm.addFlight(F_NO);
+		fm.addSeat(F_NO,200);
+		fm.addSeat(F_NO,200);
+		fm.addSeat(F_NO,100);
 					
 		//when
-		double price = fm.getCheapestAvailSeat(F_NO);
+		Seat seat = fm.getCheapestAvailSeat(F_NO);
 		
 		//then
-		Assertions.assertThat(price).isEqualTo(100, Delta.delta(0.1));
+		Assertions.assertThat(seat.getPrice()).isEqualTo(100, Delta.delta(0.1));
+	}
+	
+	//story 3
+	@Test
+	public void shouldDecreaseAvailSeatsAfterBooking() {
+		//given
+		FlightManager fm = new FlightManager();
+		fm.addFlight(F_NO);
+		fm.addSeat(F_NO,200);
+		fm.addSeat(F_NO,200);
+		fm.addSeat(F_NO,100);
+		Seat seat = fm.getCheapestAvailSeat(F_NO);
+		
+		//when
+		fm.bookSeat(F_NO, seat.getSeatNo());
+		int availSeats = fm.getAvailSeats(F_NO);
+		
+		//then
+		Assertions.assertThat(availSeats).isEqualTo(2);
+	}
+	
+	//story 4
+	@Test
+	public void shouldKnowAveragePriceOfNonBookedSeats() {
+		//given
+		FlightManager fm = new FlightManager();
+		fm.addFlight(F_NO);
+		fm.addSeat(F_NO,200);
+		fm.addSeat(F_NO,200);
+		fm.addSeat(F_NO,100);
+		
+		//when
+		double average = fm.getAveragePriceOfNonBookedSeats(F_NO);
+		
+		//then
+		Assertions.assertThat(average).isEqualTo(500/3, Delta.delta(1));
 	}
 }

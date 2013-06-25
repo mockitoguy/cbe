@@ -11,8 +11,8 @@ import java.util.Map.Entry;
 public class FlightManager {
 	private Map<String,Flight> flights = new HashMap<>();
 	
-	public Flight addFlight(String fNo, int availSeats) {
-		Flight f = new Flight(fNo, availSeats);
+	public Flight addFlight(String fNo) {
+		Flight f = new Flight(fNo);
 		flights.put(fNo, f);
 		
 		return f;		
@@ -22,8 +22,8 @@ public class FlightManager {
 		return getFlight(fNo).getAvailSeats();
 	}
 
-	public void setPrice(String fNo, int seatNo, double price) {
-		getFlight(fNo).setPrice(seatNo, price);
+	public void addSeat(String fNo, double price) {
+		getFlight(fNo).addSeat(price);
 	}
 
 	private Flight getFlight(String fNo) {
@@ -33,9 +33,21 @@ public class FlightManager {
 		return flights.get(fNo);
 	}
 
-	public double getCheapestAvailSeat(String fNo) {
+	public Seat getCheapestAvailSeat(String fNo) {
 		Flight flight = flights.get(fNo);
 		
 		return flight.getCheapestAvailSeat();
+	}
+
+	public void bookSeat(String fNo, int seatNo) {
+		Flight flight = flights.get(fNo);
+		
+		flight.bookSeat(seatNo);
+	}
+
+	public double getAveragePriceOfNonBookedSeats(String fNo) {
+		Flight flight = flights.get(fNo);
+		
+		return flight.getAveragePriceOfNonBookedSeats();
 	}
 }

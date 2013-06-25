@@ -8,32 +8,69 @@ import java.util.Map;
  */
 public class Flight {
 	private String fNo;
-	private int availSeats;
-	private Map<Integer, Double> prices = new HashMap<>();
+	private Map<Integer, Seat> seats = new HashMap<>();
 	
-	public Flight(String fNo, int availSeats) {
+	public Flight(String fNo) {
 		super();
 		this.fNo = fNo;
-		this.availSeats = availSeats;
 	}
 	public String getfNo() {
 		return fNo;
 	}
 	public int getAvailSeats() {
-		return availSeats;
-	}
-	public void setPrice(int seatNo, double price) {
-		prices.put(seatNo, price);
-	}	
-	public double getCheapestAvailSeat() {
-		double min = Double.MAX_VALUE;
-		
-		for (double p : prices.values()) {
-			if (p < min) {
-				min = p;
+		int avail = 0;
+		for (Seat seat : seats.values()) {
+			if (seat.isAvailable()) {
+				avail++;
 			}
 		}
 		
-		return min;
+		return avail;
+	}
+	
+	public Seat addSeat(double price) {
+		int seatNo = seats.size()+1;
+		
+		Seat seat = new Seat(seatNo, price);
+		seats.put(seatNo, seat);
+		
+		return seat;
+	}	
+	
+	public Seat getCheapestAvailSeat() {
+		double min = Double.MAX_VALUE;
+		Seat   cheapest = null;
+		
+		for (Seat seat : seats.values()) {
+			if (seat.getPrice() < min) {
+				min = seat.getPrice();
+				cheapest = seat;
+			}
+		}
+		
+		return cheapest;
+	}
+	public void bookSeat(int seatNo) {
+		getSeat(seatNo).book();
+		
+	}
+	
+	private Seat getSeat(int seatNo) {
+		if (!seats.containsKey(seatNo)) {
+			throw new RuntimeException("no such seat");
+		}
+		
+		return seats.get(seatNo);
+	}
+	
+	public double getAveragePriceOfNonBookedSeats() {
+		double sum = 0;
+		for (Seat seat : seats.values()) {
+			if (seat.isAvailable()) {
+				sum += seat.getPrice();
+			}
+		}
+		
+		return sum / getAvailSeats();
 	}
 }
