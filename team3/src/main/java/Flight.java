@@ -8,6 +8,9 @@ public class Flight {
     ArrayList<Seat> seats = new ArrayList<Seat>();
     Date date;
 
+    String origin;
+    String destinantion;
+
     public Flight setFlightNo(String sampleFlightName) {
         number = sampleFlightName;
         return this;
@@ -75,5 +78,15 @@ public class Flight {
         }
 
         return sum / availableSeats.size();
+    }
+
+    public Flight setDestination(String destination) {
+        this.destinantion = destination;
+        return this;
+    }
+
+    public Flight setOrigin(String origin) {
+        this.origin = origin;
+        return this;
     }
 }

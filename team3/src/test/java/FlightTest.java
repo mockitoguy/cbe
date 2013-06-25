@@ -108,4 +108,5 @@ public class FlightTest {
         Assertions.assertThat(avaragePrice).isEqualTo(150f);
 
     }
+
 }

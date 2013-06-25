@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
 public class FlightManager {
 
     List<Flight> flightList;
@@ -17,6 +20,11 @@ public class FlightManager {
         }
 
         throw new IllegalArgumentException("Flight number not found");
+    }
+
+    public List<Flight> getFlightsWithGivenCondition(SearchCondition searchCondition) {
+        return Lists.newLinkedList(Iterables.filter(flightList, searchCondition.predicate()));
+
     }
 
     public static class Builder {
