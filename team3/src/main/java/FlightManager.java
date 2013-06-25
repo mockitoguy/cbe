@@ -9,56 +9,7 @@ public class FlightManager {
         this.flightList = flightList;
     }
 
-    public List<Seat> getAvaliableSeatsForFlight(String sampleFlightName) {
-
-        List<Seat> availableSeats = new ArrayList<>();
-
-        List<Seat> allSeats = getFlightByName(sampleFlightName).seats;
-
-        for (Seat seat : allSeats) {
-            if (!seat.isBooked) {
-                availableSeats.add(seat);
-            }
-        }
-
-        return availableSeats;
-    }
-
-    public Seat getCheapestSeatsForFlight(String sampleFlightName) {
-
-        List<Seat> seats = getAvaliableSeatsForFlight(sampleFlightName);
-
-        Seat cheapestSeat = null;
-
-        for (Seat seat : seats) {
-
-            if (cheapestSeat == null || cheapestSeat.price > seat.price) {
-                cheapestSeat = seat;
-            }
-        }
-
-        if (cheapestSeat == null) {
-            throw new IllegalStateException("Flight without seats");
-        }
-
-        return cheapestSeat;
-
-    }
-
-    public Seat bookSeatOnFlight(String sampleFlightName, int sampleSeatNumber) {
-
-        List<Seat> availableSeats = getAvaliableSeatsForFlight(sampleFlightName);
-
-        for (Seat seat : availableSeats) {
-            if (seat.number == sampleSeatNumber) {
-                return seat.book();
-            }
-        }
-
-        throw new IllegalArgumentException("No seat or already booked");
-    }
-
-    private Flight getFlightByName(String flightName) throws IllegalArgumentException {
+    Flight getFlightByName(String flightName) throws IllegalArgumentException {
         for (Flight flight : flightList) {
             if (flight.number.equals(flightName)) {
                 return flight;
