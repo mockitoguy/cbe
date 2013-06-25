@@ -1,4 +1,7 @@
 package com.example;
 
-public class FlightManagerException {
+public class FlightManagerException extends Exception {
+    public FlightManagerException(String message) {
+        super(message);
+    }
 }
