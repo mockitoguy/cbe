@@ -7,7 +7,9 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import org.fest.assertions.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +20,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import pl.allegro.edu.tdd.dao.FlightDao;
 import pl.allegro.edu.tdd.dao.SeatDao;
+import pl.allegro.edu.tdd.domain.Flight;
 import pl.allegro.edu.tdd.domain.Seat;
 import pl.allegro.edu.tdd.exception.SeatAlreadyBookedException;
 
@@ -132,5 +135,20 @@ public class FlightManagerTest {
 
     // then:
     assertEquals(AVERAGE, calculatedAverage);
+  }
+
+  @Test
+  public void shouldFindFlightBetweenOriginAndDestination() {
+    // given:
+    Place origin = new Place("WARSZAWA");
+    Place destination = new Place("KRAKÓW");
+    List<Flight> expectedFlights = Arrays.asList(FlightBuilder.no("1").build(), FlightBuilder.no("2").build());
+    when(flightDao.findFlightsBetween(origin, destination)).thenReturn(expectedFlights);
+
+    // when:
+    List<Flight> flights = flightManager.findFlightsBetween(origin, destination);
+
+    // then:
+    Assertions.assertThat(flights).isEqualTo(expectedFlights);
   }
 }

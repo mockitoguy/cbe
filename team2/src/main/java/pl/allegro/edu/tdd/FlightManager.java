@@ -5,6 +5,7 @@ import java.util.List;
 
 import pl.allegro.edu.tdd.dao.FlightDao;
 import pl.allegro.edu.tdd.dao.SeatDao;
+import pl.allegro.edu.tdd.domain.Flight;
 import pl.allegro.edu.tdd.domain.Seat;
 import pl.allegro.edu.tdd.exception.SeatAlreadyBookedException;
 
@@ -45,5 +46,9 @@ public class FlightManager {
 
   public BigDecimal calculateAveragePriceForAvailableSeats(String flighNo) {
     return seatDao.calculateAveragePriceForAvailable(flighNo);
+  }
+
+  public List<Flight> findFlightsBetween(Place origin, Place destination) {
+    return flightDao.findFlightsBetween(origin, destination);
   }
 }
