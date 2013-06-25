@@ -99,9 +99,6 @@ public class FlightManagerTest {
     List<Flight> flights = flightManager.findFlights("WAW", "HAM");
 
     // then
-    assertThat(flights).isNotNull();
-    assertThat(flights).hasSize(1);
-
     assertThat(extractFlightNumbers(flights)).contains("F001");
   }
 
@@ -118,9 +115,6 @@ public class FlightManagerTest {
     List<Flight> flights = flightManager.findFlightsFrom("WAW");
 
     // then
-    assertThat(flights).isNotNull();
-    assertThat(flights).hasSize(2);
-
     assertThat(extractFlightNumbers(flights)).contains("F001", "F002");
   }
 
