@@ -1,21 +1,26 @@
 package pl.allegro.edu.tdd.domain;
 
+import pl.allegro.edu.tdd.Place;
+
 public class Flight {
+
   private String no;
-  private int availableSeats;
 
-  public Flight(String no, int availableSeats) {
+  private Place origin;
+
+  public Flight(String no) {
     this.no = no;
-    this.availableSeats = availableSeats;
   }
 
-  public int getAvailableSeats() {
-    return availableSeats;
+  public Place getOrigin() {
+    return origin;
   }
 
-  public void setAvailableSeats(int availableSeats) {
-    this.availableSeats = availableSeats;
+  public void setOrigin(Place origin) {
+    this.origin = origin;
   }
+
+  private Place destination;
 
   public String getNo() {
     return no;

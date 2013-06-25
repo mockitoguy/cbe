@@ -1,25 +1,27 @@
 package pl.allegro.edu.tdd.domain;
 
+import java.math.BigDecimal;
+
 public class Seat {
 
   private boolean available;
 
-  private long price;
+  private BigDecimal price;
 
-  public Seat(long price) {
+  public Seat(BigDecimal price) {
     this.price = price;
   }
 
-  public Seat(long price, boolean available) {
+  public Seat(BigDecimal price, boolean available) {
     this(price);
     this.available = available;
   }
 
-  public long getPrice() {
+  public BigDecimal getPrice() {
     return price;
   }
 
-  public void setPrice(long price) {
+  public void setPrice(BigDecimal price) {
     this.price = price;
   }
 
