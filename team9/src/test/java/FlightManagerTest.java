@@ -1,13 +1,19 @@
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
+import net.flight.Flight;
 import net.flight.FlightManager;
 import net.flight.FlightRepository;
 
-import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
+import static org.mockito.Mockito.*;
 
 public class FlightManagerTest {
 
@@ -25,8 +31,8 @@ public class FlightManagerTest {
   @Test
   public void shouldGetAvailableSeats() throws Exception {
     // given
-    flightRepository.addFlightSeats("F01", new SeatBuilder().available().build(), new SeatBuilder().available()
-            .build(), new SeatBuilder().booked().build());
+    flightRepository.addFlightSeats("F01", new SeatBuilder().available().build(),
+        new SeatBuilder().available().build(), new SeatBuilder().booked().build());
 
     flightRepository.addFlightSeats("F03", new SeatBuilder().available().build());
 
@@ -40,8 +46,8 @@ public class FlightManagerTest {
   @Test
   public void shouldGetCheapestSeat() throws Exception {
     // given
-    flightRepository.addFlightSeats("F01", new SeatBuilder().withPrice("100").build(),
-            new SeatBuilder().withPrice("10").build());
+    flightRepository.addFlightSeats("F01", new SeatBuilder().withPrice("100").build(), new SeatBuilder()
+        .withPrice("10").build());
 
     flightRepository.addFlightSeats("F03", new SeatBuilder().withPrice("5").build());
 
@@ -55,8 +61,8 @@ public class FlightManagerTest {
   @Test
   public void shouldBookSeatOnFlight() throws Exception {
     // given
-    flightRepository.addFlightSeats("F01", new SeatBuilder().booked().build(), new SeatBuilder().available()
-            .build(), new SeatBuilder().available().build());
+    flightRepository.addFlightSeats("F01", new SeatBuilder().booked().build(), new SeatBuilder().available().build(),
+        new SeatBuilder().available().build());
 
     int availableSeatsBeforeBooking = flightManager.getAvailableSeats("F01");
 
@@ -71,8 +77,8 @@ public class FlightManagerTest {
   @Test
   public void shouldGetAveragePriceOfNonBookedSeats() throws Exception {
     // given
-    flightRepository.addFlightSeats("F01", new SeatBuilder().withPrice("90").build(),
-            new SeatBuilder().withPrice("10").build());
+    flightRepository.addFlightSeats("F01", new SeatBuilder().withPrice("90").build(), new SeatBuilder().withPrice("10")
+        .build());
 
     // when
     BigDecimal averagePriceNonBookedSeats = flightManager.averagePriceNonBookedSeats("F01");
@@ -84,10 +90,23 @@ public class FlightManagerTest {
   @Test
   public void shouldShowListOfFlightsBetween() throws Exception {
     // given
+    Date flightF004Date = new Date();
+    flightRepository.addFlights(new FlightBuilder("F004").withOrigin("WAW").withDestination("HAM")
+        .withDepartureDate(flightF004Date).build());
+
+    flightRepository.addFlights(new FlightBuilder("F001").withOrigin("WAW2").withDestination("HAM2")
+            .withDepartureDate(new Date()).build());
+
 
     // when
+    List<Flight> flights = flightManager.findFlights("WAW", "HAM");
 
     // then
+    assertThat(flights).isNotNull();
+    assertThat(flights).hasSize(1);
 
+    assertThat(flights.get(0).getFlightNo()).isEqualTo("F004");
+    assertThat(flights.get(0).getDepartureDate()).isEqualTo(flightF004Date);
   }
+
 }
