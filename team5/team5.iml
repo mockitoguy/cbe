@@ -82,7 +82,9 @@
           <root url="jar://$MODULE_DIR$/libs/guava-13.0.1.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.ideaLibSources/guava-13.0.1-sources.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
@@ -91,7 +93,9 @@
           <root url="jar://$MODULE_DIR$/libs/joda-time-2.2.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.ideaLibSources/joda-time-2.2-sources.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
   </component>

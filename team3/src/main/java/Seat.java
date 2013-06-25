@@ -12,6 +12,9 @@ public class Seat {
     }
 
     public Seat book() {
+        if (isBooked) {
+            throw new IllegalStateException("Seat allready booked");
+        }
         isBooked = true;
         return this;
     }

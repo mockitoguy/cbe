@@ -1,29 +1,32 @@
 package net.flight;
 
-import java.math.BigDecimal;
+import static java.util.Arrays.asList;
+
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class FlightRepository {
 
-  private Map<String, List<Seat>> flightSeats = new HashMap<String, List<Seat>>();
+  private Map<String, Flight> flightMap = new HashMap<String, Flight>();
 
-  public void addFlightPrices(String flightNo, List<Seat> seatPrices) {
-    flightSeats.put(flightNo, seatPrices);
+  public void addFlightSeats(String flightNo, Seat... seatPrices) {
+    Flight flight = new Flight(flightNo);
+    flight.setSeats(asList(seatPrices));
+
+    flightMap.put(flightNo, flight);
   }
 
-  public List<Seat> getFlightSeatsForFlight(String flightNo) {
-    return flightSeats.get(flightNo);
+  public List<Seat> getFlightSeats(String flightNo) {
+    return flightMap.get(flightNo).getSeats();
   }
 
-  public static class Seat {
-    BigDecimal price;
-    boolean booked = false;
-
-    public Seat(String price) {
-      this.price = new BigDecimal(price);
-    }
+  public void addFlights(Flight flight) {
+    flightMap.put(flight.getFlightNo(), flight);
   }
 
+  public Collection<Flight> getAllFlights() {
+    return flightMap.values();
+  }
 }
