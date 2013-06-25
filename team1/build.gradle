@@ -3,7 +3,7 @@ apply plugin: 'eclipse'
 apply plugin: 'java'
 
 dependencies {
-  compile fileTree(dir: "libs")
+  testCompile fileTree(dir: "libs")
 }
 
 repositories {
@@ -25,7 +25,4 @@ dependencies {
 	libs 'junit:junit:4.10'
 	libs 'com.googlecode.catch-exception:catch-exception:1.0.4'
 	libs 'org.easytesting:fest-assert:1.4'
-    libs 'joda-time:joda-time:2.2'
-    libs 'com.google.guava:guava:14.0.1'
-
 }
