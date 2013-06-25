@@ -7,7 +7,10 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Maps;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author jkubrynski@gmail.com
@@ -39,10 +42,6 @@ public class Flight {
 
   public String getFlightNumber() {
     return flightNumber;
-  }
-
-  public int getSeatsCount() {
-    return seats.size();
   }
 
   public long getLowestSeatPrice() {
@@ -84,5 +83,21 @@ public class Flight {
         return !seat.isBooked();
       }
     });
+  }
+
+  public Seat getSeat(String seatNumber) {
+    return seats.get(seatNumber);
+  }
+
+  public int getAvailableSeatsCount() {
+    return getFreeSeats().size();
+  }
+
+  public String getFrom() {
+    return from;
+  }
+
+  public String getTo() {
+    return to;
   }
 }

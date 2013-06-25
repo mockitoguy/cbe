@@ -9,7 +9,7 @@ import com.ak.flight.exception.SeatAlreadyBookedException;
 public class Seat {
 
   private final String seatNumber;
-  private final long priceInCents;
+  private long priceInCents;
   private boolean booked;
 
   public Seat(String seatNumber, long priceInCents) {
