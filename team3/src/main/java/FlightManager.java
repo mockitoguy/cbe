@@ -10,12 +10,18 @@ public class FlightManager {
     }
 
     public List<Seat> getAvaliableSeatsForFlight(String sampleFlightName) {
-        for (Flight flight : flightList) {
-            if (flight.number.equals(sampleFlightName)) {
-                return flight.seat;
+
+        List<Seat> availableSeats = new ArrayList<>();
+
+        List<Seat> allSeats = getFlightByName(sampleFlightName).seats;
+
+        for (Seat seat : allSeats) {
+            if (!seat.isBooked) {
+                availableSeats.add(seat);
             }
         }
-        throw new IllegalArgumentException("Flight number not found");
+
+        return availableSeats;
     }
 
     public Seat getCheapestSeatsForFlight(String sampleFlightName) {
@@ -39,6 +45,29 @@ public class FlightManager {
 
     }
 
+    public Seat bookSeatOnFlight(String sampleFlightName, int sampleSeatNumber) {
+
+        List<Seat> availableSeats = getAvaliableSeatsForFlight(sampleFlightName);
+
+        for (Seat seat : availableSeats) {
+            if (seat.number == sampleSeatNumber) {
+                return seat.book();
+            }
+        }
+
+        throw new IllegalArgumentException("No seat or already booked");
+    }
+
+    private Flight getFlightByName(String flightName) throws IllegalArgumentException {
+        for (Flight flight : flightList) {
+            if (flight.number.equals(flightName)) {
+                return flight;
+            }
+        }
+
+        throw new IllegalArgumentException("Flight number not found");
+    }
+
     public static class Builder {
 
         List<Flight> arrayList = new ArrayList<Flight>();
@@ -53,4 +82,5 @@ public class FlightManager {
             return new FlightManager(arrayList);
         }
     }
+
 }
