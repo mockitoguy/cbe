@@ -18,13 +18,13 @@ public class SearchCondition {
 
     public Predicate<Flight> predicate() {
         if (origin != null && destinantion != null) {
-            return Predicates.and(new StringCheckPredicate(origin), new StringCheckPredicate(destinantion));
+            return Predicates.and(new OriginPredicate(origin), new DestinationPredicate(destinantion));
         }
         if (origin != null) {
-            return new StringCheckPredicate(origin);
+            return new OriginPredicate(origin);
         }
         if (destinantion != null) {
-            return new StringCheckPredicate(destinantion);
+            return new DestinationPredicate(destinantion);
         }
         throw new IllegalStateException("SearchConditions not initialized");
 

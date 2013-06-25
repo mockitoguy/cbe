@@ -1,10 +1,10 @@
 import com.google.common.base.Predicate;
 
-public class StringCheckPredicate implements Predicate<Flight> {
+public class OriginPredicate implements Predicate<Flight> {
 
     private String origin;
 
-    public StringCheckPredicate(String origin) {
+    public OriginPredicate(String origin) {
         this.origin = origin;
     }
 

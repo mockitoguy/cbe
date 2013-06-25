@@ -38,7 +38,7 @@ public class FlightManagerTest {
         FlightManager flightManager = new FlightManager.Builder().addFlight(flight).addFlight(otherFlight)
                 .addFlight(flight).build();
 
-        SearchCondition searchCondition = new SearchCondition().setOrigin(WAW);
+        SearchCondition searchCondition = new SearchCondition().setDestination(MAD).setOrigin(WAW);
 
         // when
 
