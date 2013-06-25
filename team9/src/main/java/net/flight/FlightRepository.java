@@ -29,4 +29,5 @@ public class FlightRepository {
   public Collection<Flight> getAllFlights() {
     return flightMap.values();
   }
+
 }

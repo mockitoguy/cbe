@@ -1,7 +1,6 @@
 package net.flight;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
 
 import com.google.common.base.Predicates;
@@ -66,12 +65,11 @@ public class FlightManager {
   }
 
   public List<Flight> findFlightsFrom(String origin) {
-    return Lists.newArrayList(Iterables.filter(flightRepository.getAllFlights(),
-            new OriginPredicate(origin)));
-
-
-
-
+    return Lists.newArrayList(Iterables.filter(flightRepository.getAllFlights(), new OriginPredicate(origin)));
   }
 
+  public List<Flight> findFlightsTo(String destination) {
+    return Lists
+        .newArrayList(Iterables.filter(flightRepository.getAllFlights(), new DestinationPredicate(destination)));
+  }
 }

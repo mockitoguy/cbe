@@ -99,7 +99,7 @@ public class FlightManagerTest {
     List<Flight> flights = flightManager.findFlights("WAW", "HAM");
 
     // then
-    assertThat(extractFlightNumbers(flights)).contains("F001");
+    assertThat(extractFlightNumbers(flights)).contains("F004");
   }
 
   @Test
@@ -116,6 +116,20 @@ public class FlightManagerTest {
 
     // then
     assertThat(extractFlightNumbers(flights)).contains("F001", "F002");
+  }
+
+  @Test
+  public void shouldFindFlightFromDestination() throws Exception {
+    // given
+    flightRepository.addFlights(new FlightBuilder("F001").withOrigin("WAW").withDestination("HAM").build());
+
+    flightRepository.addFlights(new FlightBuilder("F002").withOrigin("WAW").withDestination("HAM2").build());
+
+    // when
+    List<Flight> flights = flightManager.findFlightsTo("HAM");
+
+    // then
+    assertThat(extractFlightNumbers(flights)).contains("F001");
   }
 
   private Iterable<String> extractFlightNumbers(List<Flight> flights) {
