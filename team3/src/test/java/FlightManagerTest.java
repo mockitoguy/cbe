@@ -49,4 +49,52 @@ public class FlightManagerTest {
 
     }
 
+    // ITERATION 2
+    // story 2
+    @Test
+    public void shouldFindFlightsWithGivenDestination() {
+        // given
+        Flight flight1 = new Flight().setFlightNo(SAMPLE_FLIGHT_NAME).setDestination(MAD).setOrigin(WAW);
+        Flight flight2 = new Flight().setFlightNo(SAMPLE_FLIGHT_NAME).setDestination("YYY").setOrigin(WAW);
+
+        Flight otherFlight = new Flight().setFlightNo(SAMPLE_FLIGHT_NAME).setDestination("yyy").setOrigin("xxx");
+
+        FlightManager flightManager = new FlightManager.Builder().addFlight(flight1).addFlight(otherFlight)
+                .addFlight(flight1).addFlight(flight2).build();
+
+        SearchCondition searchCondition = new SearchCondition().setDestination(MAD);
+
+        // when
+
+        List<Flight> flights = flightManager.getFlightsWithGivenCondition(searchCondition);
+
+        // then
+        Assertions.assertThat(flights.size()).isEqualTo(2);
+
+    }
+
+    // ITERATION 2
+    // story 3
+    @Test
+    public void shouldFindFlightsWithGivenOrigin() {
+        // given
+        Flight flight1 = new Flight().setFlightNo(SAMPLE_FLIGHT_NAME).setDestination(MAD).setOrigin(WAW);
+        Flight flight2 = new Flight().setFlightNo(SAMPLE_FLIGHT_NAME).setDestination(MAD).setOrigin("XXX");
+
+        Flight otherFlight = new Flight().setFlightNo(SAMPLE_FLIGHT_NAME).setDestination("yyy").setOrigin("xxx");
+
+        FlightManager flightManager = new FlightManager.Builder().addFlight(flight1).addFlight(otherFlight)
+                .addFlight(flight1).addFlight(flight2).build();
+
+        SearchCondition searchCondition = new SearchCondition().setOrigin(WAW);
+
+        // when
+
+        List<Flight> flights = flightManager.getFlightsWithGivenCondition(searchCondition);
+
+        // then
+        Assertions.assertThat(flights.size()).isEqualTo(2);
+
+    }
+
 }
