@@ -4,11 +4,11 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER" exported="true"/>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/test/java"/>
-	<classpathentry kind="lib" path="/Users/szczepan/cbe/team5/libs/catch-exception-1.0.4.jar" exported="true"/>
-	<classpathentry kind="lib" path="/Users/szczepan/cbe/team5/libs/fest-assert-1.4.jar" exported="true"/>
-	<classpathentry kind="lib" path="/Users/szczepan/cbe/team5/libs/fest-util-1.1.6.jar" exported="true"/>
-	<classpathentry kind="lib" path="/Users/szczepan/cbe/team5/libs/hamcrest-core-1.1.jar" exported="true"/>
-	<classpathentry kind="lib" path="/Users/szczepan/cbe/team5/libs/junit-4.10.jar" exported="true"/>
-	<classpathentry kind="lib" path="/Users/szczepan/cbe/team5/libs/mockito-core-1.8.5.jar" exported="true"/>
-	<classpathentry kind="lib" path="/Users/szczepan/cbe/team5/libs/objenesis-1.0.jar" exported="true"/>
+	<classpathentry kind="lib" path="/Users/szczepan/payu/cbe/team5/libs/catch-exception-1.0.4.jar" exported="true"/>
+	<classpathentry kind="lib" path="/Users/szczepan/payu/cbe/team5/libs/fest-assert-1.4.jar" exported="true"/>
+	<classpathentry kind="lib" path="/Users/szczepan/payu/cbe/team5/libs/fest-util-1.1.6.jar" exported="true"/>
+	<classpathentry kind="lib" path="/Users/szczepan/payu/cbe/team5/libs/hamcrest-core-1.1.jar" exported="true"/>
+	<classpathentry kind="lib" path="/Users/szczepan/payu/cbe/team5/libs/junit-4.10.jar" exported="true"/>
+	<classpathentry kind="lib" path="/Users/szczepan/payu/cbe/team5/libs/mockito-core-1.8.5.jar" exported="true"/>
+	<classpathentry kind="lib" path="/Users/szczepan/payu/cbe/team5/libs/objenesis-1.0.jar" exported="true"/>
 </classpath>

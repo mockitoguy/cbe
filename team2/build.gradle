@@ -22,7 +22,6 @@ task getLibs(type: Sync) {
 }
 
 dependencies {
-    libs 'org.mockito:mockito-all:1.9.5'
 	libs 'junit:junit:4.10'
 	libs 'com.googlecode.catch-exception:catch-exception:1.0.4'
 	libs 'org.easytesting:fest-assert:1.4'
