@@ -6,4 +6,9 @@ public interface Seat {
 	double getPrice();
 	boolean isAvailable();
 	void setAvailable(boolean availability);
+	SeatClass getClazz();
+	
+	enum SeatClass {
+		ECONOMICAL, BUSINESS, FIRST;
+	}
 }

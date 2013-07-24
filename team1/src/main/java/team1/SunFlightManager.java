@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import team1.Seat.SeatClass;
+
 public class SunFlightManager implements FlightManager {
 
 	Map<String, Flight> flights = new HashMap<String, Flight>();
@@ -95,6 +97,27 @@ public class SunFlightManager implements FlightManager {
 	public Flight getFlight(String flightId) {
 		return flights.get(flightId);
 	
+	}
+
+	@Override
+	public double getAveragePrice(String id, SeatClass clazz) {
+		Flight flight = flights.get(id);
+		List<Seat> seats = flight.getSeats();
+		double sum = 0.0;
+		int i=0;
+		for(Seat seat:seats) {
+			if(clazz.equals(seat.getClazz())) {
+				sum += seat.getPrice();
+				i++;
+			}
+		}
+		return sum/i;
+	}
+
+	@Override
+	public List<Seat> getUntypicalPriceSeats(String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import team1.Seat.SeatClass;
+
 public class FlightBuilder {
 
 	FlightImpl flightImpl = new FlightImpl();
@@ -31,10 +33,11 @@ public class FlightBuilder {
 		return this;
 	}
 	
-	public FlightBuilder addSeat(int no, double price) {
+	public FlightBuilder addSeat(int no, double price, SeatClass clazz) {
 		SeatImpl seat = new SeatImpl();
 		seat.setNumber(no);
 		seat.setPrice(price);
+		seat.setClazz(clazz);
 		this.flightImpl.getSeats().add(seat);
 		return this;
 	}
@@ -117,7 +120,14 @@ class SeatImpl implements Seat {
 	private int number;
 	private double price;
 	private boolean available = true;
+	private SeatClass clazz;
 	
+	public SeatClass getClazz() {
+		return clazz;
+	}
+	public void setClazz(SeatClass clazz) {
+		this.clazz = clazz;
+	}
 	public int getNumber() {
 		return number;
 	}

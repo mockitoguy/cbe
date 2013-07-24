@@ -10,6 +10,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import team1.Seat.SeatClass;
+
 public class FlightManagerTest {
 
 	FlightManager flightManager = new SunFlightManager();
@@ -22,16 +24,19 @@ public class FlightManagerTest {
 		flightManager.addFlight(flightBuilder.clean().setId("ID1").
 				setOrgin("Warsaw").setDestination("Majami").
 				setDate(new Date()).
-				addSeat(1, 32.01).
-				addSeat(2, 52.99).
-				addSeat(3, 12.99).
-				setAvailableSeats(10).build());
+				addSeat(1, 32.01, SeatClass.ECONOMICAL).
+				addSeat(2, 52.99, SeatClass.BUSINESS).
+				addSeat(3, 12.99, SeatClass.BUSINESS).
+				setAvailableSeats(10).
+				build());
 		flightManager.addFlight(flightBuilder.clean().setId("LG1").
 				setOrgin("Poznan").setDestination("Kamczatka").
 				setDate(new Date()).
-				addSeat(1, 132.99).
-				addSeat(2, 432.99).
-				addSeat(3, 10.99).setAvailableSeats(12).build());
+				addSeat(1, 132.99, SeatClass.BUSINESS).
+				addSeat(2, 432.99, SeatClass.BUSINESS).
+				addSeat(3, 10.99, SeatClass.FIRST).
+				setAvailableSeats(12).
+				build());
 	}
 	
 	@Test
@@ -125,4 +130,24 @@ public class FlightManagerTest {
 		assertEquals(flightManager.getFlight("ID1"), flights.get(0));
 
 	}
+	
+	@Test
+	public void shouldReturnProperAvgPriceForClass() {
+		//given
+		//when
+		double avg = flightManager.getAveragePrice("ID1", SeatClass.BUSINESS);
+		//then
+		assertEquals(32.99, avg, 0.01);
+	}
+	
+	@Test
+	public void shouldReturnUntypicalPricesList() {
+		//given
+		//when
+		List<Seat> seats = flightManager.getUntypicalPriceSeats("ID1");
+		//then
+		assertEquals(2, seats.size());
+	}
+	
+	
 }
