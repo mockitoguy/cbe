@@ -1,5 +1,9 @@
 package team1;
 
+import java.util.List;
+
+
+
 public interface FlightManager {
 
 	int getAvailableSeats(String string);
@@ -13,6 +17,10 @@ public interface FlightManager {
 	boolean isSeatAvailable(String string, int i);
 
 	double getAveragePrice(String id, boolean b);
+
+	List<Flight> getFlightsBetween(String string, String string2);
+
+	Flight getFlight(String flight);
 
 	
 	

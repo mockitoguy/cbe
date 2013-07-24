@@ -4,6 +4,9 @@ package team1;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import java.util.Date;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,11 +20,15 @@ public class FlightManagerTest {
 		FlightBuilder flightBuilder = new FlightBuilder();
 		
 		flightManager.addFlight(flightBuilder.clean().setId("ID1").
+				setOrgin("Warsaw").setDestination("Majami").
+				setDate(new Date()).
 				addSeat(1, 32.01).
 				addSeat(2, 52.99).
 				addSeat(3, 12.99).
 				setAvailableSeats(10).build());
 		flightManager.addFlight(flightBuilder.clean().setId("LG1").
+				setOrgin("Poznan").setDestination("Kamczatka").
+				setDate(new Date()).
 				addSeat(1, 132.99).
 				addSeat(2, 432.99).
 				addSeat(3, 10.99).setAvailableSeats(12).build());
@@ -90,4 +97,32 @@ public class FlightManagerTest {
 		assertEquals(22.50, avg, 0.01);
 	}
 	
+	@Test
+	public void shouldReturnFlightsBetweenDestinationAndOrgin() {
+		//given
+		//when
+		List<Flight> flights = flightManager.getFlightsBetween("Poznan","Kamczatka");
+		//then
+
+		assertEquals(flightManager.getFlight("LG1"),flights.get(0));
+	}
+	@Test
+	public void shouldreturnFlightToDestination() {
+		// given
+		// when
+		List<Flight> flights = flightManager.getFlightsBetween(null,
+				"Kamczatka");
+		// then
+		assertEquals(flightManager.getFlight("LG1"), flights.get(0));
+	}
+	@Test
+	public void shouldReturnFlightFromOrigin() {
+		// given
+		// when
+		List<Flight> flights = flightManager.getFlightsBetween("Warsaw",null);
+		// then
+
+		assertEquals(flightManager.getFlight("ID1"), flights.get(0));
+
+	}
 }

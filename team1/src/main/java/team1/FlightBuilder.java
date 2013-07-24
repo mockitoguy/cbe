@@ -1,6 +1,7 @@
 package team1;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class FlightBuilder {
@@ -17,6 +18,14 @@ public class FlightBuilder {
 		return this;
 	}
 
+	public FlightBuilder setOrgin(String orgin) {
+		flightImpl.setOrgin(orgin);
+		return this;
+	}
+	public FlightBuilder setDestination(String destination) {
+		flightImpl.setDestination(destination);
+		return this;
+	}
 	public FlightBuilder setAvailableSeats(int i) {
 		flightImpl.setAvailableSeats(i);
 		return this;
@@ -35,6 +44,13 @@ public class FlightBuilder {
 	Flight build() {
 		return flightImpl;
 	}
+
+	public FlightBuilder setDate(Date date) {
+		flightImpl.setDate(date);
+		return this;
+	}
+
+
 	
 	
 
@@ -43,8 +59,10 @@ public class FlightBuilder {
 class FlightImpl implements Flight{
 
 	String id;
-	
+	String orgin;
+	String destination;
 	int availableSeats;
+	Date date;
 
 	private List<Seat> seats;
 	
@@ -52,14 +70,33 @@ class FlightImpl implements Flight{
 		return id;
 	}
 
+	public void setDate(Date date1) {
+		this.date = date1;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
 	public void setId(String id) {
 		this.id = id;
 	}
-
+	public void setOrgin(String orgin) {
+		this.orgin = orgin;
+	}
+	public String getOrgin() {
+		return this.orgin;
+	}
+	public void setDestination(String destination2) {
+		this.destination = destination2;	
+	}
+	public String getDestination() {
+		return destination;
+	}
 	public int getAvailableSeats() {
 		return availableSeats;
 	}
-
+	
 	public void setAvailableSeats(int availableSeats) {
 		this.availableSeats = availableSeats;
 	}

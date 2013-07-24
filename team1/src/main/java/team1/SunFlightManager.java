@@ -1,5 +1,6 @@
 package team1;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,6 +77,24 @@ public class SunFlightManager implements FlightManager {
 			}
 		}
 		return sum/i;
+	}
+
+	@Override
+	public List<Flight> getFlightsBetween(String orgin, String destination) {
+		List<Flight> flightsBetween = new ArrayList<Flight>();
+		for (Flight flight:flights.values()) {
+			if ((destination == null || destination.equals(flight.getDestination())) 
+				&& (orgin == null || orgin.equals(flight.getOrgin()))) {
+				flightsBetween.add(flight);
+			}	
+		}
+		return flightsBetween;
+	}
+
+	@Override
+	public Flight getFlight(String flightId) {
+		return flights.get(flightId);
+	
 	}
 
 }
