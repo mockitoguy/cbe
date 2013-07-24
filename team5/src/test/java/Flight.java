@@ -3,6 +3,51 @@ import java.util.HashMap;
 
 public class Flight {
 
+    // STORY 2
+    
+    private String origin;
+    private String destination;
+    private String date;
+    private String flightNo;
+
+    public Flight(String flightNo) {
+        this.flightNo = flightNo;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getFlightNo() {
+        return flightNo;
+    }
+
+    
+    
+    
+    
+    // STORY 1
+
     @SuppressWarnings("rawtypes")
     private HashMap<String, HashMap> flights = new HashMap<String, HashMap>();
     private HashMap<String, Seat[]> flightsWithSeats = new HashMap<String, Seat[]>();

@@ -1,63 +1,122 @@
 import static org.junit.Assert.assertEquals;
 
-import java.util.HashMap;
+import java.util.List;
 
 import org.junit.Test;
 
 public class FlightTest {
 
+    // STORY 2
+
     @Test
-    public void shouldKnowAvailableSeats() {
+    public void shouldKnowFlightListFromTo() {
         // given
-        Flight flight = new Flight();
-        HashMap<Integer, Integer> seats = new HashMap<Integer, Integer>();
-        seats.put(1, 1000);
-        seats.put(2, 200);
-        seats.put(3, 300);
-        HashMap<Integer, Integer> seats2 = new HashMap<Integer, Integer>();
-        seats2.put(1, 100);
-        flight.addFlight("LH001", seats);
-        flight.addFlight("LH002", seats2);
+        FlightManager flightManager = new FlightManager();
+        flightManager.addFlight(new FlightBuilder("LH001").origin("Warsaw").destination("Poznan").date("2013-08-01")
+                .build());
+        flightManager.addFlight(new FlightBuilder("LH002").origin("Warsaw").destination("Berlin").date("2013-08-02")
+                .build());
 
         // when
-        int availableSeats = flight.getAvailableSeats("LH001");
+        List<Flight> flight = flightManager.getFlight("Warsaw", "Poznan");
 
         // then
-        assertEquals(3, availableSeats);
+        assertEquals("LH001", flight.get(0).getFlightNo());
+        assertEquals("2013-08-01", flight.get(0).getDate());
     }
 
     @Test
-    public void shouldGetPriceOfCheapestSeat() {
+    public void shouldKnowFlightListFrom() {
         // given
-        Flight flight = new Flight();
-        HashMap<Integer, Integer> seats = new HashMap<Integer, Integer>();
-        seats.put(1, 1000);
-        seats.put(2, 200);
-        seats.put(3, 300);
-        flight.addFlight("LH001", seats);
+        FlightManager flightManager = new FlightManager();
+        flightManager.addFlight(new FlightBuilder("LH001").origin("Warsaw").destination("Poznan").date("2013-08-01")
+                .build());
+        flightManager.addFlight(new FlightBuilder("LH002").origin("Warsaw").destination("Berlin").date("2013-08-02")
+                .build());
 
         // when
-        int price = flight.getPriceOfCheapestSeat("LH001");
+        List<Flight> flights = flightManager.getFlight("Warsaw");
 
         // then
-        assertEquals(200, price);
+        assertEquals("LH001", flights.get(0).getFlightNo());
+        assertEquals("2013-08-01", flights.get(0).getDate());
+        assertEquals("LH002", flights.get(1).getFlightNo());
+        assertEquals("2013-08-02", flights.get(1).getDate());
     }
 
     @Test
-    public void shouldBookSeat() {
+    public void shouldKnowFlightListTo() {
         // given
-        Flight flight = new Flight();
-        Seat seat1 = new Seat(1, 100, false);
-        Seat seat2 = new Seat(2, 200, false);
-        Seat seat3 = new Seat(3, 300, false);
-        Seat[] seats = {seat1, seat2, seat3};
-        flight.addFlight("LH001", seats);
+        FlightManager flightManager = new FlightManager();
+        flightManager.addFlight(new FlightBuilder("LH001").origin("Warsaw").destination("Poznan").date("2013-08-01")
+                .build());
+        flightManager.addFlight(new FlightBuilder("LH002").origin("Warsaw").destination("Berlin").date("2013-08-02")
+                .build());
 
         // when
-        int seatNumber = flight.bookSeat("LH001");
+        List<Flight> flights = flightManager.getFlightWithDestination("Poznan");
 
         // then
-        assertEquals(true, flight.isBooked("LH001", seatNumber));
+        assertEquals("LH001", flights.get(0).getFlightNo());
+        assertEquals("2013-08-01", flights.get(0).getDate());
     }
+
     
+    
+    // STORY 1
+
+    // @Test
+    // public void shouldKnowAvailableSeats() {
+    // // given
+    // Flight flight = new Flight();
+    // HashMap<Integer, Integer> seats = new HashMap<Integer, Integer>();
+    // seats.put(1, 1000);
+    // seats.put(2, 200);
+    // seats.put(3, 300);
+    // HashMap<Integer, Integer> seats2 = new HashMap<Integer, Integer>();
+    // seats2.put(1, 100);
+    // flight.addFlight("LH001", seats);
+    // flight.addFlight("LH002", seats2);
+    //
+    // // when
+    // int availableSeats = flight.getAvailableSeats("LH001");
+    //
+    // // then
+    // assertEquals(3, availableSeats);
+    // }
+    //
+    // @Test
+    // public void shouldGetPriceOfCheapestSeat() {
+    // // given
+    // Flight flight = new Flight();
+    // HashMap<Integer, Integer> seats = new HashMap<Integer, Integer>();
+    // seats.put(1, 1000);
+    // seats.put(2, 200);
+    // seats.put(3, 300);
+    // flight.addFlight("LH001", seats);
+    //
+    // // when
+    // int price = flight.getPriceOfCheapestSeat("LH001");
+    //
+    // // then
+    // assertEquals(200, price);
+    // }
+    //
+    // @Test
+    // public void shouldBookSeat() {
+    // // given
+    // Flight flight = new Flight();
+    // Seat seat1 = new Seat(1, 100, false);
+    // Seat seat2 = new Seat(2, 200, false);
+    // Seat seat3 = new Seat(3, 300, false);
+    // Seat[] seats = {seat1, seat2, seat3};
+    // flight.addFlight("LH001", seats);
+    //
+    // // when
+    // int seatNumber = flight.bookSeat("LH001");
+    //
+    // // then
+    // assertEquals(true, flight.isBooked("LH001", seatNumber));
+    // }
+
 }
