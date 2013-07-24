@@ -2,6 +2,7 @@ package team1;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import team1.Seat.SeatClass;
@@ -41,8 +42,6 @@ public class FlightBuilder {
 		this.flightImpl.getSeats().add(seat);
 		return this;
 	}
-	
-	
 
 	Flight build() {
 		return flightImpl;
@@ -50,6 +49,11 @@ public class FlightBuilder {
 
 	public FlightBuilder setDate(Date date) {
 		flightImpl.setDate(date);
+		return this;
+	}
+
+	public FlightBuilder addSeatClassPrice(SeatClass business, double d) {
+		flightImpl.setSeatClassPrice(business,d);
 		return this;
 	}
 
@@ -66,11 +70,16 @@ class FlightImpl implements Flight{
 	String destination;
 	int availableSeats;
 	Date date;
+	HashMap<SeatClass,Double> seatClassDefPrices = new HashMap<SeatClass,Double>();
 
 	private List<Seat> seats;
 	
 	public String getId() {
 		return id;
+	}
+
+	public void setSeatClassPrice(SeatClass business, double d) {
+		seatClassDefPrices.put(business, d);
 	}
 
 	public void setDate(Date date1) {
@@ -111,6 +120,11 @@ class FlightImpl implements Flight{
 			seats = new ArrayList<Seat>();
 		}
 		return seats;
+	}
+
+	@Override
+	public Double getSeatClassePrice(SeatClass buisnessClass) {
+		return seatClassDefPrices.get(buisnessClass);
 	}
 	
 	

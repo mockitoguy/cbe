@@ -115,9 +115,16 @@ public class SunFlightManager implements FlightManager {
 	}
 
 	@Override
-	public List<Seat> getUntypicalPriceSeats(String string) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Seat> getUntypicalPriceSeats(String id) {
+		Flight flight = flights.get(id);
+		List<Seat> seats = flight.getSeats();
+		List<Seat> untypicalSeats = new ArrayList<Seat>();
+		for(Seat seat:seats) {
+			if(seat.getPrice() != flight.getSeatClassePrice(seat.getClazz())) {
+				untypicalSeats.add(seat);
+			}
+		}
+		return untypicalSeats;
 	}
 
 }

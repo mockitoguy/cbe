@@ -24,6 +24,9 @@ public class FlightManagerTest {
 		flightManager.addFlight(flightBuilder.clean().setId("ID1").
 				setOrgin("Warsaw").setDestination("Majami").
 				setDate(new Date()).
+				addSeatClassPrice(SeatClass.BUSINESS,52.99).
+				addSeatClassPrice(SeatClass.ECONOMICAL,9.01).
+				addSeatClassPrice(SeatClass.FIRST,1099.99).
 				addSeat(1, 32.01, SeatClass.ECONOMICAL).
 				addSeat(2, 52.99, SeatClass.BUSINESS).
 				addSeat(3, 12.99, SeatClass.BUSINESS).
@@ -32,6 +35,9 @@ public class FlightManagerTest {
 		flightManager.addFlight(flightBuilder.clean().setId("LG1").
 				setOrgin("Poznan").setDestination("Kamczatka").
 				setDate(new Date()).
+				addSeatClassPrice(SeatClass.BUSINESS,432.99).
+				addSeatClassPrice(SeatClass.ECONOMICAL,19.01).
+				addSeatClassPrice(SeatClass.FIRST,2171.95).
 				addSeat(1, 132.99, SeatClass.BUSINESS).
 				addSeat(2, 432.99, SeatClass.BUSINESS).
 				addSeat(3, 10.99, SeatClass.FIRST).
