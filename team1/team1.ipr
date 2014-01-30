@@ -45,7 +45,7 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/team2.iml" filepath="$PROJECT_DIR$/team2.iml"/>
+      <module fileurl="file://$PROJECT_DIR$/team1.iml" filepath="$PROJECT_DIR$/team1.iml"/>
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-type="JavaSDK" assert-jdk-15="true" project-jdk-name="1.6">

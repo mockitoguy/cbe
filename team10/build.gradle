@@ -26,3 +26,16 @@ dependencies {
 	libs 'com.googlecode.catch-exception:catch-exception:1.0.4'
 	libs 'org.easytesting:fest-assert:1.4'
 }
+
+eclipse.classpath.file.withXml {
+  //relativize the paths
+  def node = it.asNode()
+  node.classpathentry.findAll { it.@kind == 'lib' }.each {
+    def relPath = relativePath(project.projectDir, project.file(it.@path))
+    it.@path = relPath    
+  }
+}
+
+File relativePath(File from, File to) {
+  new File(from.toURI().relativize(to.toURI()).toString())
+}

@@ -1,49 +1,39 @@
 apply plugin: 'idea'
 
-task setupTeams
+task setupTeams {
+  description "Refreshes and cleans up all the teams"
+  doLast {
+    logger.lifecycle("All the team dirs have been refreshed and cleaned up")
+  }
+}
 
 12.times { 
   def team = "team${it+1}"
-  delete team
-  def genTeam = tasks.create(name: "genTeam${it+1}", type: Sync) {
+  def genTeam = tasks.create(name: "genTeam${it+1}", type: Copy) {
+    description "Copies template project into $team"
+    
   	from "template-team"  
   	into team
+  	doFirst {
+  	  logger.lifecycle("Deleting existing contents for {}", team)
+  	  delete team
+  	  assert !file(team).exists() : "Deletion of $team seemed to fail"
+  	  logger.lifecycle("Copying template project into $team")
+  	}
   }
-  def setupIde = tasks.create(name: "setupTeam${it+1}", type: GradleBuild, dependsOn: genTeam) {
+  
+  def setupIde = tasks.create(name: "setupTeam${it+1}", type: GradleBuild) {
+    description "Generates IDE metadata in $team"
+    
+    dependsOn genTeam
     buildFile "$team/build.gradle"
     tasks = ['eclipse', 'idea']
+    doFirst { 
+      logger.lifecycle("Generating IDE metadata in {}", team)
+    }
   }
+  
   setupTeams.dependsOn setupIde
 }  
 
-task setupRoot {
-
-}
-
-
-task generateProjects {
-  doLast {
-    file("settings.gradle").createNewFile()
-    //String include = "include 'team1'"
-    10.times { 
-      def team = "team${it+1}"
-      delete(team)
-      file(team).mkdirs() 
-      file("$team/settings.gradle").createNewFile()
-      copy { 
-        from "template-build.gradle"
-        into team
-        rename "template-build.gradle", "build.gradle"
-      }
-      copy {
-        from 'libs'
-        into "$team/libs"
-      }
-      //include += ", '$team'"
-      
-    }
-    
-    //file("settings.gradle").text = "$include\n"
-  }
-}
-
+defaultTasks "setupTeams"
