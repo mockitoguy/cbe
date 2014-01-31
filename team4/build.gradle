@@ -27,6 +27,7 @@ dependencies {
 	libs 'org.easytesting:fest-assert:1.4'
     libs 'org.spockframework:spock-core:0.7-groovy-2.0'
     libs 'org.codehaus.groovy:groovy-all:2.2.1'
+    libs 'com.google.guava:guava:15.0'
 }
 
 eclipse.classpath.file.withXml {

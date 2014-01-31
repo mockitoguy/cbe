@@ -1,3 +1,6 @@
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,4 +37,25 @@ public class FlightManager {
 
     }
 
+    public Iterable<Flight> findFlightsBetween(final String origin, final String destination) {
+        Predicate<Flight> between = new Predicate<Flight>() {
+            @Override
+            public boolean apply(Flight flight) {
+                return flight.getOrigin().equals(origin) && flight.getDestination().equals(destination);
+            }
+        };
+
+        return Iterables.filter(flights.values(), between);
+    }
+
+    public Iterable<Flight> findFlightsFrom(final String origin) {
+        Predicate<Flight> from = new Predicate<Flight>() {
+            @Override
+            public boolean apply(Flight flight) {
+                return flight.getOrigin().equals(origin);
+            }
+        };
+
+        return Iterables.filter(flights.values(), from);
+    }
 }
