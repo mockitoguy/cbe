@@ -1,4 +1,3 @@
-import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -9,13 +8,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class FlightManagerTest {
 
-    private FlightManager flightManager;
+    private FlightManager flightManager = new FlightManager();
 
-    @Before
-    public void setup() {
-        flightManager = new FlightManager();
 
-    }
 
     @Test
     public void shouldKnowAvailableSeats() throws Exception {
@@ -77,4 +72,23 @@ public class FlightManagerTest {
         //then
         assertThat(flightManager.getAvailableSeats(flight)).isEqualTo(0);
     }
+    @Test
+    public void shouldFindTheAverageSeatPriceForNonBookedSeats() {
+
+        //given
+        Flight flight = new Flight("LOT-1");
+        Seat seat1 = new Seat("B1", BigDecimal.valueOf(10));
+        flightManager.addSeats(flight,
+                seat1,
+                new Seat("B2", BigDecimal.valueOf(18)),
+                new Seat("B3", BigDecimal.valueOf(20)));
+
+        flightManager.book(seat1, flight);
+        //when
+        BigDecimal price = flightManager.findAveragePriceForNonBookedSeats(flight);
+
+        //then
+        assertThat(price).isEqualTo(BigDecimal.valueOf(19));
+    }
+
 }

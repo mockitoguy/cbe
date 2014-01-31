@@ -1,6 +1,7 @@
 import com.google.common.base.Predicate;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 
@@ -14,17 +15,18 @@ public class FlightManager {
 
 
     private final Multimap<Flight, Seat> seats = ArrayListMultimap.create();
+    private Predicate<Seat> nonBookedSeatsPredicate = new Predicate<Seat>() {
+
+        @Override
+        public boolean apply(Seat seat) {
+            return !seat.isBooked();
+        }
+    };;
 
     public int getAvailableSeats(Flight flight) throws FlightNotFoundException {
         Collection<Seat> seatsForFlight = seats.get(flight);
         if (!seatsForFlight.isEmpty()) {
-            return FluentIterable.from(seatsForFlight).filter(new Predicate<Seat>() {
-
-                @Override
-                public boolean apply(Seat seat) {
-                    return !seat.isBooked();
-                }
-            }).size();
+            return FluentIterable.from(seatsForFlight).filter(nonBookedSeatsPredicate).size();
 
         } else {
             throw new FlightNotFoundException();
@@ -53,5 +55,24 @@ public class FlightManager {
             }
 
         }
+    }
+
+    public BigDecimal findAveragePriceForNonBookedSeats(Flight flight) {
+        Collection<Seat> seatsForFlight = seats.get(flight);
+        if (!seatsForFlight.isEmpty()) {
+            ImmutableList<Seat> filtered = FluentIterable.from(seatsForFlight).filter(nonBookedSeatsPredicate).toList();
+
+            return average(filtered);
+        } else {
+            return BigDecimal.ZERO;
+        }
+    }
+
+    private BigDecimal average(ImmutableList<Seat> filtered) {
+        BigDecimal sum = BigDecimal.ZERO;
+        for (Seat seat : filtered) {
+            sum = sum.add(seat.getPrice());
+        }
+        return sum.divide(BigDecimal.valueOf(filtered.size()));
     }
 }
