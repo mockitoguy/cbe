@@ -3,8 +3,9 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 
+import static com.googlecode.catchexception.CatchException.catchException;
+import static com.googlecode.catchexception.CatchException.caughtException;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Fail.fail;
 
 public class FlightManagerTest {
 
@@ -36,7 +37,7 @@ public class FlightManagerTest {
 
     }
 
-    @Test(expected = FlightNotFoundException.class)
+    @Test
     public void shouldThrowExceptionForNonExistingFlight() throws Exception {
 
         //given
@@ -45,10 +46,10 @@ public class FlightManagerTest {
         flightManager.addSeat(flight1, seatB1);
 
         //when
-        flightManager.getAvailableSeats(new Flight("nonExistingFlight"));
+        catchException(flightManager).getAvailableSeats(new Flight("nonExistingFlight"));
 
         //then
-        fail("should throw exception");
+        assertThat(caughtException()).isInstanceOf(FlightNotFoundException.class);
 
     }
 

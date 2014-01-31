@@ -201,6 +201,17 @@
       <JAVADOC />
       <SOURCES />
     </library>
+    <library name="com.googlecode.catch-exception:catch-throwable:1.2.0" type="repository">
+      <properties maven-id="com.googlecode.catch-exception:catch-throwable:1.2.0" />
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/lib/catch-throwable-1.2.0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/mockito-core-1.9.5.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/hamcrest-core-1.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/objenesis-1.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
     <library name="org.assertj:assertj-core:1.0.0" type="repository">
       <properties maven-id="org.assertj:assertj-core:1.0.0" />
       <CLASSES>
