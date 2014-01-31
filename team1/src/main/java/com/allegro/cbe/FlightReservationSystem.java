@@ -12,29 +12,38 @@ import com.google.common.collect.Multimap;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FlightReservationSystem {
 
-    private Multimap<String, Seat> flights = ArrayListMultimap.create();
+    private Multimap<Flight, Seat> flights = ArrayListMultimap.create();
+    private Map<String, Flight> flightNumbers = new HashMap<>();
 
     public int checkAvailableSeats(String flightNumber) {
-        assert flights.containsKey(flightNumber);
+        assert getFlight(flightNumber) != null;
 
-        List<Seat> seats = (List<Seat>) flights.get(flightNumber);
+        Flight flight = getFlight(flightNumber);
+        List<Seat> seats = (List<Seat>) flights.get(flight);
         int availableSeats = FluentIterable.from(seats).filter(new AvailableSeatPredicate()).size();
 
         return availableSeats;
     }
 
-    public void addFlight(String flightNumber, Seat... flightSeats) {
-        assert flightNumber != null;
+    private Flight getFlight(final String flightNumber) {
+        return flightNumbers.get(flightNumber);
+    }
 
-        flights.putAll(flightNumber, Lists.newArrayList(flightSeats));
+    public void addFlight(Flight flight, Seat... flightSeats) {
+        assert flight != null;
+
+        flightNumbers.put(flight.getFlightNumber(), flight);
+        flights.putAll(flight, Lists.newArrayList(flightSeats));
     }
 
     public float findCheapestSeatPrice(String flightNumber) {
-        List<Seat> seats = (List<Seat>) flights.get(flightNumber);
+        List<Seat> seats = (List<Seat>) flights.get(getFlight(flightNumber));
         Collections.sort(seats, new Comparator<Seat>() {
             @Override
             public int compare(Seat o1, Seat o2) {
@@ -46,9 +55,9 @@ public class FlightReservationSystem {
     }
 
     public void bookSeat(String flightNumber, final String seatNumber) {
-        assert flights.containsKey(flightNumber);
+        assert getFlight(flightNumber) != null;
 
-        Collection<Seat> seats = flights.get(flightNumber);
+        Collection<Seat> seats = flights.get(getFlight(flightNumber));
         Optional<Seat> s = FluentIterable.from(seats).firstMatch(new Predicate<Seat>() {
             @Override
             public boolean apply(Seat seat) {
@@ -62,9 +71,12 @@ public class FlightReservationSystem {
     }
 
     public float findAveragePriceOfAvailableSeats(String flightNumber) {
-        assert flights.containsKey(flightNumber);
+        assert getFlight(flightNumber) != null;
 
-        List<Seat> availableSeats = FluentIterable.from(flights.get(flightNumber)).filter(new AvailableSeatPredicate()).toList();
+        List<Seat> availableSeats =
+                FluentIterable
+                        .from(flights.get(getFlight(flightNumber)))
+                        .filter(new AvailableSeatPredicate()).toList();
 
         float sumOfPrices = 0.0f;
 
@@ -73,5 +85,9 @@ public class FlightReservationSystem {
         }
 
         return sumOfPrices / availableSeats.size();
+    }
+
+    public List<Flight> findFlights(final String warsaw, final String poznan) {
+        return null;  //To change body of created methods use File | Settings | File Templates.
     }
 }
