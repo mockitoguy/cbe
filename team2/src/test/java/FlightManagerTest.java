@@ -1,27 +1,24 @@
-import org.junit.Before;
 import org.junit.Test;
 
-import java.math.BigDecimal;
 import java.util.List;
 
+import static com.googlecode.catchexception.apis.CatchExceptionBdd.thenThrown;
+import static com.googlecode.catchexception.apis.CatchExceptionBdd.when;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class FlightManagerTest {
 
-    FlightManager flightManager;
-
-    @Before
-    public void setup() {
-        flightManager = new FlightManager();
-    }
-
+    FlightManager flightManager = new FlightManager();
 
     @Test
     public void shouldKnowAvailableSeats() {
         //given
-        flightManager.addFlight(new Flight("RA-666", 15));
-        flightManager.addFlight(new Flight("LOT-123", 5));
+
+        flightManager.addFlight(FlightBuilder.flightBuilder().flightNo("RA-666").setInitialCapacity(15).build());
+        flightManager.addFlight(new FlightBuilder().flightNo("LOT-123").setInitialCapacity(5).build());
 
         //when
         int seatsNumber = flightManager.getAvailableSeats("LOT-123");
@@ -32,29 +29,31 @@ public class FlightManagerTest {
 
     @Test(expected = FlightNotFoundException.class)
     public void shouldReturnExceptionIfFlightNoExists() {
-        //when
         flightManager.getAvailableSeats("NON-EXISTING-FLIGHT");
     }
 
-    @Test(expected = FlightAlreadyExistsException.class)
+    @Test
     public void shouldThrowFlightAlreadyExistsExceptionWhenTryingToAddExistingFlight() {
         //given
-        flightManager.addFlight(new Flight("RA-666", 15));
+        flightManager.addFlight(new FlightBuilder().flightNo("RA-666").build());
 
         //when
-        flightManager.addFlight(new Flight("RA-666", 15));
+        when(flightManager).addFlight(new FlightBuilder().flightNo("RA-666").build());
+
+        //then
+        thenThrown(FlightAlreadyExistsException.class);
     }
 
     @Test
     public void shouldGetTheCheapestSeatPriceForAGivenFlight() {
         //given
+        flightManager.addFlight(new FlightBuilder().flightNo("RA-222").build());
+        flightManager.setPrice("RA-222", 1, 25);
 
-        Money twoEuro = new Money(BigDecimal.valueOf(2.0), Money.Currency.EUR);
-        Money oneEuro = new Money(BigDecimal.valueOf(1.0), Money.Currency.EUR);
-        flightManager.addFlight(new Flight("RA-666", 5));
-        flightManager.setPrice("RA-666", 1, oneEuro);
-        flightManager.setPrice("RA-666", 2 , twoEuro);
-        flightManager.setPrice("RA-666", 3 , oneEuro);
+        flightManager.addFlight(new FlightBuilder().flightNo("RA-666").build());
+        flightManager.setPrice("RA-666", 1, 50);
+        flightManager.setPrice("RA-666", 2, 50);
+        flightManager.setPrice("RA-666", 3, 70);
 
         //when
         List<Seat> cheapestSeats = flightManager.getCheapestSeats("RA-666");
@@ -62,11 +61,41 @@ public class FlightManagerTest {
         //then
         assertThat(cheapestSeats).isNotEmpty();
         assertThat(cheapestSeats.size()).isEqualTo(2);
-        assertThat(cheapestSeats.get(0).getPrice()).isEqualTo(oneEuro);
+        assertThat(cheapestSeats.get(0).getPrice()).isEqualTo(50);
+    }
 
+    @Test
+    public void shouldBookASeatOnAGivenFlight() throws Throwable {
+        //given
+        flightManager.addFlight(new FlightBuilder().flightNo("RA-666").build());
+
+        //when
+        flightManager.bookASeat("RA-666", 1);
+
+        //then
+        assertFalse(flightManager.seatAt("RA-666", 1).isAvailable());
+        assertTrue(flightManager.seatAt("RA-666", 2).isAvailable());
 
     }
 
+    @Test
+    public void shouldGetAListOfFlightsBeetweenTwoLocations() throws Throwable {
+        //given
+        Flight flight1 = new FlightBuilder().between("London", "New York").build();
+        Flight flight2 = new FlightBuilder().between("London", "New York").build();
+
+        flightManager.addFlight(flight1);
+        flightManager.addFlight(flight2);
+
+        flightManager.addFlight(new FlightBuilder().between("Warsaw", "New York").build());
+        flightManager.addFlight(new FlightBuilder().between("London", "San Francisco").build());
+
+        //when
+        List<FlightDetails> details = flightManager.getFlightsDetails("London", "New York");
+
+        //then
+        assertThat(details).containsOnly(flight1, flight2);
+    }
 
 
 }
