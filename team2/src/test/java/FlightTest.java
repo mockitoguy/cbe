@@ -10,7 +10,7 @@ public class FlightTest {
 
 
     public void setup(){
-        flight = new Flight(DUMMY_ID, INITIAL_CAPACITY);
+        flight = new FlightBuilder().flightNo(DUMMY_ID).setInitialCapacity(INITIAL_CAPACITY).build();
     }
 
     @Test

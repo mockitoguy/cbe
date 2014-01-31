@@ -36,4 +36,8 @@ public class Flight {
     public String getDestination() {
         return destination;
     }
+
+    public String getDate() {
+        return date;
+    }
 }

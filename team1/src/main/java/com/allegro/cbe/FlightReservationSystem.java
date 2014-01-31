@@ -1,8 +1,10 @@
 package com.allegro.cbe;
 
 
+import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
@@ -90,12 +92,31 @@ public class FlightReservationSystem {
         return sumOfPrices / availableSeats.size();
     }
 
-    public List<Flight> findFlights(final String origin, final String destination) {
+    public List<FlightInfo> findFlights(final String origin, final String destination) {
         checkArgument(origin != null);
         checkArgument(destination != null);
 
         return FluentIterable.from(flightNumbers.values())
-                .filter(new RoutePredicate(origin, destination))
+                .filter(Predicates.and(new OriginPredicate(origin), new DestinationPredicate(destination)))
+                .transform(new FlightToFlightInfoTranfsorm())
+                .toList();
+    }
+
+    public List<FlightInfo> findFlightsFrom(final String origin) {
+        checkArgument(origin != null);
+
+        return FluentIterable.from(flightNumbers.values())
+                .filter(new OriginPredicate(origin))
+                .transform(new FlightToFlightInfoTranfsorm())
+                .toList();
+    }
+
+    public List<FlightInfo> findFlightsTo(final String destination) {
+        checkArgument(destination != null);
+
+        return FluentIterable.from(flightNumbers.values())
+                .filter(new DestinationPredicate(destination))
+                .transform(new FlightToFlightInfoTranfsorm())
                 .toList();
     }
 }

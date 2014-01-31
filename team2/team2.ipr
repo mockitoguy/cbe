@@ -1470,6 +1470,22 @@
     <mapping directory="" vcs="" />
     <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
   </component>
+  <component name="libraryTable">
+    <library name="guava-15.0">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/libs/guava-15.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="joda-time-2.1">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/libs/joda-time-2.1.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+  </component>
   <component name="masterDetails">
     <states>
       <state key="ArtifactsStructureConfigurable.UI">

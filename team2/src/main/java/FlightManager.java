@@ -1,3 +1,8 @@
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,9 +28,9 @@ public class FlightManager {
         return flight.getSeatsCapacity();
     }
 
-    public void setPrice(String flightNumer, int seatNumber, Money value) {
-        Flight flight  = flights.get(flightNumer);
-        flight.seatAt(seatNumber).setValue(value);
+    public void setPrice(String flightNumer, int seatNumber, int price) {
+        Flight flight = flights.get(flightNumer);
+        flight.seatAt(seatNumber).setValue(price);
     }
 
     public List<Seat> getCheapestSeats(String flightNumber) {
@@ -33,4 +38,34 @@ public class FlightManager {
         return flight.getCheapestSeats();
     }
 
+    public void bookASeat(String flightNumber, int seatNumber) {
+        seatAt(flightNumber, seatNumber).book();
+
+    }
+
+    Seat seatAt(String flightNumber, int seatNumber) {
+        Flight flight = flights.get(flightNumber);
+        return flight.seatAt(seatNumber);
+    }
+
+    public List<FlightDetails> getFlightsDetails(String origin, String destination) {
+        List<FlightDetails> resultList = Lists.newArrayList();
+        for(Flight flight : flights.values()){
+         if(origin.equals(flight.getOrigin()) && destination.equals(flight.getDestination())){
+            resultList.add(flight);
+         }
+       }
+
+        return resultList;
+    }
+
+    public List<FlightDetails> getFlightsDetailsListFromOrigin(String origin) {
+        List<FlightDetails> resultList = Lists.newArrayList();
+        for(Flight flight : flights.values()){
+            if(origin.equals(flight.getOrigin())){
+                resultList.add(flight);
+            }
+        }
+        return resultList;
+    }
 }

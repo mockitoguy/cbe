@@ -22,6 +22,10 @@ public class FlightTestBuilder {
         return new FlightTestBuilder();
     }
 
+    public static FlightTestBuilder flight(String flightNumber) {
+        return new FlightTestBuilder().withNumber(flightNumber);
+    }
+
     public FlightTestBuilder withNumber(String flightNumber) {
         this.flightNumber = flightNumber;
         return this;
