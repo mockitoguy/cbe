@@ -105,4 +105,32 @@ public class FlightReservationSystem {
                 })
                 .toList();
     }
+
+    public List<FlightInfo> findFlightsFrom(final String origin) {
+        checkArgument(origin != null);
+
+        return FluentIterable.from(flightNumbers.values())
+                .filter(new OriginPredicate(origin))
+                .transform(new Function<Flight, FlightInfo>() {
+                    @Override
+                    public FlightInfo apply(final Flight flight) {
+                        return new FlightInfo(flight.getFlightNumber(), flight.getDate());
+                    }
+                })
+                .toList();
+    }
+
+    public List<FlightInfo> findFlightsTo(final String destination) {
+        checkArgument(destination != null);
+
+        return FluentIterable.from(flightNumbers.values())
+                .filter(new DestinationPredicate(destination))
+                .transform(new Function<Flight, FlightInfo>() {
+                    @Override
+                    public FlightInfo apply(final Flight flight) {
+                        return new FlightInfo(flight.getFlightNumber(), flight.getDate());
+                    }
+                })
+                .toList();
+    }
 }

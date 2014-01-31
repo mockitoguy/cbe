@@ -13,6 +13,11 @@ public class FlightInfo {
     private final String flightNumber;
     private final String date;
 
+    public FlightInfo(final String flightNumber) {
+        this.flightNumber = flightNumber;
+        this.date = "";
+    }
+
     public FlightInfo(final String flightNumber, final String date) {
         Preconditions.checkArgument(flightNumber != null, "Flight number cannot be null.");
         Preconditions.checkArgument(date != null, "Flight date cannot be null.");
