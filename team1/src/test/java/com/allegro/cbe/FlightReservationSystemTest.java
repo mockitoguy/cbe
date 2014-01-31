@@ -80,7 +80,6 @@ public class FlightReservationSystemTest {
 
     // ------------------------------------------------------------------------------------------------------
     // 2nd Iteration
-
     @Test
     public void shouldFindMatchingFlightsForRoute() {
         //given

@@ -4,6 +4,7 @@ package com.allegro.cbe;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
@@ -96,13 +97,8 @@ public class FlightReservationSystem {
         checkArgument(destination != null);
 
         return FluentIterable.from(flightNumbers.values())
-                .filter(new RoutePredicate(origin, destination))
-                .transform(new Function<Flight, FlightInfo>() {
-                    @Override
-                    public FlightInfo apply(final Flight flight) {
-                        return new FlightInfo(flight.getFlightNumber(), flight.getDate());
-                    }
-                })
+                .filter(Predicates.and(new OriginPredicate(origin), new DestinationPredicate(destination)))
+                .transform(new FlightToFlightInfoTranfsorm())
                 .toList();
     }
 
@@ -111,12 +107,7 @@ public class FlightReservationSystem {
 
         return FluentIterable.from(flightNumbers.values())
                 .filter(new OriginPredicate(origin))
-                .transform(new Function<Flight, FlightInfo>() {
-                    @Override
-                    public FlightInfo apply(final Flight flight) {
-                        return new FlightInfo(flight.getFlightNumber(), flight.getDate());
-                    }
-                })
+                .transform(new FlightToFlightInfoTranfsorm())
                 .toList();
     }
 
@@ -125,12 +116,7 @@ public class FlightReservationSystem {
 
         return FluentIterable.from(flightNumbers.values())
                 .filter(new DestinationPredicate(destination))
-                .transform(new Function<Flight, FlightInfo>() {
-                    @Override
-                    public FlightInfo apply(final Flight flight) {
-                        return new FlightInfo(flight.getFlightNumber(), flight.getDate());
-                    }
-                })
+                .transform(new FlightToFlightInfoTranfsorm())
                 .toList();
     }
 }
