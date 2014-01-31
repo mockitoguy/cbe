@@ -95,6 +95,18 @@ public class FlightTest {
     }
 
     @Test
+    public void shouldFlightNotMatchToOriginAndDestination() throws Exception {
+        //given
+        Flight flight = new FlightBuilder().setOrigin("London").setDestination("New York").build();
+
+        //when
+        boolean match = flight.matchOriginAndDestination("Madrid", "New York");
+
+        //then
+        assertThat(match).isFalse();
+    }
+
+    @Test
     public void shouldFlightMatchToOrigin() throws Exception {
         // given
         Flight flight = new FlightBuilder().setOrigin("London").build();
@@ -106,6 +118,17 @@ public class FlightTest {
         assertThat(match).isTrue();
     }
 
+    @Test
+    public void shouldFlightNotMatchToOrigin() throws Exception {
+        // given
+        Flight flight = new FlightBuilder().setOrigin("London").build();
+
+        // when
+        boolean match = flight.matchOrigin("Paris");
+
+        // then
+        assertThat(match).isFalse();
+    }
 
     @Test
     public void shouldFlightMatchToDestination() throws Exception {
@@ -117,6 +140,18 @@ public class FlightTest {
 
         // then
         assertThat(match).isTrue();
+    }
+
+    @Test
+    public void shouldFlightNotMatchToDestination() throws Exception {
+        // given
+        Flight flight = new FlightBuilder().setDestination("Moscow").build();
+
+        // when
+        boolean match = flight.matchDestination("Berlin");
+
+        // then
+        assertThat(match).isFalse();
     }
 
 }
