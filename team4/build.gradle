@@ -1,6 +1,6 @@
 apply plugin: 'idea'
 apply plugin: 'eclipse'
-apply plugin: 'java'
+apply plugin: 'groovy'
 
 dependencies {
   testCompile fileTree(dir: "libs")
@@ -25,6 +25,8 @@ dependencies {
 	libs 'junit:junit:4.10'
 	libs 'com.googlecode.catch-exception:catch-exception:1.0.4'
 	libs 'org.easytesting:fest-assert:1.4'
+    libs 'org.spockframework:spock-core:0.7-groovy-2.0'
+    libs 'org.codehaus.groovy:groovy-all:2.2.1'
 }
 
 eclipse.classpath.file.withXml {
