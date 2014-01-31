@@ -49,8 +49,8 @@ class FlightManagerSpec extends Specification {
     def "should return list of flights between a given origin and destination"() {
         given:
         Flight flight1 = new FlightBuilder("LOT-123").from("WAW").to("AMS").on("2014-02-04").build();
-        Flight flight2 = new FlightBuilder("LOT-123").from("WAW").to("AMS").on("2014-02-05").build();
-        Flight flight3 = new FlightBuilder("LOT-123").from("XXX").to("YYY").on("2014-02-04").build();
+        Flight flight2 = new FlightBuilder("LOT-124").from("WAW").to("AMS").on("2014-02-05").build();
+        Flight flight3 = new FlightBuilder("LOT-125").from("XXX").to("YYY").on("2014-02-04").build();
 
         FlightManager flightManager = new FlightManager()
         flightManager.addFlight(flight1)
@@ -62,9 +62,9 @@ class FlightManagerSpec extends Specification {
 
         then:
         foundFlights.each {
-            it.origin == "WAW"
-            it.destination == "AMS"
-            it.date
+            assert it.origin == "WAW"
+            assert it.destination == "AMS"
+            assert it.date
         }
     }
 
