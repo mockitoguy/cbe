@@ -19,10 +19,6 @@ public class Flight {
         seats.put(number, price);
     }
 
-    public BigDecimal getSeatPrice(String number) {
-        return seats.get(number);
-    }
-
     public String getNumber() {
         return number;
     }
@@ -33,7 +29,7 @@ public class Flight {
 
     public BigDecimal getCheapestSeatPrice() {
         if (seats.isEmpty()) {
-            return null;
+            throw new FlightHasNoSeatsException(number);
         }
 
         BigDecimal cheapestPrice = BigDecimal.valueOf(Long.MAX_VALUE);
@@ -44,5 +40,11 @@ public class Flight {
         }
 
         return cheapestPrice;
+    }
+
+    public void bookSeat(String seatNumber) {
+        if (seats.containsKey(seatNumber)) {
+            seats.remove(seatNumber);
+        }
     }
 }

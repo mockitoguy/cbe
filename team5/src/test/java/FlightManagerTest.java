@@ -1,3 +1,4 @@
+import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -10,55 +11,63 @@ import static org.fest.assertions.Assertions.assertThat;
  */
 public class FlightManagerTest {
 
+    FlightManager manager;
+
+    @Before
+    public void setup() {
+        manager = new FlightManager();
+    }
+
     @Test
     public void shouldUserKnowNumberOfAvailableSeatsForFlight() {
         //given
-        FlightManager flightManager = new FlightManager();
-        Flight flightToNewYork = new Flight("LOT-123");
-        flightToNewYork.addSeat("1a", BigDecimal.TEN);
-        flightToNewYork.addSeat("1b", BigDecimal.TEN);
-        flightManager.addFlight(flightToNewYork);
-
-        Flight flightToLondon = new Flight("LOT-456");
-        flightToLondon.addSeat("2a", BigDecimal.TEN);
-        flightToLondon.addSeat("3a", BigDecimal.TEN);
-        flightToLondon.addSeat("4a", BigDecimal.TEN);
-        flightManager.addFlight(flightToLondon);
+        manager.addFlight(FlightTestDataGenerator.flightWithSeats("LOT-123", 2));
+        manager.addFlight(FlightTestDataGenerator.flightWithSeats("LOT-456", 3));
 
         //when
-        int seats = flightManager.getAvailableSeatsForFlight("LOT-123");
+        int seats = manager.getAvailableSeatsForFlight("LOT-123");
 
         //then
         assertThat(seats).isEqualTo(2);
     }
 
-    @Test
-    public void shouldUserGetNoSeatsWhenFlightNotExists() {
+    @Test(expected = NoFlightFoundException.class)
+    public void shouldThrowExceptionWhenFlightNotExists() {
         // given
-        FlightManager manager = new FlightManager();
-        manager.addFlight(new Flight("LOT-QWE"));
+        manager.addFlight(FlightTestDataGenerator.flightWithSeats("LOT-123", 0));
         String notExistingFlightNumber = "abc";
 
         // when
-        int seats = manager.getAvailableSeatsForFlight(notExistingFlightNumber);
+        manager.getAvailableSeatsForFlight(notExistingFlightNumber);
 
         // then
-        assertThat(seats).isZero();
+        // NoFlightFoundException
     }
+
+
 
     @Test
     public void shouldUserGetCheapestSeatForGivenFlight() {
         // given
-        FlightManager manager = new FlightManager();
-        Flight flightToLondon = new Flight("LOT-123");
-        flightToLondon.addSeat("0", BigDecimal.ONE);
-        flightToLondon.addSeat("1", BigDecimal.TEN);
-        manager.addFlight(flightToLondon);
+        manager.addFlight(FlightTestDataGenerator.flightWithCheapestPrice("LOT-123", BigDecimal.ONE));
 
         // when
         BigDecimal price = manager.getCheapestSeatForFlight("LOT-123");
 
         // then
         assertThat(price).isEqualTo(BigDecimal.ONE);
+    }
+
+    @Test
+    public void shouldUserBookSeatForFlight() {
+        //given
+        String flightNumber = "LOT-333";
+        manager.addFlight(FlightTestDataGenerator.flightWithSeats(flightNumber, "1", "2", "3"));
+
+        //when
+        manager.bookSeat(flightNumber,"3");
+
+        //then
+        assertThat(manager.getAvailableSeatsForFlight(flightNumber)).isEqualTo(2);
     }
 }

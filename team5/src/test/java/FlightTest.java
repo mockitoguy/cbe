@@ -11,32 +11,41 @@ import static org.fest.assertions.Assertions.assertThat;
 public class FlightTest {
 
     @Test
-    public void shoudKnowPriceForSeat() {
+    public void shouldKnowCheapestSeat() {
         //given
-        Flight flight = new Flight("LOT-123");
-        flight.addSeat("1a", BigDecimal.valueOf(555.55));
-
-        //when
-        BigDecimal price = flight.getSeatPrice("1a");
-
-        //then
-        assertThat(price).isEqualByComparingTo(BigDecimal.valueOf(555.55));
-    }
-
-
-    @Test
-    public void shuldKnowCheapestSeat() {
-        //given
-        Flight flight = new Flight("LOT-133");
-        flight.addSeat("11", BigDecimal.valueOf(100));
-        flight.addSeat("12", BigDecimal.valueOf(101));
-        flight.addSeat("13", BigDecimal.valueOf(103));
+        Flight flight = FlightTestDataGenerator.flightWithCheapestPrice("LOT-133", BigDecimal.valueOf(100));
 
         //then
         BigDecimal price = flight.getCheapestSeatPrice();
 
         //then
         assertThat(price).isEqualByComparingTo(BigDecimal.valueOf(100));
+    }
+
+
+    @Test(expected = FlightHasNoSeatsException.class)
+    public void shouldThrowExceptionWhenFlightHasNoSeats() {
+        //given
+        Flight flight = FlightTestDataGenerator.flightWithSeats("LOT-111",0);
+
+        //when
+        flight.getCheapestSeatPrice();
+
+        //then
+        //throw FlightHasNoSeatsException
+
+    }
+
+    @Test
+    public void shouldBookSeat() {
+        // given
+        Flight flight = FlightTestDataGenerator.flightWithSeats("LOT-123", 3);
+
+        // when
+        flight.bookSeat("1");
+
+        // then
+        assertThat(flight.getAvailableSeats()).isEqualTo(2);
     }
 
 }

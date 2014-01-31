@@ -11,22 +11,26 @@ public class FlightManager {
     private final Map<String, Flight> flights = new HashMap<>();
 
     public int getAvailableSeatsForFlight(String flightNumber) {
-        if (flights.containsKey(flightNumber)) {
-            return flights.get(flightNumber).getAvailableSeats();
-        } else {
-            return 0;
-        }
+        return findFlight(flightNumber).getAvailableSeats();
     }
 
     public BigDecimal getCheapestSeatForFlight(String flightNumber) {
-        if (flights.containsKey(flightNumber)) {
-            Flight flight = flights.get(flightNumber);
-            return flight.getCheapestSeatPrice();
-        }
-        return null;
+        return findFlight(flightNumber).getCheapestSeatPrice();
     }
 
     public void addFlight(Flight flight) {
         flights.put(flight.getNumber(), flight);
+    }
+
+    public void bookSeat(String flightNumber, String seatNumber) {
+        findFlight(flightNumber).bookSeat(seatNumber);
+    }
+
+    private Flight findFlight(String flightNumber) {
+        if (flights.containsKey(flightNumber)) {
+            return flights.get(flightNumber);
+        } else {
+            throw new NoFlightFoundException(flightNumber);
+        }
     }
 }
