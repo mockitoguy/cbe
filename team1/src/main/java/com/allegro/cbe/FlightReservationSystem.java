@@ -16,13 +16,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class FlightReservationSystem {
 
     private Multimap<Flight, Seat> flights = ArrayListMultimap.create();
     private Map<String, Flight> flightNumbers = new HashMap<>();
 
     public int checkAvailableSeats(String flightNumber) {
-        assert getFlight(flightNumber) != null;
+        checkArgument(getFlight(flightNumber) != null);
 
         Flight flight = getFlight(flightNumber);
         List<Seat> seats = (List<Seat>) flights.get(flight);
@@ -36,7 +39,7 @@ public class FlightReservationSystem {
     }
 
     public void addFlight(Flight flight, Seat... flightSeats) {
-        assert flight != null;
+        checkNotNull(flight != null);
 
         flightNumbers.put(flight.getFlightNumber(), flight);
         flights.putAll(flight, Lists.newArrayList(flightSeats));
@@ -55,7 +58,7 @@ public class FlightReservationSystem {
     }
 
     public void bookSeat(String flightNumber, final String seatNumber) {
-        assert getFlight(flightNumber) != null;
+        checkArgument(getFlight(flightNumber) != null);
 
         Collection<Seat> seats = flights.get(getFlight(flightNumber));
         Optional<Seat> s = FluentIterable.from(seats).firstMatch(new Predicate<Seat>() {
@@ -71,7 +74,7 @@ public class FlightReservationSystem {
     }
 
     public float findAveragePriceOfAvailableSeats(String flightNumber) {
-        assert getFlight(flightNumber) != null;
+        checkArgument(getFlight(flightNumber) != null);
 
         List<Seat> availableSeats =
                 FluentIterable
@@ -87,7 +90,12 @@ public class FlightReservationSystem {
         return sumOfPrices / availableSeats.size();
     }
 
-    public List<Flight> findFlights(final String warsaw, final String poznan) {
-        return null;  //To change body of created methods use File | Settings | File Templates.
+    public List<Flight> findFlights(final String origin, final String destination) {
+        checkArgument(origin != null);
+        checkArgument(destination != null);
+
+        return FluentIterable.from(flightNumbers.values())
+                .filter(new RoutePredicate(origin, destination))
+                .toList();
     }
 }
