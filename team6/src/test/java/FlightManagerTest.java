@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import static com.googlecode.catchexception.CatchException.catchException;
 import static com.googlecode.catchexception.CatchException.caughtException;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class FlightManagerTest {
 
@@ -17,8 +19,8 @@ public class FlightManagerTest {
 
         //given
         Flight flight = new Flight("LOT-1");
-        flightManager.addSeats(flight, new Seat("B1", BigDecimal.TEN), new Seat("B2", BigDecimal.ZERO));
-        flightManager.addSeats(new Flight("LOT-2"), new Seat("F5", BigDecimal.ONE));
+        flightManager.addSeats(flight, new SeatBuilder().setNumber("B1").createSeat(), new SeatBuilder().setNumber("B2").setPrice(BigDecimal.ZERO).createSeat());
+        flightManager.addSeats(new Flight("LOT-2"), new SeatBuilder().setNumber("F5").createSeat());
 
         //when
         int seats = flightManager.getAvailableSeats(flight);
@@ -32,7 +34,7 @@ public class FlightManagerTest {
     public void shouldThrowExceptionForNonExistingFlight() throws Exception {
 
         //given
-        flightManager.addSeats(new Flight("LOT-1"), new Seat("B1", BigDecimal.TEN));
+        flightManager.addSeats(new Flight("LOT-1"), new SeatBuilder().createSeat());
 
         //when
         catchException(flightManager).getAvailableSeats(new Flight("nonExistingFlight"));
@@ -48,8 +50,8 @@ public class FlightManagerTest {
         //given
         Flight flight = new Flight("LOT-1");
         flightManager.addSeats(flight,
-                new Seat("B1", BigDecimal.valueOf(10)),
-                new Seat("B2", BigDecimal.valueOf(7)));
+                new SeatBuilder().setPrice(BigDecimal.valueOf(10)).createSeat(),
+                new SeatBuilder().setPrice(BigDecimal.valueOf(7)).createSeat());
 
         //when
         BigDecimal price = flightManager.findCheapestSeatPrice(flight);
@@ -59,11 +61,11 @@ public class FlightManagerTest {
     }
 
     @Test
-    public void shouldBookAFlightForAFlight() {
+    public void shouldBookASeatForAFlight() {
 
         //given
         Flight flight = new Flight("LOT-123");
-        Seat seat = new Seat("C6", BigDecimal.TEN);
+        Seat seat = new SeatBuilder().setNumber("C5").createSeat();
         flightManager.addSeats(flight, seat);
 
         //when
@@ -72,23 +74,44 @@ public class FlightManagerTest {
         //then
         assertThat(flightManager.getAvailableSeats(flight)).isEqualTo(0);
     }
+
     @Test
     public void shouldFindTheAverageSeatPriceForNonBookedSeats() {
 
         //given
         Flight flight = new Flight("LOT-1");
-        Seat seat1 = new Seat("B1", BigDecimal.valueOf(10));
+        Seat bookedSeat = mock(Seat.class);
+        when(bookedSeat.isBooked()).thenReturn(true);
         flightManager.addSeats(flight,
-                seat1,
-                new Seat("B2", BigDecimal.valueOf(18)),
-                new Seat("B3", BigDecimal.valueOf(20)));
+                bookedSeat,
+                new SeatBuilder().setNumber("B2").setPrice(BigDecimal.valueOf(10)).createSeat(),
+                new SeatBuilder().setNumber("B3").setPrice(BigDecimal.valueOf(20)).createSeat());
 
-        flightManager.book(seat1, flight);
         //when
         BigDecimal price = flightManager.findAveragePriceForNonBookedSeats(flight);
 
         //then
-        assertThat(price).isEqualTo(BigDecimal.valueOf(19));
+        assertThat(price).isEqualTo(BigDecimal.valueOf(15));
+    }
+
+
+    private class SeatBuilder {
+        private String number;
+        private BigDecimal price;
+
+        public SeatBuilder setNumber(String number) {
+            this.number = number;
+            return this;
+        }
+
+        public SeatBuilder setPrice(BigDecimal price) {
+            this.price = price;
+            return this;
+        }
+
+        public Seat createSeat() {
+            return new Seat(number, price);
+        }
     }
 
 }
