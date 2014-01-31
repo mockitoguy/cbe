@@ -1,12 +1,12 @@
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 import static com.googlecode.catchexception.CatchException.catchException;
 import static com.googlecode.catchexception.CatchException.caughtException;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class FlightManagerTest {
 
@@ -19,8 +19,8 @@ public class FlightManagerTest {
 
         //given
         Flight flight = new Flight("LOT-1");
-        flightManager.addSeats(flight, new SeatBuilder().setNumber("B1").createSeat(), new SeatBuilder().setNumber("B2").setPrice(BigDecimal.ZERO).createSeat());
-        flightManager.addSeats(new Flight("LOT-2"), new SeatBuilder().setNumber("F5").createSeat());
+        flightManager.addSeats(flight, new SeatBuilder().setNumber("B1").build(), new SeatBuilder().setNumber("B2").setPrice(BigDecimal.ZERO).build());
+        flightManager.addSeats(new Flight("LOT-2"), new SeatBuilder().setNumber("F5").build());
 
         //when
         int seats = flightManager.getAvailableSeats(flight);
@@ -34,7 +34,7 @@ public class FlightManagerTest {
     public void shouldThrowExceptionForNonExistingFlight() throws Exception {
 
         //given
-        flightManager.addSeats(new Flight("LOT-1"), new SeatBuilder().createSeat());
+        flightManager.addSeats(new Flight("LOT-1"), new SeatBuilder().build());
 
         //when
         catchException(flightManager).getAvailableSeats(new Flight("nonExistingFlight"));
@@ -50,8 +50,8 @@ public class FlightManagerTest {
         //given
         Flight flight = new Flight("LOT-1");
         flightManager.addSeats(flight,
-                new SeatBuilder().setPrice(BigDecimal.valueOf(10)).createSeat(),
-                new SeatBuilder().setPrice(BigDecimal.valueOf(7)).createSeat());
+                new SeatBuilder().setPrice(BigDecimal.valueOf(10)).build(),
+                new SeatBuilder().setPrice(BigDecimal.valueOf(7)).build());
 
         //when
         BigDecimal price = flightManager.findCheapestSeatPrice(flight);
@@ -65,7 +65,7 @@ public class FlightManagerTest {
 
         //given
         Flight flight = new Flight("LOT-123");
-        Seat seat = new SeatBuilder().setNumber("C5").createSeat();
+        Seat seat = new SeatBuilder().setNumber("C5").build();
         flightManager.addSeats(flight, seat);
 
         //when
@@ -80,12 +80,11 @@ public class FlightManagerTest {
 
         //given
         Flight flight = new Flight("LOT-1");
-        Seat bookedSeat = mock(Seat.class);
-        when(bookedSeat.isBooked()).thenReturn(true);
+
         flightManager.addSeats(flight,
-                bookedSeat,
-                new SeatBuilder().setNumber("B2").setPrice(BigDecimal.valueOf(10)).createSeat(),
-                new SeatBuilder().setNumber("B3").setPrice(BigDecimal.valueOf(20)).createSeat());
+                new SeatBuilder().setPrice(BigDecimal.TEN).build().book(),
+                new SeatBuilder().setPrice(BigDecimal.valueOf(10)).build(),
+                new SeatBuilder().setPrice(BigDecimal.valueOf(20)).build());
 
         //when
         BigDecimal price = flightManager.findAveragePriceForNonBookedSeats(flight);
@@ -94,6 +93,22 @@ public class FlightManagerTest {
         assertThat(price).isEqualTo(BigDecimal.valueOf(15));
     }
 
+    @Test
+    public void shouldReturnFlightForGivenOriginAndDestination() {
+
+        //given
+        Date date = new Date();
+        Flight flight = new Flight("C3", new Route("Warsaw", "Dublin"), date);
+        flightManager.addSeats(flight, new SeatBuilder().build());
+        flightManager.addSeats(new Flight("F2", new Route("Paris", "London"), date),
+                new SeatBuilder().build());
+
+        //when
+        List<Flight> flights = flightManager.findFlights("Warsaw", "Dublin");
+
+        //then
+        assertThat(flights).contains(flight);
+    }
 
     private class SeatBuilder {
         private String number;
@@ -109,7 +124,7 @@ public class FlightManagerTest {
             return this;
         }
 
-        public Seat createSeat() {
+        public Seat build() {
             return new Seat(number, price);
         }
     }

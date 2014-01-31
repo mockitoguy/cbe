@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -69,10 +70,24 @@ public class FlightManager {
     }
 
     private BigDecimal average(ImmutableList<Seat> filtered) {
+
         BigDecimal sum = BigDecimal.ZERO;
         for (Seat seat : filtered) {
             sum = sum.add(seat.getPrice());
         }
         return sum.divide(BigDecimal.valueOf(filtered.size()));
+    }
+
+    public List<Flight> findFlights(String origin, String destination) {
+
+        List<Flight> flights = new ArrayList<>();
+        for (Flight flight : seats.keySet()) {
+
+            if (flight.getRoute().equals(new Route(origin, destination))) {
+                flights.add(flight);
+            }
+        }
+
+        return flights;
     }
 }

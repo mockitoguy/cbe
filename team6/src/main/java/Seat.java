@@ -11,8 +11,9 @@ public  class Seat implements Comparable<Seat> {
         this.price = price;
     }
 
-    public void book() {
+    public Seat book() {
         booked = true;
+        return this;
     }
 
     public String getNumber() {
