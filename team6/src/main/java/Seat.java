@@ -1,6 +1,7 @@
 import java.math.BigDecimal;
 
-public  class Seat implements Comparable<Seat>{
+public  class Seat implements Comparable<Seat> {
+
     private final String number;
     private final BigDecimal price;
     private boolean booked;
