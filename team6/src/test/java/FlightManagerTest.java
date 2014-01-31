@@ -66,4 +66,19 @@ public class FlightManagerTest {
         //then
         assertThat(price).isEqualTo(BigDecimal.valueOf(33.55));
     }
+
+    @Test
+    public void shouldBookAFlightForAFlight() {
+
+        //given
+        Seat seat = new Seat("C6", BigDecimal.TEN);
+        Flight flight = new Flight("LOT-123");
+        flightManager.addSeat(flight, seat);
+
+        //when
+        flightManager.book(seat, flight);
+
+        //then
+        assertThat(flightManager.getAvailableSeats(flight)).isEqualTo(0);
+    }
 }

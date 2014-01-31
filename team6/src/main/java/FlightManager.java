@@ -1,4 +1,6 @@
+import com.google.common.base.Predicate;
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 
@@ -12,11 +14,17 @@ public class FlightManager {
 
     private final Multimap<Flight, Seat> seats = ArrayListMultimap.create();
 
-
     public int getAvailableSeats(Flight flight) throws FlightNotFoundException {
         Collection<Seat> seatsForFlight = seats.get(flight);
         if (!seatsForFlight.isEmpty()) {
-            return seatsForFlight.size();
+            return FluentIterable.from(seatsForFlight).filter(new Predicate<Seat>() {
+
+                @Override
+                public boolean apply(Seat seat) {
+                    return !seat.isBooked();
+                }
+            }).size();
+
         } else {
             throw new FlightNotFoundException();
         }
@@ -27,9 +35,21 @@ public class FlightManager {
     }
 
     public BigDecimal findCheapestSeatPrice(Flight flight) {
-        List<Seat> seats1 = Lists.newArrayList(seats.get(flight));
-        Collections.sort(seats1);
-        return seats1.get(0).getPrice();
+        List<Seat> seats = Lists.newArrayList(this.seats.get(flight));
+        Collections.sort(seats);
+        return seats.get(0).getPrice();
 
+    }
+
+    public void book(Seat seat, Flight flight) {
+
+        List<Seat> seats = Lists.newArrayList(this.seats.get(flight));
+        for (Seat s : seats) {
+            if (s.getNumber().equals(seat.getNumber())) {
+                s.book();
+                return;
+            }
+
+        }
     }
 }
