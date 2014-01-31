@@ -9,13 +9,28 @@ import java.math.BigDecimal;
  */
 public class Seat {
 
+    private int seatId;
     private BigDecimal price;
+    private boolean available = true;
 
-    public Seat(BigDecimal price) {
+    public Seat(BigDecimal price, int seatId) {
         this.price = price;
+        this.seatId = seatId;
     }
 
     public BigDecimal getPrice() {
         return price;
+    }
+
+    public int getSeatId() {
+        return seatId;
+    }
+
+    void book() {
+        available = false;
+    }
+
+    boolean isAvailable() {
+        return available;
     }
 }
