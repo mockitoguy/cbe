@@ -10,11 +10,6 @@ public class Flight {
     private float[] seatPrices;
     private int bookingCounter = 0;
 
-    public Flight(int availableSeats, float seatPrice) {
-        this.seatPrices = new float[availableSeats];
-        Arrays.fill(this.seatPrices, seatPrice);
-    }
-
     public Flight(float... prices) {
         seatPrices = prices;
     }
