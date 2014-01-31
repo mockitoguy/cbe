@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -19,7 +20,7 @@ public class FlightManager {
         return flights.get(flightNo).getAvailableSeatCount();
     }
 
-    public Seat findCheapestSeat(String flighNo) {
+    public BigDecimal findCheapestSeatPrice(String flighNo) {
         Flight flight = flights.get(flighNo);
         List<Seat> seats = flight.getSeats();
 
@@ -29,7 +30,7 @@ public class FlightManager {
                 return seat1.getPrice().compareTo(seat2.getPrice());
             }
         });
-        return seats.get(0);
+        return seats.get(0).getPrice();
 
     }
 

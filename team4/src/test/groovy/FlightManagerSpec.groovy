@@ -2,7 +2,7 @@ import spock.lang.Specification
 
 class FlightManagerSpec extends Specification {
 
-    def "should find cheapeset seat for a given flight"() {
+    def "should find cheapeset seat price for a given flight"() {
         given:
         FlightManager flightManager = new FlightManager()
         def flight = new Flight("LOT-123")
@@ -12,10 +12,10 @@ class FlightManagerSpec extends Specification {
         flightManager.addFlight(flight)
 
         when:
-        def foundSeat = flightManager.findCheapestSeat("LOT-123")
+        def foundSeatPrice = flightManager.findCheapestSeatPrice("LOT-123")
 
         then:
-        foundSeat == cheapestSeat
+        foundSeatPrice == 2
     }
 
     def "should know available seats for flight"() {

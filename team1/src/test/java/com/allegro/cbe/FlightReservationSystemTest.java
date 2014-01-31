@@ -2,22 +2,21 @@ package com.allegro.cbe;
 
 import org.junit.Test;
 
+import static com.allegro.cbe.SeatTestBuilder.*;
 import static org.fest.assertions.Assertions.assertThat;
 
 public class FlightReservationSystemTest {
 
+    FlightReservationSystem flightReservationSystem = new FlightReservationSystem();
+
     @Test
     public void shouldCheckAvailableSeatsCount() throws Throwable {
         //given
-        String flightNumber = "ABC123";
-        Seat seat1 = new Seat("1", 1);
-        Seat seat2 = new Seat("2", 1);
-
-        FlightReservationSystem flightReservationSystem = new FlightReservationSystem();
-        flightReservationSystem.addFlight(flightNumber, seat1, seat2);
+        flightReservationSystem.addFlight("ABC-123", seat().build(), seat().build());
+        flightReservationSystem.addFlight("XYZ-666", seat().build());
 
         //when
-        int availableSeats = flightReservationSystem.checkAvailableSeats(flightNumber);
+        int availableSeats = flightReservationSystem.checkAvailableSeats("ABC-123");
 
         //then
         assertThat(availableSeats).isEqualTo(2);
@@ -26,58 +25,45 @@ public class FlightReservationSystemTest {
     @Test
     public void shouldFindCheapestSeatPerFlight() throws Throwable {
         //given
-        FlightReservationSystem flightReservationSystem = new FlightReservationSystem();
+        flightReservationSystem.addFlight("LOT-123",
+                                            seat().withPrice(10f).build(),
+                                            seat().withPrice(15f).build());
 
-        String flightNumber = "LOT-123";
-
-        Seat cheapestSeat = new Seat("1", 10.12f);
-        Seat anotherSeat = new Seat("2", 15.00f);
-
-        flightReservationSystem.addFlight(flightNumber, cheapestSeat, anotherSeat);
+        flightReservationSystem.addFlight("XYZ-665", seat().withPrice(1f).build());
 
         //when
-        float price = flightReservationSystem.findCheapestSeatPrice(flightNumber);
+        float price = flightReservationSystem.findCheapestSeatPrice("LOT-123");
 
         //then
-        assertThat(price).isEqualTo(10.12f);
+        assertThat(price).isEqualTo(10f);
     }
 
     @Test
     public void shouldBookSeat() throws Throwable {
         //given
-        FlightReservationSystem flightReservationSystem = new FlightReservationSystem();
+        flightReservationSystem.addFlight("LOT-123",
+                                            seat().withNumber("1").build(),
+                                            seat().withNumber("2").build());
 
-        String flightNumber = "LOT-123";
-
-        Seat seat1 = new Seat("1", 10.12f);
-        Seat seat2 = new Seat("2", 15.00f);
-
-        flightReservationSystem.addFlight(flightNumber, seat1, seat2);
+        flightReservationSystem.addFlight("XYZ-665", seat().withNumber("1").build());
 
         //when
-        flightReservationSystem.bookSeat(flightNumber, "1");
+        flightReservationSystem.bookSeat("LOT-123", "1");
 
         //then
-        assertThat(flightReservationSystem.checkAvailableSeats(flightNumber)).isEqualTo(1);
+        assertThat(flightReservationSystem.checkAvailableSeats("LOT-123")).isEqualTo(1);
     }
 
     @Test
     public void shouldFindAveragePriceOfAvailableSeats() throws Throwable {
         //given
-        FlightReservationSystem flightReservationSystem = new FlightReservationSystem();
-
-        String flightNumber = "LOT-123";
-
-        Seat availableSeat1 = new Seat("1", 1f);
-        Seat availableSeat2 = new Seat("2", 3f);
-
-        Seat bookedSeat1 = new Seat("3", 1000f);
-        bookedSeat1.book();
-
-        flightReservationSystem.addFlight(flightNumber, availableSeat1, availableSeat2, bookedSeat1);
+        flightReservationSystem.addFlight("LOT-123",
+                                            seat().withPrice(1f).build(),
+                                            seat().withPrice(3f).build(),
+                                            seat().withPrice(1000f).book().build());
 
         //when
-        float averagePrice = flightReservationSystem.findAveragePriceOfAvailableSeats(flightNumber);
+        float averagePrice = flightReservationSystem.findAveragePriceOfAvailableSeats("LOT-123");
 
         //then
         assertThat(averagePrice).isEqualTo(2f);
