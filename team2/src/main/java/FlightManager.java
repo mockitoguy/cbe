@@ -58,4 +58,14 @@ public class FlightManager {
 
         return resultList;
     }
+
+    public List<FlightDetails> getFlightsDetailsListFromOrigin(String origin) {
+        List<FlightDetails> resultList = Lists.newArrayList();
+        for(Flight flight : flights.values()){
+            if(origin.equals(flight.getOrigin())){
+                resultList.add(flight);
+            }
+        }
+        return resultList;
+    }
 }

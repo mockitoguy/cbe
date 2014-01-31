@@ -97,5 +97,25 @@ public class FlightManagerTest {
         assertThat(details).containsOnly(flight1, flight2);
     }
 
+    @Test
+    public void shouldGetFlightsFromGivenOrigin() throws Throwable {
+        //given
+        Flight flight1 = new FlightBuilder().between("London", "New York").build();
+        Flight flight2 = new FlightBuilder().between("London", "New York").build();
+        Flight flight3 = new FlightBuilder().between("Warsaw", "New York").build();
+        Flight flight4 = new FlightBuilder().between("London", "San Francisco").build();
+
+        flightManager.addFlight(flight1);
+        flightManager.addFlight(flight2);
+        flightManager.addFlight(flight3);
+        flightManager.addFlight(flight4);
+
+        //when
+        List<FlightDetails> details = flightManager.getFlightsDetailsListFromOrigin("London");
+
+        //then
+        assertThat(details).containsOnly(flight1, flight2, flight4);
+    }
+
 
 }
