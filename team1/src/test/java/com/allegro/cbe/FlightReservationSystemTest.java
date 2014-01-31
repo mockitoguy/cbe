@@ -2,11 +2,10 @@ package com.allegro.cbe;
 
 import org.junit.Test;
 
-import java.util.Date;
 import java.util.List;
 
-import static com.allegro.cbe.SeatTestBuilder.*;
-import static com.allegro.cbe.FlightTestBuilder.*;
+import static com.allegro.cbe.FlightTestBuilder.flight;
+import static com.allegro.cbe.SeatTestBuilder.seat;
 import static org.fest.assertions.Assertions.assertThat;
 
 public class FlightReservationSystemTest {
@@ -94,10 +93,11 @@ public class FlightReservationSystemTest {
         flightReservationSystem.addFlight(flight3);
 
         //when
-        List<Flight> flights = flightReservationSystem.findFlights("Warsaw", "Poznan");
+        List<FlightInfo> flights = flightReservationSystem.findFlights("Warsaw", "Poznan");
 
         //then
-        assertThat(flights).containsOnly(flight1, flight2);
+        assertThat(flights).containsOnly(new FlightInfo("LOT-123", "10-01-2014"),
+                                        new FlightInfo("XYZ-666", "20-02-2014"));
     }
 
 }

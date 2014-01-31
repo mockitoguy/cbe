@@ -1,6 +1,7 @@
 package com.allegro.cbe;
 
 
+import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ArrayListMultimap;
@@ -90,12 +91,18 @@ public class FlightReservationSystem {
         return sumOfPrices / availableSeats.size();
     }
 
-    public List<Flight> findFlights(final String origin, final String destination) {
+    public List<FlightInfo> findFlights(final String origin, final String destination) {
         checkArgument(origin != null);
         checkArgument(destination != null);
 
         return FluentIterable.from(flightNumbers.values())
                 .filter(new RoutePredicate(origin, destination))
+                .transform(new Function<Flight, FlightInfo>() {
+                    @Override
+                    public FlightInfo apply(final Flight flight) {
+                        return new FlightInfo(flight.getFlightNumber(), flight.getDate());
+                    }
+                })
                 .toList();
     }
 }
