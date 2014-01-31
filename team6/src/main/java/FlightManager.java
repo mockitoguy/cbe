@@ -83,8 +83,32 @@ public class FlightManager {
         List<Flight> flights = new ArrayList<>();
         for (Flight flight : seats.keySet()) {
 
-            if (flight.getRoute().equals(new Route(origin, destination))) {
+            if (flight.getRoute().equals(new Flight.Route(origin, destination))) {
                 flights.add(flight);
+            }
+        }
+
+        return flights;
+    }
+
+    public List<Flight> findFlightsByOrigin(String origin) {
+        List<Flight> flights = new ArrayList<>();
+        for (Flight flight : seats.keySet()) {
+
+            if (flight.getOrigin().equals(origin)){
+                flights.add(flight) ;
+            }
+        }
+
+        return flights;
+    }
+
+    public List<Flight> findFlightsByDestination(String destination) {
+        List<Flight> flights = new ArrayList<>();
+        for (Flight flight : seats.keySet()) {
+
+            if (flight.getDestination().equals(destination)){
+                flights.add(flight) ;
             }
         }
 

@@ -98,9 +98,9 @@ public class FlightManagerTest {
 
         //given
         Date date = new Date();
-        Flight flight = new Flight("C3", new Route("Warsaw", "Dublin"), date);
+        Flight flight = new Flight("C3", new Flight.Route("Warsaw", "Dublin"), date);
         flightManager.addSeats(flight, new SeatBuilder().build());
-        flightManager.addSeats(new Flight("F2", new Route("Paris", "London"), date),
+        flightManager.addSeats(new Flight("F2", new Flight.Route("Paris", "London"), date),
                 new SeatBuilder().build());
 
         //when
@@ -109,7 +109,43 @@ public class FlightManagerTest {
         //then
         assertThat(flights).contains(flight);
     }
+    @Test
+    public void shouldReturnFlightForGivenOrigin() {
 
+        //given
+        Date date = new Date();
+        Flight flight = new Flight("C3", new Flight.Route("Warsaw", "Dublin"), date);
+        Flight flight2 = new Flight("C4", new Flight.Route("Warsaw", "Cairo"), date);
+        flightManager.addSeats(flight, new SeatBuilder().build());
+        flightManager.addSeats(flight2, new SeatBuilder().build());
+        flightManager.addSeats(new Flight("F2", new Flight.Route("Paris", "London"), date),
+                new SeatBuilder().build());
+
+        //when
+        List<Flight> flights = flightManager.findFlightsByOrigin("Warsaw");
+
+        //then
+        assertThat(flights).contains(flight, flight2);
+    }
+
+    @Test
+    public void shouldReturnFlightForGivenDestination() {
+
+        //given
+        Date date = new Date();
+        Flight flight = new Flight("C3", new Flight.Route("Paris", "Dublin"), date);
+        Flight flight2 = new Flight("C5", new Flight.Route("Warsaw", "Dublin"), date);
+        flightManager.addSeats(flight, new SeatBuilder().build());
+        flightManager.addSeats(flight2, new SeatBuilder().build());
+        flightManager.addSeats(new Flight("F2", new Flight.Route("Paris", "London"), date),
+                new SeatBuilder().build());
+
+        //when
+        List<Flight> flights = flightManager.findFlightsByDestination("Dublin");
+
+        //then
+        assertThat(flights).contains(flight, flight2);
+    }
     private class SeatBuilder {
         private String number;
         private BigDecimal price;
