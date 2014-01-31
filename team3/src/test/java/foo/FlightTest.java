@@ -14,19 +14,19 @@ public class FlightTest {
     @Test
     public void shouldBookSeatForGivenFlight() {
         // given
-        Flight flight = new Flight(2, 1);
+        Flight flight = Flight.withSeatPrices(1.0f, 1.0f).build();
 
         // when
         int seatNumber = flight.bookSeat();
 
         // then
-        assertThat(seatNumber).isIn(1, 2);
+        assertThat(seatNumber).isEqualTo(1);
     }
 
     @Test(expected = NoSeatsAvailableException.class)
     public void shouldFailWhenThereAreNoFreeSeats() {
         // given
-        Flight flight = new Flight(1, 1);
+        Flight flight = Flight.withSeatPrices(1).build();
         flight.bookSeat();
 
         // when
@@ -38,7 +38,7 @@ public class FlightTest {
     @Test
     public void shouldCalculateAverageFreeSeatPrice() {
         // given
-        Flight flight = new Flight(1,2,3);
+        Flight flight = Flight.withSeatPrices(1, 2, 3).build();
         flight.bookSeat();
 
         // when

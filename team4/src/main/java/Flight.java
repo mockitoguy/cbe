@@ -13,8 +13,16 @@ public class Flight {
     private String flightNo;
     private List<Seat> seats = new ArrayList<>();
 
-    Flight(String flighNo) {
-        this.flightNo = flighNo;
+    Flight() {
+    }
+
+    Flight(String flightNo) {
+        this.flightNo = flightNo;
+    }
+
+    Flight(String flightNo, List<Seat> seats) {
+        this(flightNo);
+        this.seats = new ArrayList<>(seats);
     }
 
     public int getAvailableSeatCount() {
@@ -31,5 +39,27 @@ public class Flight {
 
     public String getFlightNo() {
         return flightNo;
+    }
+
+    public static class Builder {
+        private String flightNo;
+        private List<Seat> seats = new ArrayList<>();
+
+        public Builder(String flightNo) {
+            this.flightNo = flightNo;
+
+        }
+
+        public Builder withSeat(Seat seat) {
+            seats.add(seat);
+            return this;
+        }
+
+        public Flight build() {
+            Flight flight = new Flight(flightNo, seats);
+
+            return flight;
+        }
+
     }
 }
