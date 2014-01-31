@@ -73,6 +73,8 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="guava-15.0" level="project" />
+    <orderEntry type="library" name="joda-time-2.1" level="project" />
   </component>
 </module>
 
