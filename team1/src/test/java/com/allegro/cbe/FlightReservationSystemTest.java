@@ -83,9 +83,9 @@ public class FlightReservationSystemTest {
     @Test
     public void shouldFindMatchingFlightsForRoute() {
         //given
-        Flight flight1 = new Flight("LOT-123", "Warsaw", "Poznan", "10-01-2014");
-        Flight flight2 = new Flight("XYZ-666", "Warsaw", "Poznan", "20-02-2014");
-        Flight flight3 = new Flight("ABC-007", "Warsaw", "Cracow", "20-02-2014");
+        Flight flight1 = flight("LOT-123").withOrigin("Warsaw").withDestination("Poznan").onDate("10-01-2014").build();
+        Flight flight2 = flight("XYZ-666").withOrigin("Warsaw").withDestination("Poznan").onDate("20-02-2014").build();
+        Flight flight3 = flight("ABC-007").withOrigin("Warsaw").withDestination("Cracow").onDate("20-02-2014").build();
 
         flightReservationSystem.addFlight(flight1);
         flightReservationSystem.addFlight(flight2);
